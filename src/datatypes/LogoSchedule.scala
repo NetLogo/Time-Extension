@@ -187,6 +187,7 @@ class LogoSchedule extends ExtensionObject {
        -------------------------------------------------------------------------- */
     while (event != null && event.tick <= untilTick) { // iterates through scheduleTree
       event.agents match {
+        getTickCounter(extcontext).tick(event.tick-getTickCounter(extcontext).ticks)
         case null => // observer context
           val nvmContext: org.nlogo.nvm.Context = new org.nlogo.nvm.Context(
             extcontext.nvmContext.job,
