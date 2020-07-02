@@ -1,181 +1,101 @@
-extensions [time]
-globals[
-  tick-datetime
-  tick-date
-  tick-day
-  ts
-  t-datetime
-  t-date
-  t-day
-]
-to setup
-  ;;print __dump-extensions
-  ;;print __dump-extension-prims
-  __clear-all-and-reset-ticks
-  print ""
-  print "============================"
-  print ""
+extensions [ time csv]
+__includes ["time-series.nls"]
 
-  ;; A logotime can be one of three varieties: a DATETIME, a DATE, and a DAY
-  ;; The variety is inferred by the length of the string passed to time:create
-  ;;
-  ;; The date delimiter can be '-' or '/' and the delimeter between the date and time
-  ;; can be a 'T' or a ' '.  Single digit months and days can have an optional leading zero.
-  ;; Single digit hours, minutes, and seconds must have a leading zero.  Hours are basd on a
-  ;; 24-hour clock (e.g. midnight is '00', noon is '12', and 11pm is '23').
-  ;;
-  ;; DATETIME strings are based on the ISO8601 Standard which can by month, day, or week based:
-  ;;   month based:  "yyyy-mm-ddTHH:MM:SS.SSS"
-  ;;   day based:    "yyyy-dddTHH:MM:SS.SSS"
-  ;;   week based:   "yyyy-Www-dTHH:MM:SS.SSS"
-  ;;   more info: http://joda-time.sourceforge.net/cal_iso.html
-  ;;
-  ;; DATE must be ordered as year-month-day, and DAY must be month-day.
-  ;;
-  ;; Use "" or "now" to get the system datetime
 
-  ;; Show what's possible in terms of formatting DATETIME, DATE, and DAY
-  ; VALID DATETIME's
-  print time:create "2000-01-02T03:04:0.678"
-  print time:create "2000-01-02T03:04:05.678"
-  print time:create "2000-01-02 03:04:5"
-  print time:create "2000-01-02 03:4"
-  print time:create "2000-01-02 3"
-  print time:create "2000/01/02 03:04:05.678"
-  print time:create "2000-1-02 03:04:05.678"
-  print time:create "2000-01-2 03:04:05.678"
-  print time:create "2000-1-2 03:04:05.678"
-  print time:create "2000-01-02"
-  print time:create "2000-01-2"
-  print time:create "2000-1-02"
-  print time:create "01-02"
-  print time:create "01-2"
-  print time:create "1-02"
-  print ""
-  print "============================"
-  print ""
 
-  ; prints the current datetime, two different ways
-  print time:create "now"
-  print time:create ""
-  print ""
-  print "============================"
-  print ""
 
-  ;; Create a datetime, a date, and a day
-  set t-datetime time:create "2000-01-02 03:04:05.678"
-  set t-date time:create "2000-01-02"
-  set t-day time:create "01-02"
-
-  ;; Print out the logotime using user specified format, for full description of options, see:
-  ;; http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html
-  print time:show t-datetime "yyyy-MM-dd"
-  print ""
-  print "============================"
-  print ""
-
-  ;; Print out specific fields from the datetime
-  print time:get "year" t-datetime
-  print time:get "month" t-datetime
-  print time:get "week" t-datetime
-  print time:get "day" t-datetime
-  print time:get "dayofyear" t-datetime
-  print time:get "dayofweek" t-datetime
-  print time:get "hour" t-datetime
-  print time:get "minute" t-datetime
-  print time:get "second" t-datetime
-  print time:get "millis" t-datetime
-  print ""
-  print "============================"
-  print ""
-
-  ;; Add some interval to the datetime
-  print time:plus t-datetime 1.0 "seconds"
-  print time:plus t-datetime 1.0 "minutes"
-  print time:plus t-datetime (60.0 * 24) "minutes"
-  print time:plus t-datetime 1 "week"
-  print time:plus t-datetime 1.0 "weeks"
-  print time:plus t-datetime 1.0 "months"  ;; note that decimal months or years are
-  print time:plus t-datetime 1.0 "years"   ;; rounded to the nearest whole number
-  print ""
-  print "============================"
-  print ""
-
-  ;; any of the three varieties of logotime can be achored to the tick,
-  ;; the time value of the logotime is assumed to be tick zero.
-  ;; the other arguments to this call describe how much time one tick is worth,
-  ;; e.g. below one tick is with one hour, two days, and three months respectively
-  set tick-datetime time:anchor-to-ticks t-datetime 1 "hour"
-  set tick-date time:anchor-to-ticks t-date 2 "days"
-  set tick-day time:anchor-to-ticks t-day 3 "months"
-
-  ;; make comparisons between LogoTimes
-  print "before, before, after, equal, equal"
-  print time:is-before (time:create "2000-01-02") (time:create "2000-01-03")
-  print time:is-before (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-after  (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-03")
-  print "before days"
-  print time:is-before (time:create "01-02") (time:create "01-03")
-  print "is between"
-  print time:is-between (time:create "2000-03-08") (time:create "1999-12-02") (time:create "2000-05-03")
-  print time:is-between (time:create "2000-03-08") (time:create "2000-05-03") (time:create "1999-12-02")
-  print ""
-  print "============================"
-  print ""
-
-  ;; find the amount of time between two LogoTimes, make sure to specify a time unit and recall that months
-  ;; and years will only be reported as whole numbers
-  print time:difference-between (time:create "2000-01-02 00:00") (time:create "2000-02-02 00:00") "days"
-  print time:difference-between (time:create "2000-01-02") (time:create "2001-02-02") "days"
-  print time:difference-between (time:create "01-02") (time:create "01-01") "hours"
-end
-
-to go
-  ;; during model execution, any logotime that has been achored to ticks will automatically
-  ;; hold the appropriate date, and can be used analogously to using the "ticks" primitive
-  reset-ticks
-  print ""
-  print "GO ============================"
-  print ""
-  while[ticks < 2][
-    tick
-    print (word "tick " ticks)
-    print (word "tick-datetime " tick-datetime)
-    print (word "tick-date " tick-date)
-    print (word "tick-day " tick-day)
-  ]
-  tick
-end
-
-to setup-and-go
-  setup
-  ;; during model execution, any logotime that has been achored to ticks will automatically
-  ;; hold the appropriate date, and can be used analogously to using the "ticks" primitive
-  print ""
-  print "GO ============================"
-  print ""
-  while[ticks < 2][
-    tick
-    print (word "tick " ticks)
-    print (word "tick-datetime " tick-datetime)
-    print (word "tick-date " tick-date)
-    print (word "tick-day " tick-day)
-  ]
-  tick
+to run-tests
+  ;print ts-get TS time:create "2000-01-01 01:00:00" "all"
+  test-indexes-before-and-after
+  test-ts-add-row
+  test-ts-get
+  test-ts-get-range
+  test-time-series-with-strings
+  test-ts-get-interp
 end
 
 
+to test-time-series-with-strings
+  let ts ts-load  "time-series-data.csv"
+  let start-time time:create "1999-12-31"
+  let end-time time:create "2000-01-03"
+  set ts ts-create ["flow" "temp"]
+  set ts ts-add-row ts (list (time:create "2000-01-01") "jerry" 2)
+  set ts ts-add-row ts (list (time:create "2000-01-02") "cherry" 5)
+  if (ts-get-range ts start-time end-time "flow") != ["jerry" "cherry"] [error "error dealing with strings"]
+  if (ts-get-range ts start-time end-time "temp") != [2 5] [error "error dealing with strings"]
+
+  ts-write ts "new-ts-range.csv"
+  let ts_out (ts-load-with-format "new-ts-range.csv" "YYYY-MM-dd")
+  print "All tests with strings passed"
+end
+
+to test-ts-get-range
+  let ts ts-load  "time-series-data.csv"
+  if (ts-get-range ts time:create "2000-01-01 01:00:00" time:create "2000-01-01 03:00:00" "flow") != (list 1010 1020 1030) [error "ts-get-range fail 1"]
+  if (ts-get-range ts time:create "2000-01-01 01:00:01" time:create "2000-01-01 03:00:00" "flow") != (list 1020 1030) [error "ts-get-range fail 2"]
+  if (ts-get-range ts time:create "1999-12-31 00:00:00" time:create "1999-12-31 23:00:00" "flow") != (list) [error "ts-get-range fail 3"]
+  if (ts-get-range ts time:create "2000-01-03 01:00:01" time:create "2000-01-04 01:00:01" "flow") != (list) [error "ts-get-range fail 3"]
+  if (ts-get-range ts time:create "2000-01-03 01:00:00" time:create "2000-01-03 01:00:00" "flow") != (list 1040) [error "ts-get-range fail 3"]
+   print "All ts-get-range tests passed"
+end
+
+to test-ts-get
+  let ts ts-load  "time-series-data.csv"
+  if not time:is-equal (ts-get ts (time:create "2000-01-03 01:00:01") "LOGOTIME") (time:create "2000-01-03 01:00:00") [error "failure to get the last time as the closest to a time bigger than the last"]
+  if not time:is-equal (ts-get ts (time:create "1999-12-31 00:00:00") "LOGOTIME") (time:create "2000-01-01 00:00:00") [error "failure to get the first time as the closest to a time bigger than the last"]
+  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:00:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get the exact match 2000-01-01 01:00:00"]
+  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:29:59") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:59"]
+  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:30:01") "LOGOTIME") (time:create "2000-01-01 02:00:00") [error "failure to get 2000-01-01 02:00:00 for 2000-01-01 01:30:01"]
+
+  ; what should this do? higher or lower
+  ;if not time:is-equal (ts-get ts (time:create "2000-01-01 01:30:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:00"]
+  print "All ts-get tests passed"
+end
+
+to test-ts-add-row
+  let ts ts-load  "time-series-data.csv"
+  if not time:is-equal time:create "2000-01-03 01:00:01" (item 0 item 51 ts-add-row ts (list time:create "2000-01-03 01:00:01" 10 20)) [error "failure to add row with latest time to end"]
+  if not time:is-equal time:create "1999-12-31 00:00:00" (item 0 item 1 ts-add-row ts (list time:create "1999-12-31 00:00:00" 10 20)) [error "failure to add row with earliest time to beginning"]
+  if not time:is-equal time:create "2000-01-01 02:00:01" (item 0 item 4 ts-add-row ts (list time:create "2000-01-01 02:00:01" 10 20)) [error "failure to add row to the proper place"]
+  print "All ts-add-row tests passed"
+end
+
+to test-indexes-before-and-after
+  let ts ts-load  "time-series-data.csv"
+  if (__indexes-before-and-after ts time:create "1999-12-31 00:00:00") != list nobody 1 [error "failure to get correct index of 1999-12-31 00:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 00:00:00") != list 1 1 [error "failure to get correct index of 2000-01-01 00:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 01:00:00") != list 2 2 [error "failure to get correct index of 2000-01-01 01:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 01:30:00") != list 2 3 [error "failure to get correct index of 2000-01-01 01:30:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 02:00:00") != list 3 3 [error "failure to get correct index of 2000-01-01 02:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 02:00:01") != list 3 4 [error "failure to get correct index of 2000-01-01 02:00:01"]
+  if (__indexes-before-and-after ts time:create "2000-01-01 03:00:00") != list 4 4 [error "failure to get correct index of 2000-01-01 03:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-03 01:00:00") != list 50 50 [error "failure to get correct index of 2000-01-03 01:00:00"]
+  if (__indexes-before-and-after ts time:create "2000-01-03 01:00:01") != list 50 nobody [error "failure to get correct index of 2000-01-03 01:00:00"]
+
+  print "All indexes-above-and-below tests passed"
+end
+
+to test-ts-get-interp
+  let ts ts-load  "time-series-data.csv"
+  if ts-get-interp ts time:create "2000-01-01 3:30" "temp" != 13.5 [error "ts-interp failing when interpolation is right in the middle"]
+  if ts-get-interp ts time:create "2000-01-01 3:06" "temp" != 13.1 [error "ts-interp failing when interpolation is 1/10 of the way between"]
+  if ts-get-interp ts time:create "2000-01-01 3:15" "temp" != 13.25 [error "ts-interp failing when interpolation is 1/4 of the way between"]
+  if ts-get-interp ts time:create "2000-01-01 3:45" "temp" != 13.75 [error "ts-interp failing when interpolation is 3/4 of the way between"]
+  if ts-get-interp ts time:create "2000-01-01 3:54" "temp" != 13.9 [error "ts-interp failing when interpolation is 9/10 of the way between"]
+  if ts-get-interp ts time:create "2000-01-01 3:00" "temp" != 13 [error "ts-interp failing when there is an exact match"]
+
+  print "All ts-interp tests passed"
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-137
-10
-574
-448
+221
+27
+559
+366
 -1
 -1
-13.0
+10.0
 1
 10
 1
@@ -196,47 +116,13 @@ ticks
 30.0
 
 BUTTON
-28
-56
-94
-89
+128
+29
+218
+62
 NIL
-setup
+run-tests\n
 NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-27
-106
-90
-139
-NIL
-go
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-26
-154
-105
-187
-stop
-stop
-T
 1
 T
 OBSERVER
@@ -477,12 +363,19 @@ Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
 sheep
 false
-0
-Rectangle -7500403 true true 151 225 180 285
-Rectangle -7500403 true true 47 225 75 285
-Rectangle -7500403 true true 15 75 210 225
-Circle -7500403 true true 135 75 150
-Circle -16777216 true false 165 76 116
+15
+Circle -1 true true 203 65 88
+Circle -1 true true 70 65 162
+Circle -1 true true 150 105 120
+Polygon -7500403 true false 218 120 240 165 255 165 278 120
+Circle -7500403 true false 214 72 67
+Rectangle -1 true true 164 223 179 298
+Polygon -1 true true 45 285 30 285 30 240 15 195 45 210
+Circle -1 true true 3 83 150
+Rectangle -1 true true 65 221 80 296
+Polygon -1 true true 195 285 210 285 210 240 240 210 195 210
+Polygon -7500403 true false 276 85 285 105 302 99 294 83
+Polygon -7500403 true false 219 85 210 105 193 99 201 83
 
 square
 false
@@ -567,6 +460,13 @@ Line -7500403 true 216 40 79 269
 Line -7500403 true 40 84 269 221
 Line -7500403 true 40 216 269 79
 Line -7500403 true 84 40 221 269
+
+wolf
+false
+0
+Polygon -16777216 true false 253 133 245 131 245 133
+Polygon -7500403 true true 2 194 13 197 30 191 38 193 38 205 20 226 20 257 27 265 38 266 40 260 31 253 31 230 60 206 68 198 75 209 66 228 65 243 82 261 84 268 100 267 103 261 77 239 79 231 100 207 98 196 119 201 143 202 160 195 166 210 172 213 173 238 167 251 160 248 154 265 169 264 178 247 186 240 198 260 200 271 217 271 219 262 207 258 195 230 192 198 210 184 227 164 242 144 259 145 284 151 277 141 293 140 299 134 297 127 273 119 270 105
+Polygon -7500403 true true -1 195 14 180 36 166 40 153 53 140 82 131 134 133 159 126 188 115 227 108 236 102 238 98 268 86 269 92 281 87 269 103 269 113
 
 x
 false

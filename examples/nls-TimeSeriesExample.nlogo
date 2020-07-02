@@ -1,12 +1,8 @@
-extensions [time]
+extensions [time csv]
+__includes ["time-series.nls"]
 globals[
-  tick-datetime
-  tick-date
-  tick-day
+  time-series
   ts
-  t-datetime
-  t-date
-  t-day
 ]
 to setup
   ;;print __dump-extensions
@@ -16,163 +12,38 @@ to setup
   print "============================"
   print ""
 
-  ;; A logotime can be one of three varieties: a DATETIME, a DATE, and a DAY
-  ;; The variety is inferred by the length of the string passed to time:create
-  ;;
-  ;; The date delimiter can be '-' or '/' and the delimeter between the date and time
-  ;; can be a 'T' or a ' '.  Single digit months and days can have an optional leading zero.
-  ;; Single digit hours, minutes, and seconds must have a leading zero.  Hours are basd on a
-  ;; 24-hour clock (e.g. midnight is '00', noon is '12', and 11pm is '23').
-  ;;
-  ;; DATETIME strings are based on the ISO8601 Standard which can by month, day, or week based:
-  ;;   month based:  "yyyy-mm-ddTHH:MM:SS.SSS"
-  ;;   day based:    "yyyy-dddTHH:MM:SS.SSS"
-  ;;   week based:   "yyyy-Www-dTHH:MM:SS.SSS"
-  ;;   more info: http://joda-time.sourceforge.net/cal_iso.html
-  ;;
-  ;; DATE must be ordered as year-month-day, and DAY must be month-day.
-  ;;
-  ;; Use "" or "now" to get the system datetime
+  set time-series ts-load "time-series-data.csv"
 
-  ;; Show what's possible in terms of formatting DATETIME, DATE, and DAY
-  ; VALID DATETIME's
-  print time:create "2000-01-02T03:04:0.678"
-  print time:create "2000-01-02T03:04:05.678"
-  print time:create "2000-01-02 03:04:5"
-  print time:create "2000-01-02 03:4"
-  print time:create "2000-01-02 3"
-  print time:create "2000/01/02 03:04:05.678"
-  print time:create "2000-1-02 03:04:05.678"
-  print time:create "2000-01-2 03:04:05.678"
-  print time:create "2000-1-2 03:04:05.678"
-  print time:create "2000-01-02"
-  print time:create "2000-01-2"
-  print time:create "2000-1-02"
-  print time:create "01-02"
-  print time:create "01-2"
-  print time:create "1-02"
-  print ""
-  print "============================"
-  print ""
+  print ts-get time-series time:create "2000-01-01 01:30:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:20:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:30:00" "flow"
+  print ts-get time-series time:create "2005-01-02 10:50:01" "flow"
+  print ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
 
-  ; prints the current datetime, two different ways
-  print time:create "now"
-  print time:create ""
-  print ""
-  print "============================"
-  print ""
+  print ts-get-interp time-series time:create "2000-01-01 10:30:00" "flow"
+  print ts-get-interp time-series time:create "2000-01-03 00:30:00" "all"
 
-  ;; Create a datetime, a date, and a day
-  set t-datetime time:create "2000-01-02 03:04:05.678"
-  set t-date time:create "2000-01-02"
-  set t-day time:create "01-02"
+  print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
-  ;; Print out the logotime using user specified format, for full description of options, see:
-  ;; http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html
-  print time:show t-datetime "yyyy-MM-dd"
-  print ""
-  print "============================"
-  print ""
+  set ts ts-create ["flow" "temp"]
+  set ts ts-add-row ts ["2000-01-08" 5 4]
+  set ts ts-add-row ts ["2000-01-01" 6 7]
+  ts-write ts "new-ts-file.csv"
 
-  ;; Print out specific fields from the datetime
-  print time:get "year" t-datetime
-  print time:get "month" t-datetime
-  print time:get "week" t-datetime
-  print time:get "day" t-datetime
-  print time:get "dayofyear" t-datetime
-  print time:get "dayofweek" t-datetime
-  print time:get "hour" t-datetime
-  print time:get "minute" t-datetime
-  print time:get "second" t-datetime
-  print time:get "millis" t-datetime
-  print ""
-  print "============================"
-  print ""
-
-  ;; Add some interval to the datetime
-  print time:plus t-datetime 1.0 "seconds"
-  print time:plus t-datetime 1.0 "minutes"
-  print time:plus t-datetime (60.0 * 24) "minutes"
-  print time:plus t-datetime 1 "week"
-  print time:plus t-datetime 1.0 "weeks"
-  print time:plus t-datetime 1.0 "months"  ;; note that decimal months or years are
-  print time:plus t-datetime 1.0 "years"   ;; rounded to the nearest whole number
-  print ""
-  print "============================"
-  print ""
-
-  ;; any of the three varieties of logotime can be achored to the tick,
-  ;; the time value of the logotime is assumed to be tick zero.
-  ;; the other arguments to this call describe how much time one tick is worth,
-  ;; e.g. below one tick is with one hour, two days, and three months respectively
-  set tick-datetime time:anchor-to-ticks t-datetime 1 "hour"
-  set tick-date time:anchor-to-ticks t-date 2 "days"
-  set tick-day time:anchor-to-ticks t-day 3 "months"
-
-  ;; make comparisons between LogoTimes
-  print "before, before, after, equal, equal"
-  print time:is-before (time:create "2000-01-02") (time:create "2000-01-03")
-  print time:is-before (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-after  (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-03")
-  print "before days"
-  print time:is-before (time:create "01-02") (time:create "01-03")
-  print "is between"
-  print time:is-between (time:create "2000-03-08") (time:create "1999-12-02") (time:create "2000-05-03")
-  print time:is-between (time:create "2000-03-08") (time:create "2000-05-03") (time:create "1999-12-02")
-  print ""
-  print "============================"
-  print ""
-
-  ;; find the amount of time between two LogoTimes, make sure to specify a time unit and recall that months
-  ;; and years will only be reported as whole numbers
-  print time:difference-between (time:create "2000-01-02 00:00") (time:create "2000-02-02 00:00") "days"
-  print time:difference-between (time:create "2000-01-02") (time:create "2001-02-02") "days"
-  print time:difference-between (time:create "01-02") (time:create "01-01") "hours"
+  set time-series ts-load-with-format "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss.SSS"
+  print time-series
 end
 
 to go
-  ;; during model execution, any logotime that has been achored to ticks will automatically
-  ;; hold the appropriate date, and can be used analogously to using the "ticks" primitive
-  reset-ticks
-  print ""
-  print "GO ============================"
-  print ""
-  while[ticks < 2][
-    tick
-    print (word "tick " ticks)
-    print (word "tick-datetime " tick-datetime)
-    print (word "tick-date " tick-date)
-    print (word "tick-day " tick-day)
-  ]
-  tick
-end
-
-to setup-and-go
   setup
-  ;; during model execution, any logotime that has been achored to ticks will automatically
-  ;; hold the appropriate date, and can be used analogously to using the "ticks" primitive
-  print ""
-  print "GO ============================"
-  print ""
-  while[ticks < 2][
-    tick
-    print (word "tick " ticks)
-    print (word "tick-datetime " tick-datetime)
-    print (word "tick-date " tick-date)
-    print (word "tick-day " tick-day)
-  ]
   tick
 end
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
-137
-10
-574
-448
+336
+18
+773
+456
 -1
 -1
 13.0
