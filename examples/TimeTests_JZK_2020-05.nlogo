@@ -1,6 +1,9 @@
 extensions [ time csv ]
 
-globals [time-series]
+globals [
+  time-series
+  ts
+]
 to setup
   ca
   reset-ticks
@@ -40,6 +43,7 @@ to test-ts-get-range
   time:ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
 
   let cond1 length (time:ts-get-range time-series (time:create "2020-06-16 12:00") (time:create "2020-06-17 12:00") "x") = 2
+
   let cond2 length (time:ts-get-range time-series (time:create "2020-06-17 12:00") (time:create "2020-06-17 12:00") "x") = 1
   ; print (time:ts-get-range time-series (time:create "2020-06-18 12:00") (time:create "2020-06-19 12:00") "x")
   ifelse cond1 and cond2 [;  and cond3 [
@@ -65,6 +69,45 @@ to test-ts-get-interp
   ]
   print ""
 end
+
+
+
+
+to test-ts-load
+  ;;print __dump-extensions
+  ;;print __dump-extension-prims
+  __clear-all-and-reset-ticks
+
+  print "============================"
+  print "Testing ts-load for semi-colon but"
+  print "============================"
+
+
+  set time-series time:ts-load "time-series-data-with-comments.csv"
+
+  print time:ts-get time-series time:create "2000-01-01 01:30:00" "flow"
+  print time:ts-get time-series time:create "2000-01-01 10:20:00" "flow"
+  print time:ts-get time-series time:create "2000-01-01 10:30:00" "flow"
+  print time:ts-get time-series time:create "2005-01-02 10:50:01" "flow"
+  print time:ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
+
+  print time:ts-get-exact time-series time:create "2000-01-01 00:00" "flow"
+  print time:ts-get-exact time-series time:create "2000-01-01 00:00" "temp"  ; This line has a comment and it creates an error
+
+;  print time:ts-get-interp time-series time:create "2000-01-01 10:30:00" "flow"
+;  print time:ts-get-interp time-series time:create "2000-01-03 00:30:00" "all"
+;
+;  print time:ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
+;
+;  set ts time:ts-create ["flow" "temp"]
+;  time:ts-add-row ts ["2000-01-08" 5 4]
+;  time:ts-add-row ts ["2000-01-01" 6 7]
+;  time:ts-write ts "new-ts-file.csv"
+;
+;  set time-series time:ts-load-with-format "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss.SSS"
+;  print time-series
+end
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 210

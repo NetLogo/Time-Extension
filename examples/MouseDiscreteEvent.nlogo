@@ -1,4 +1,5 @@
-extensions [time]
+extensions [time csv]
+__includes ["../time-series.nls"]
 
 globals
  [
@@ -27,7 +28,7 @@ to setup
   time:anchor-schedule start-time 1.0 "second"
 
   ; Create a log of times at which traps snap
-  set snap-log (time:ts-create ["trap-xcor" "trap-ycor"])
+  set snap-log (ts-create ["trap-xcor" "trap-ycor"])
 
 end
 
@@ -44,15 +45,15 @@ time:schedule-event (one-of patches) [ [] -> snap ] current-time
   ; First, delete the output file if it already exists.
   if file-exists? "snap-log.csv" [file-delete "snap-log.csv"]
   ; Then open it.
-  time:ts-write snap-log "snap-log.csv"
+  ts-write snap-log "snap-log.csv"
 
   ; Finally, histogram the trap snap times
   ; We can only histogram numbers, but the snap-log records times in logotime format.
   ; So we create a temporary list of snap times in seconds using "map".
   ; Use time:difference-between instead of time:get because time:get reports only integer values.
   set-current-plot "Snap time distribution"
-  print (time:ts-get-range snap-log start-time current-time "logotime")
-  histogram map [ [?1] -> time:difference-between start-time ?1 "second" ] (time:ts-get-range snap-log start-time current-time "logotime")
+  print (ts-get-range snap-log start-time current-time "logotime")
+  histogram map [ [?1] -> time:difference-between start-time ?1 "second" ] (ts-get-range snap-log start-time current-time "logotime")
 
 end
 
@@ -90,7 +91,7 @@ to update-output
   plotxy ticks count patches with [pcolor = yellow]
 
   ; Record the snap time, converted to seconds because we don't need the date, hour, etc.
-  time:ts-add-row snap-log (sentence current-time pxcor pycor)
+  set snap-log ts-add-row snap-log (sentence current-time pxcor pycor)
 
 end
 @#$#@#$#@
@@ -511,7 +512,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

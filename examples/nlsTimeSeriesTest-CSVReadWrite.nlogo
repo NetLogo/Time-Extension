@@ -1,113 +1,68 @@
-extensions [ time csv]
+extensions [time csv]
 __includes ["../time-series.nls"]
-globals
-[
-  ; Global variables calculated by code
-  ; start-time and end-time are defined on the Interface
-  time                   ;;; A Logo-time value for current time
-  next-time              ;;; The next time (when current time step ends)
-  end-time-code          ;;; Logo-time variable for ending time
-  step-length            ;;; Length of time step (days)
-  flow                   ; River flow
-  temperature            ; River temperature
-
-  ; Internal data structures
-  input-time-series  ; Time-series input set (time extension's LogoTime data type)
-  input-time-list    ;;; List of times in input-time-series
-
-  ; File names
-  time-series-file-name
-
-]
+globals [ts ts_out]
 
 to setup
+  let random_flow0 (random 100)
+  let random_flow1 (random 100)
+  set ts ts-create ["flow" "temp"]
+  set ts ts-add-row ts (list (time:create "2000-01-01") random_flow0 2)
+  set ts ts-add-row ts (list (time:create "2000-01-02") random_flow1 5)
+  ts-write ts "new-ts-output.csv"
 
-  ca
+  set ts_out ts-load "new-ts-output.csv"
+  let flow_value0 ts-get ts_out (time:create "2000-01-01") "flow"
+  let flow_value1 ts-get ts_out (time:create "2000-01-02") "flow"
+  if(flow_value0 != random_flow0)
+  [ error "Read and Write Error" ]
+  if (flow_value1 != random_flow1)
+  [ error "Read and Write Error" ]
 
-  reset-ticks
+  let flow_value0e ts-get-exact ts_out (time:create "2000-01-01") "flow"
+  let flow_value1e ts-get-exact ts_out (time:create "2000-01-02") "flow"
+  if(flow_value0e != random_flow0)
+  [ error "Read and Write Error" ]
+  if (flow_value1e != random_flow1)
+  [ error "Read and Write Error" ]
 
-  file-close ; Just in case a file got left open.
+  let flow_value0i ts-get-interp ts_out (time:create "2000-01-01") "flow"
+  let flow_value1i ts-get-interp ts_out (time:create "2000-01-02") "flow"
+  if(flow_value0i != random_flow0)
+  [ error "Read and Write Error" ]
+  if (flow_value1i != random_flow1)
+  [ error "Read and Write Error" ]
 
-  set time-series-file-name "time-series-with-variable-time-steps.csv"; All time-series inputs (flow, temperature...)
-
-  ;;; Set the current time to the simulation start time
-  set time (time:create start-time)
-
-  ; Create a LogoTime variable for simulation end time
-  set end-time-code time:create end-time
-
-  ; Some defensive programming
-  if time:is-after time end-time-code [ error "Really, the simulation must end after it starts" ]
-  output-print time:show time "MMMM d, yyyy HH:mm"
-
-  ; Read all the input file's data into a LogoTimeSeries variable
-  if not file-exists? time-series-file-name [ error (word "Input file " time-series-file-name " not found") ]
-  set input-time-series ts-load time-series-file-name
-
-  ;;; Extract from the LogoTimeSeries a list of the time values in the input file
-  set input-time-list ts-get-range input-time-series start-time end-time "LOGOTIME"
-  ; Test output
-  foreach input-time-list
-  [ ?1 -> show time:show ?1 "MMMM d, yyyy HH:mm" ]
-
-  ;;; Initialize the next-time variable
-  set next-time 0
 
 end
 
-to go
-
-  tick
-
-  ;;; Determine length of the current time step: the time (days) between current time and
-  ; the next time in the input file.
-  ; If it is the first tick (next-time = 0) then do not advance the time
-  ; Time values are all taken from the list of time values in the input file
-  ifelse next-time = 0
-  [ set next-time time:copy item 1 input-time-list ]
-  [
-    ; If it is not the first tick, advance the time by reading the first value on the time list
-    set time time:copy first input-time-list
-    ; Then remove the current time from the list, and stop if it is the last time.
-    set input-time-list remove-item 0 input-time-list
-    if empty? input-time-list [ stop ]
-    ; Now, the first item on the time list is the start of the *next* time step
-    set next-time time:copy first input-time-list
-  ]
-
-  ; Finally, calculate the time step length
-  set step-length time:difference-between time next-time "days"
-
-  ; Get the model input from the LogoTimeSeries variable
-  set flow ts-get input-time-series time "flow"
-  set temperature ts-get input-time-series time "temperature"
-
-  ; Display current time, flow, temperature
-  output-print (word (time:show time "MMMM d, yyyy HH:mm") "; Length: " step-length " flow: " flow " temperature: " temperature)
-
+to run-test
+  print "------------- Starting Tests ---------------------"
+  repeat 1000
+  [ setup ]
+  print "------------- Completed Tests --------------------"
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
-383
-184
+647
+448
 -1
 -1
-55.0
+13.0
 1
 10
 1
 1
 1
 0
-0
-0
 1
-0
-2
-0
-2
+1
+1
+-16
+16
+-16
+16
 0
 0
 1
@@ -115,10 +70,10 @@ ticks
 30.0
 
 BUTTON
-12
-10
-104
-43
+18
+65
+84
+98
 NIL
 setup
 NIL
@@ -131,101 +86,42 @@ NIL
 NIL
 1
 
-INPUTBOX
-11
-107
-153
-167
-start-time
-2000/4/1 00:00
-1
-0
-String
-
-INPUTBOX
-12
-178
-153
-238
-end-time
-2000/10/1 00:00
-1
-0
-String
-
-BUTTON
-12
-61
-75
-94
-NIL
-go
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-OUTPUT
-210
-140
-664
-387
-10
-
-BUTTON
-82
-61
-145
-94
-step
-go
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-TEXTBOX
-213
-118
-287
-136
-Current date
-11
-0.0
-1
-
 @#$#@#$#@
-# Variable Time Step Demonstration Model
-
 ## WHAT IS IT?
 
-This model demonstrates use of the Time extension to provide scheduling of models with variable time steps: when the amount of time represented by one tick varies. Examples of such models include those that (a) represent day and night separately, with the length of day and night varying with the seasons; (b) have environment conditions that change at irregular time intervals; and (c, here) have environment variables that change regularly but also occasionally short-term "events" of major change at time scales less than the normal regular time step.
+(a general understanding of what the model is trying to show or explain)
 
 ## HOW IT WORKS
 
-A time-series input file contains the times at which two environment variables (river flow and temperature) change, and their values at each change. The Time extension's LogoTimeSeries variable type is used to read in the input and extract a NetLogo list of the times at which flow and temperature change (between simulation starting and ending times specified by the user). 
+(what rules the agents use to create the overall behavior of the model)
 
-Then, in the go procedure, the list of times at which temperature and flow change is used to keep track of the current simulation time and calculate the time (number of days, including fractions) represented by each tick.
+## HOW TO USE IT
 
-The input file provided with this demonstration (ExampleTimeSeriesInputs.csv) includes one-day time steps with occasional sub-daily "events". Usually, flow and temperature change once per day at midnight. Some days, however, include several changes within a day.
+(how to use the model, including a description of each of the items in the Interface tab)
 
-Note that if you edit ExampleTimeSeriesInputs.csv in Excel or other software, you need to tell the software to write the date/time values of Column 1 in the proper yyyy/m/d hh:mm format. In Excel, this requires selecting the values, then using the Format dialog to select "More number formats", then "Custom", and then manually editing the "Type:" input to "yyyy/m/d hh:mm".
+## THINGS TO NOTICE
+
+(suggested things for the user to notice while running the model)
+
+## THINGS TO TRY
+
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+
+## EXTENDING THE MODEL
+
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+
+## NETLOGO FEATURES
+
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
+## RELATED MODELS
+
+(models in the NetLogo Models Library and elsewhere which are of related interest)
 
 ## CREDITS AND REFERENCES
 
-This model was developed by Steve Railsback and Colin Sheppard. The Time extension, including this and other demonstration models, is available at: https://github.com/colinsheppard/time
-
-May 2014
+(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
 @#$#@#$#@
 default
 true
@@ -368,17 +264,6 @@ Circle -7500403 true true 96 51 108
 Circle -16777216 true false 113 68 74
 Polygon -10899396 true false 189 233 219 188 249 173 279 188 234 218
 Polygon -10899396 true false 180 255 150 210 105 210 75 240 135 240
-
-frog top
-true
-0
-Polygon -7500403 true true 146 18 135 30 119 42 105 90 90 150 105 195 135 225 165 225 195 195 210 150 195 90 180 41 165 30 155 18
-Polygon -7500403 true true 91 176 67 148 70 121 66 119 61 133 59 111 53 111 52 131 47 115 42 120 46 146 55 187 80 237 106 269 116 268 114 214 131 222
-Polygon -7500403 true true 185 62 234 84 223 51 226 48 234 61 235 38 240 38 243 60 252 46 255 49 244 95 188 92
-Polygon -7500403 true true 115 62 66 84 77 51 74 48 66 61 65 38 60 38 57 60 48 46 45 49 56 95 112 92
-Polygon -7500403 true true 200 186 233 148 230 121 234 119 239 133 241 111 247 111 248 131 253 115 258 120 254 146 245 187 220 237 194 269 184 268 186 214 169 222
-Circle -16777216 true false 157 38 18
-Circle -16777216 true false 125 38 18
 
 house
 false
