@@ -76,7 +76,7 @@ Create a global to store a LogoTimeSeries object.  In your setup procedure, load
 
     globals[time-series]
 
-	set time-series time:ts-load "time-series-data.csv"
+	set time-series ts-load "time-series-data.csv"
 
 
 
@@ -84,7 +84,7 @@ Create a LogoTime and use it to extract the value from the "flow" column that is
 
     let current-time time:create "2000-01-01 01:20:00"
 
-    let current-flow time:ts-get time-series current-time "flow"
+    let current-flow ts-get time-series current-time "flow"
 
     ;; By default, the nearest record in the time series is retrieved (in this case 1010),
 	;; you can alternatively require an exact match or do linear interpolation.
@@ -119,7 +119,7 @@ This extension is powered by the Java Time Library, which has very sophisticated
 
 **Time Series Utilities**
 
-Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this rep with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this repo with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
 
 Users can also create and record a time series of events within their model, access that series during simulations, and export it to a file for analysis. For example, a market model could create a time series object into which is recorded the date and time, trader, price, and size of each trade. The time series utilities let model code get (for example) the mean price over the previous day or week, and save all the trades to a file at the end of a run.
 
@@ -139,9 +139,9 @@ A second common use of discrete event scheduling is when it is important to keep
 
 ## Installation
 
-First, [download the latest version of the extension](https://github.com/colinsheppard/Time-Extension/releases). Note that the latest version of this extension was compiled against NetLogo 5.0.4; if you are using a different version of NetLogo you might consider building your own jar file ([see building section below](#building)).
+The Time extension is now available through the extensions manager. Simply including `extensions [table]` at the top of the model should prompt NetLogo to download the extension (you must be using NetLogo 6.1 or later).
 
-Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
+Alternatively, [download the latest version of the extension](https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/time-2.0beta.zip) (Note that this extension is compiled for NetLogo 6.1 and may not work for earlier versions of NetLogo) Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
 
 For more information on NetLogo extensions:
 [http://ccl.northwestern.edu/netlogo/docs/extensions.html](http://ccl.northwestern.edu/netlogo/docs/extensions.html)
