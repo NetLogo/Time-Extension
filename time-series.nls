@@ -130,14 +130,14 @@ to-report ts-load-with-format [filepath format-string]
 end
 
 
-to-report ts-has-repeat-times [ltime-series]
+to-report ts-has-repeat-times? [ltime-series]
   foreach (range 1 (length ltime-series - 1)) [i -> 
     if time:is-equal (__time-of item i ltime-series) (__time-of item (i + 1) ltime-series) [report true]]         
   report false
 end
 
 
-to-report ts-has-repeat-of-time [ltime-series logotime]    
+to-report ts-has-repeat-of-time? [ltime-series logotime]    
   let b&a __indices-before-and-after ltime-series logotime
   let i1 first b&a
   let i2 last b&a
