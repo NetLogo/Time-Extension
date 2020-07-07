@@ -139,7 +139,7 @@ A second common use of discrete event scheduling is when it is important to keep
 
 ## Installation
 
-The Time extension is now available through the extensions manager. Simply including `extensions [table]` at the top of the model should prompt NetLogo to download the extension (you must be using NetLogo 6.1 or later).
+The Time extension is now available through the extensions manager. Simply including `extensions [time]` at the top of the model should prompt NetLogo to download the extension (you must be using NetLogo 6.1 or later).
 
 Alternatively, [download the latest version of the extension](https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/time-2.0beta.zip) (Note that this extension is compiled for NetLogo 6.1 and may not work for earlier versions of NetLogo) Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
 
@@ -686,7 +686,7 @@ Behaves almost identical to ts-get, but if there is not an exact match with the 
 
 Reports a list of all of the values from the *column-name* column of the *logotimeseries* in the rows between *logotime1* and *logotime2* (inclusively).  If "ALL" or "all" is specified as the column name, then a list of lists is reported, with one sub-list for each column in *logotimeseries*, including the date/time column.  If "LOGOTIME" or "logotime" is specified as the column name, then the date/time column is returned.
 
-If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally.
+If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally, i.e. it will return the same thing as with logotime1 and logotime2 reversed. 
 
     print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
