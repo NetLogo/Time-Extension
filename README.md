@@ -56,6 +56,8 @@ Compare your date/time to some other date/time:
 
 **Time Series Tool**
 
+*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive.
+
 [Download this example time series file](https://github.com/colinsheppard/Time-Extension/raw/master/examples/time-series-data.csv) and place in the same directory as your NetLogo model.  Here are the first 10 lines of the file:
 
     ; meta data at the top of the file
@@ -117,7 +119,7 @@ This extension is powered by the Java Time Library, which has very sophisticated
 
 **Time Series Utilities**
 
-Modelers commonly need to use time series data in NetLogo.  The **time extension** provides convenient primitives for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this rep with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
 
 Users can also create and record a time series of events within their model, access that series during simulations, and export it to a file for analysis. For example, a market model could create a time series object into which is recorded the date and time, trader, price, and size of each trade. The time series utilities let model code get (for example) the mean price over the previous day or week, and save all the trades to a file at the end of a run.
 
@@ -156,11 +158,12 @@ The **time extension** introduces some new data types (more detail about these i
 
 * **LogoTime** - A LogoTime object stores a time stamp; it can track a full date and time, or just a date (with no associated time).
 
-* **LogoTimeSeries** - A LogoTimeSeries object stores a table of data indexed by LogoTime.  The time series can be read in from a file or recorded by the code during a simulation.
-
 * **LogoEvent** - A LogoEvent encapsulates a who, a what, and a when.  It allows you to define, for example, that you want turtle 7 to execute the go-forward procedure at tick 10.  When scheduling an event using the **time extension** you pass the who, what, and when as arguments (e.g. "time:schedule-event (turtle 1) td 5").
 
 * **Discrete Event Schedule** - A discrete event schedule is a sorted list of LogoEvents that is maintained by this extension and manages the dispatch (execution) of those events.  Users do not need to manipulate or manage this schedule directly, but it is useful to understand that it stores and executes LogoEvents when the "time:go" or "time:go-until" commands are issued.  As the schedule is executed, the **time extension** automatically updates the NetLogo ticks to match the current event in the schedule.
+
+The time-series.nls file in this repo contains the same functionality that was in the original version of the time series.
+* **LogoTimeSeries** - A LogoTimeSeries object stores a table of data indexed by LogoTime.  The time series can be read in from a file or recorded by the code during a simulation. It is currently implemented in NetLogo code using a list of lists. 
 
 [back to top](#netlogo-time-extension)
 
@@ -230,10 +233,6 @@ The **time extension** has the following notable behavior:
 
 * **Decimal versus whole number time periods** - In this extension, decimal values can be used by the *plus* and *anchor-to-ticks* primitives for seconds, minutes, hours, days, and weeks (milliseconds can't be fractional because they are the base unit of time).  These units are treated as *durations* because they can unambiguously be converted from a decimal number to a whole number of milliseconds.  But there is ambiguity in how many milliseconds there are in 1 month or 1 year, so month and year increments are treated as *periods* which are by definition whole number valued. So if you use the *time:plus* primitive to add 1 month to the date "2012-02-02", you will get "2012-03-02"; and if you add another month you get "2012-04-02" even though February and March have different numbers of days.  If you try to use a fractional number of months or years, it will be rounded to the nearest integer and then added. If you want to increment a time variable by one and a half 365-day years, then just increment by 1.5 * 365 days instead of 1.5 years.
 
-* **LogoTimeSeries must have unique LogoTimes** - The LogoTimes in the timestamp column of the LogoTimeSeries must be unique.  In other words, there cannot be more than one row indexed by a particular timestamp. If you add a row to a LogoTimeSeries using a LogoTime already in the table, the data in the table will be overwritten by the new row.
-
-* **LogoTimeSeries columns are numeric or string valued** - The data columns in a LogoTimeSeries will be typed as numbers or strings depending on the value in the first row of the input file (or the first row added using *time:ts-add-row*).  A number added to a string column will be encoded as a string and a string added to a number column will throw an error.
-
 * **LogoEvents are dispatched in order, and ties go to the first created** - If multiple LogoEvents are scheduled for the exact same time, they are dispatched (executed) in the order in which they were added to the discrete event schedule.
 
 * **LogoEvents can be created for an agentset** - When an agentset is scheduled to perform an anonymous command (before NetLogo 6.0 these were called tasks), the individual agents execute the procedure in a non-random order, which is different from *ask* which shuffles the agents.  Of note is that this is the only way I'm aware of to accomplish an unsorted *ask*, in NetLogo while still allowing for the death and creation of agents during execution.  Some simple benchmarking indicates that not shuffling can reduce execution time by ~15%.  To shuffle the order, use the *add-shuffled* primitive, which will execute the actions in random order with low overhead.
@@ -241,6 +240,7 @@ The **time extension** has the following notable behavior:
 * **LogoEvents won't break if an agent dies** - If an agent is scheduled to perform an anonymous command in the future but dies before the event is dispatched, the event will be silently skipped.
 
 * **LogoEvents can be scheduled to occur at a LogoTime** - LogoTimes are acceptable alternatives to specifying tick numbers for when events should occur.  However, for this to work the discrete event schedule must be "anchored" to a reference time so it knows a relationship between ticks and time.  See *time:anchor-schedule** below for an example of anchoring.
+
 
 [back to top](#netlogo-time-extension)
 
@@ -622,84 +622,99 @@ Returns a new LogoTime object that holds the same date/time as the *logotime* ar
 ---------------------------------------
 
 ### Time Series Tool
+*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. Since it is not part of the extension, these "primitives" don't have the "time:" prefix. Also, the NetLogo file must have the csv extension for the time-series.nls functionality to work. 
 
 
-**time:ts-create**
+**ts-create**
 
-*time:ts-create column-name-list*
+*ts-create column-name-list*
 
 Reports a new, empty LogoTimeSeries. The number of data columns and their names are defined by the number and values of *column-name-list* parameter, which must be a list of strings. The first column, which contains dates or times, is created automatically.
 
-    let turtle-move-times (time:ts-create ["turtle-show" "new-xcor" "new-ycor"])
+    let turtle-move-times (ts-create ["turtle-show" "new-xcor" "new-ycor"])
 
 ---------------------------------------
 
-**time:ts-add-row**
+**ts-add-row**
+*NOTE*: This is the only time-series functionality in time-series.nls that is not backwards compatible with the old time extension. Since time-series.nls implements time series with native NetLogo lists, they are immutable. So, ts-add-row returns a new timeseries, it does not mutate the old one. This means that variables holding the time series must be re-assigned. 
 
-*time:ts-add-row logotimeseries row-list*
+*ts-add-row logotimeseries row-list*
 
-Adds a record to an existing LogoTimeSeries. The *row-list* should be a list containing a LogoTime as the first element and the rest of the data corresponding to the number of columns in the LogoTimeSeries object.  Columns are either numeric or string valued (note: if you add a string to a numeric column an error occurs).
+Returns a new LogoTimeSeries  with row-list added to the inputed logotimeseries. The *row-list* should be a list containing a LogoTime as the first element and the rest of the data corresponding to the number of columns in the LogoTimeSeries object.  Columns are either numeric or string valued.
 
     ;; A turtle records the time and destination each time it moves
     ;; model-time is a DATETIME variable anchored to ticks.
-    time:ts-add-row turtle-move-times (sentence model-time who xcor ycor)
+    set turtle-move-times ts-add-row turtle-move-times (sentence model-time who xcor ycor)
 
 
 ---------------------------------------
 
-**time:ts-get**
+**ts-get**
 
-*time:ts-get logotimeseries logotime column-name*
+*ts-get logotimeseries logotime column-name*
 
-Reports the value from the *column-name* column of the *logotimeseries* in the row matching *logotime*.  If there is not an exact match with *logotime*, the row with the nearest date/time will be used.  If "ALL" or "all" is specified as the column name, then the entire row, including the logotime, is returned as a list.
+Reports the value from the *column-name* column of the *logotimeseries* in the row matching *logotime*.  If there is not an exact match with *logotime*, the row with the nearest date/time will be used. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. If "ALL" or "all" is specified as the column name, then the entire row, including the logotime, is returned as a list.
 
-    print time:ts-get ts (time:create "2000-01-01 10:00:00") "flow"
+    print ts-get ts (time:create "2000-01-01 10:00:00") "flow"
     ;; prints the value from the flow column in the row containing a time stamp of 2000-01-01 10:00:00
 
 ---------------------------------------
 
-**time:ts-get-interp**
+**ts-get-interp**
 
-*time:ts-get-interp logotimeseries logotime column-name*
+*ts-get-interp logotimeseries logotime column-name*
 
 Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
 
-    print time:ts-get-interp ts (time:create "2000-01-01 10:30:00") "flow"
+    print ts-get-interp ts (time:create "2000-01-01 10:30:00") "flow"
 
 ---------------------------------------
 
-**time:ts-get-exact**
+**ts-get-exact**
 
 *time:ts-get-exact logotimeseries logotime column-name*
 
-Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown.
+Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
 
-    print time:ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
+    print ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
 
 ---------------------------------------
 
-**time:ts-get-range**
+**ts-get-range**
 
-*time:ts-get-range logotimeseries logotime1 logotime2 column-name*
+*ts-get-range logotimeseries logotime1 logotime2 column-name*
 
 Reports a list of all of the values from the *column-name* column of the *logotimeseries* in the rows between *logotime1* and *logotime2* (inclusively).  If "ALL" or "all" is specified as the column name, then a list of lists is reported, with one sub-list for each column in *logotimeseries*, including the date/time column.  If "LOGOTIME" or "logotime" is specified as the column name, then the date/time column is returned.
 
 If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally.
 
-    print time:ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
+    print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
 
 ---------------------------------------
 
-**time:ts-load**
+**ts-has-repeat-times?**
+*ts-has-repeat-times? logotimeseries*
 
-*time:ts-load filepath*
+Reports whether there are any repeated times in the logotimeseries (i.e. two rows with the same time). This can be helpful for determining if it is appropriate to use ts-get or ts-get-range. 
+
+---------------------------------------
+**ts-has-repeat-of-time?**
+*ts-has-repeat-of-time? logotimeries logotime*
+
+Reports whether logotime appears more than once in logotimeseries.  
+
+---------------------------------------
+
+**ts-load**
+
+*ts-load filepath*
 
 Loads time series data from a text input file (comma or tab separated) and reports a new LogoTimeSeries object that contains the data.
 
-    let ts time:ts-load "time-series-data.csv"
+    let ts ts-load "time-series-data.csv"
 
-Each input file and LogoTimeSeries object can contain one or more variables, which are accessed by the column names provided on the first line of the file.  The first line of the file must therefore start with the the word “time” or “date” (this word is actually unimportant as it is ignored), followed by the names of the variables (columns) in the file.  Do not use "all" or "ALL" for a column name as this keyword is reserved (see time:ts-get below).
+Each input file and LogoTimeSeries object can contain one or more variables, which are accessed by the column names provided on the first line of the file.  The first line of the file must therefore start with the the word “time” or “date” (this word is actually unimportant as it is ignored), followed by the names of the variables (columns) in the file.  Do not use "all" or "ALL" for a column name as this keyword is reserved (see ts-get).
 
 The first column of the file must be timestamps that can be parsed by this extension (see the [behavior section](#behavior) for acceptable string formats).  Finally, if the timestamps do not appear in chronological order in the text file, they will be automatically sorted into order when loaded.
 
@@ -717,13 +732,13 @@ The following is an example of hourly river flow and water temperature data that
 
 ---------------------------------------
 
-**time:ts-load-with-format**
+**ts-load-with-format**
 
-*time:ts-load filepath format-string*
+*ts-load filepath format-string*
 
-Identical to time:ts-load except that the first column is parsed based on the *format-string* specifier.
+Identical to ts-load except that the first column is parsed based on the *format-string* specifier.
 
-    let ts time:ts-load "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss"
+    let ts ts-load "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss"
 
 See the following link for a full description of the available format options:
 
@@ -731,13 +746,13 @@ See the following link for a full description of the available format options:
 
 ---------------------------------------
 
-**time:ts-write** 
+**ts-write** 
 
-*time:ts-write logotimeseries filepath*
+*ts-write logotimeseries filepath*
 
 Writes the time series data to a text file in CSV (comma-separated) format.
 
-    time:ts-write ts "time-series-output.csv"
+    ts-write ts "time-series-output.csv"
 
 The column names will be written as the header line, for example:
 
