@@ -664,7 +664,7 @@ Reports the value from the *column-name* column of the *logotimeseries* in the r
 
 *ts-get-interp logotimeseries logotime column-name*
 
-Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
+Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
 
     print ts-get-interp ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -672,9 +672,9 @@ Behaves almost identical to time:ts-get, but if there is not an exact match with
 
 **ts-get-exact**
 
-*time:ts-get-exact logotimeseries logotime column-name*
+*ts-get-exact logotimeseries logotime column-name*
 
-Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
+Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
 
     print ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
 
