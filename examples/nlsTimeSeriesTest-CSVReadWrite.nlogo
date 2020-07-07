@@ -1,5 +1,5 @@
 extensions [time csv]
-__includes ["time-series.nls"]
+__includes ["../time-series.nls"]
 globals [ts ts_out]
 
 to setup

@@ -1,5 +1,5 @@
 extensions [ time csv]
-__includes ["time-series.nls"]
+__includes ["../time-series.nls"]
 
 
 
@@ -40,6 +40,8 @@ to test-ts-get-range
    print "All ts-get-range tests passed"
 end
 
+
+
 to test-ts-get
   let ts ts-load  "time-series-data.csv"
   if not time:is-equal (ts-get ts (time:create "2000-01-03 01:00:01") "LOGOTIME") (time:create "2000-01-03 01:00:00") [error "failure to get the last time as the closest to a time bigger than the last"]
@@ -63,15 +65,15 @@ end
 
 to test-indexes-before-and-after
   let ts ts-load  "time-series-data.csv"
-  if (__indexes-before-and-after ts time:create "1999-12-31 00:00:00") != list nobody 1 [error "failure to get correct index of 1999-12-31 00:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 00:00:00") != list 1 1 [error "failure to get correct index of 2000-01-01 00:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 01:00:00") != list 2 2 [error "failure to get correct index of 2000-01-01 01:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 01:30:00") != list 2 3 [error "failure to get correct index of 2000-01-01 01:30:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 02:00:00") != list 3 3 [error "failure to get correct index of 2000-01-01 02:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 02:00:01") != list 3 4 [error "failure to get correct index of 2000-01-01 02:00:01"]
-  if (__indexes-before-and-after ts time:create "2000-01-01 03:00:00") != list 4 4 [error "failure to get correct index of 2000-01-01 03:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-03 01:00:00") != list 50 50 [error "failure to get correct index of 2000-01-03 01:00:00"]
-  if (__indexes-before-and-after ts time:create "2000-01-03 01:00:01") != list 50 nobody [error "failure to get correct index of 2000-01-03 01:00:00"]
+  if (__indices-before-and-after ts time:create "1999-12-31 00:00:00") != list nobody 1 [error "failure to get correct index of 1999-12-31 00:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-01 00:00:00") != list 1 1 [error "failure to get correct index of 2000-01-01 00:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-01 01:00:00") != list 2 2 [error "failure to get correct index of 2000-01-01 01:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-01 01:30:00") != list 2 3 [error "failure to get correct index of 2000-01-01 01:30:00"]
+  if (__indices-before-and-after ts time:create "2000-01-01 02:00:00") != list 3 3 [error "failure to get correct index of 2000-01-01 02:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-01 02:00:01") != list 3 4 [error "failure to get correct index of 2000-01-01 02:00:01"]
+  if (__indices-before-and-after ts time:create "2000-01-01 03:00:00") != list 4 4 [error "failure to get correct index of 2000-01-01 03:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-03 01:00:00") != list 50 50 [error "failure to get correct index of 2000-01-03 01:00:00"]
+  if (__indices-before-and-after ts time:create "2000-01-03 01:00:01") != list 50 nobody [error "failure to get correct index of 2000-01-03 01:00:00"]
 
   print "All indexes-above-and-below tests passed"
 end
@@ -87,6 +89,8 @@ to test-ts-get-interp
 
   print "All ts-interp tests passed"
 end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 221

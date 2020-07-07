@@ -10,19 +10,21 @@ to-report ts-add-row [ltime-series row]
   
   (ifelse
     length ltime-series = 1 or time:is-after (__time-of row) (__time-of last ltime-series) [      
-      report lput row ltime-series
+      report lput (__row-copy row) ltime-series
     ]
     time:is-before (__time-of row) (__time-of item 1 ltime-series) [
-      report insert-item 1 ltime-series row
+      report insert-item 1 ltime-series (__row-copy row)
     ]
     [ ;else
-      let b&a __indexes-before-and-after ltime-series (__time-of row)
-      if first b&a = last b&a [error (word "a row with logotime " __time-of row " already exists")]
-      report insert-item (last b&a) ltime-series row
+      let b&a __indices-before-and-after ltime-series (__time-of row)      
+      report insert-item (last b&a) ltime-series (__row-copy row)
     ]  
   )
 end
 
+to-report __row-copy [row]
+  report fput (time:copy first row) (butfirst row)
+end
 
 to-report ts-get [ltime-series logotime col-name]  
   let b&a ts-get-before-and-after ltime-series logotime
@@ -40,7 +42,7 @@ end
 
 
 to-report ts-get-before-and-after [ltime-series logotime]
-  let b&a __indexes-before-and-after ltime-series logotime
+  let b&a __indices-before-and-after ltime-series logotime
   let before ifelse-value (first b&a = nobody) [nobody] [item (first b&a) ltime-series]
   let after ifelse-value (last b&a = nobody) [nobody] [item (last b&a) ltime-series]
   report list before after
@@ -74,28 +76,41 @@ end
 
 
 to-report ts-get-range [ltime-series logotime1 logotime2 col-name]
+  ; reports a subset of the time-series between the two logotimes. 
+  
 ; reverse the times if logotime2 is before logotime1
   if time:is-before logotime2 logotime1 [ 
     let temp1 logotime1
     set logotime1 logotime2
     set logotime2 temp1
   ]
-    
-  ; get the index after logotime1
-  let b&a-t1 __indexes-before-and-after ltime-series logotime1
-  let after-t1 __after-index b&a-t1 length ltime-series
-    
-  ; get the index after logotime2
-  let b&a-t2 __indexes-before-and-after ltime-series logotime2
-  let after-t2 __after-index b&a-t2 length ltime-series
   
-  if (first b&a-t2 = last b&a-t2) [ ;if logotime2 is exactly in the ltime-series, increase after-t2 by 1 so that logotime2 is included
-    set after-t2 after-t2 + 1
+  let max-index (length ltime-series)
+    
+  ; get the start index of the range
+  let b&a-t1 __indices-before-and-after ltime-series logotime1
+  let start-index nobody
+  ifelse first b&a-t1 = last b&a-t1 [ ; if b&a are the same, there was an exact match. So, need to get the index of the first row with that time    
+    set start-index first b&a-t1 
+    while [start-index > 1 and time:is-equal logotime1 (__time-of item (start-index - 1) ltime-series)] [set start-index start-index - 1]
+  ] [ ; if there isn't an exact match, then the after index will be the start of the returned range. 
+    set start-index __after-index (last b&a-t1) max-index
   ]
+    
+  ; get the end index of the range
+  let b&a-t2 __indices-before-and-after ltime-series logotime2  
+  let end-index nobody
+  ifelse (first b&a-t2 = last b&a-t2) [ ; if b&a are the same, there was an exact match. So need to get the index of the first row after that time.       
+    set end-index last b&a-t2  
+    while [end-index < max-index and time:is-equal logotime2 (__time-of item end-index ltime-series)] [set end-index end-index + 1]
+  ] [ ; if there isn't an exact match, then the after index will be the end of the returned range 
+    set end-index __after-index (last b&a-t2) max-index
+  ]
+ 
   
   ; report the columns of the sublist between aftere-t1 and after-t2 
   let columns (item 0 ltime-series)
-  report map [row -> __col-of-row columns row col-name] sublist ltime-series after-t1 after-t2
+  report map [row -> __col-of-row columns row col-name] sublist ltime-series start-index end-index
 end
 
 
@@ -115,11 +130,43 @@ to-report ts-load-with-format [filepath format-string]
 end
 
 
+to-report ts-has-repeat-times [ltime-series]
+  foreach (range 1 (length ltime-series - 1)) [i -> 
+    if time:is-equal (__time-of item i ltime-series) (__time-of item (i + 1) ltime-series) [report true]]         
+  report false
+end
+
+
+to-report ts-has-repeat-of-time [ltime-series logotime]    
+  let b&a __indices-before-and-after ltime-series logotime
+  let i1 first b&a
+  let i2 last b&a
+  ; if the indices are the same, that just means there was an exact match -> still need to check above and below
+  ifelse i1 = i2 [
+    (ifelse 
+      i1 > 1 and time:is-equal (__time-of item (i1 - 1) ltime-series) (__time-of item i1 ltime-series) [
+        report true
+      ] 
+      i2 < (length ltime-series - 1) and time:is-equal (__time-of item i2 ltime-series) (__time-of item (i2 + 1) ltime-series) [
+        report true
+      ] 
+      [report false]
+    )
+  ] [ 
+    ; if the i1 != i2, there isn't even an exact match, let alone a repeat. 
+    report false
+  ]  
+end
+
+
+
 to ts-write [ltime-series filepath]
   csv:to-file filepath fput (first ltime-series) map [row -> 
     fput (__show-default (first row)) (butfirst row)] 
     butfirst ltime-series
 end
+
+
 
 
 ;**********************************
@@ -149,8 +196,8 @@ to-report __interp [before-and-after logotime col-names col-name]
 end
   
 
-to-report __indexes-before-and-after [timeseries logotime]  
-  ; return the indexes of the rows in timeseries that have logotimes above and below logotimes. 
+to-report __indices-before-and-after [timeseries logotime]  
+  ; return the indexes of the rows in timeseries that have logotimes above and below the input logotime. 
   ; if there is an exact match, return the index of the exact row twice. 
   ; the column names are included so that you can just use the index on the timeseries list and not butfirst timeseries list. 
   ; This is equivalent to treating ltime-series objects here as starting at index 1
@@ -248,6 +295,7 @@ to-report __show-default [logotime]
   )
 end
 
-to-report __after-index [before-and-after max-index]
-  report ifelse-value (last before-and-after) = nobody [max-index] [last before-and-after]
+to-report __after-index [after-i max-index]
+  ; if the after-index exists, report it, otherwise report the max-index
+  report ifelse-value after-i = nobody [max-index] [after-i]
 end
