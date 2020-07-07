@@ -1,5 +1,5 @@
-extensions [ time ]
-
+extensions [ time csv]
+__includes ["../time-series.nls"]
 globals
 [
   ; Global variables calculated by code
@@ -42,10 +42,10 @@ to setup
 
   ; Read all the input file's data into a LogoTimeSeries variable
   if not file-exists? time-series-file-name [ error (word "Input file " time-series-file-name " not found") ]
-  set input-time-series time:ts-load time-series-file-name
+  set input-time-series ts-load time-series-file-name
 
   ;;; Extract from the LogoTimeSeries a list of the time values in the input file
-  set input-time-list time:ts-get-range input-time-series start-time end-time "LOGOTIME"
+  set input-time-list ts-get-range input-time-series start-time end-time "LOGOTIME"
   ; Test output
   foreach input-time-list
   [ ?1 -> show time:show ?1 "MMMM d, yyyy HH:mm" ]
@@ -79,8 +79,8 @@ to go
   set step-length time:difference-between time next-time "days"
 
   ; Get the model input from the LogoTimeSeries variable
-  set flow time:ts-get input-time-series time "flow"
-  set temperature time:ts-get input-time-series time "temperature"
+  set flow ts-get input-time-series time "flow"
+  set temperature ts-get input-time-series time "temperature"
 
   ; Display current time, flow, temperature
   output-print (word (time:show time "MMMM d, yyyy HH:mm") "; Length: " step-length " flow: " flow " temperature: " temperature)
@@ -543,7 +543,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

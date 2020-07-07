@@ -426,7 +426,7 @@ TimePlusExamples
 
 NLSTimeSeriesReadWrite_Default
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [ts ts_out random_flow0 random_flow1 flow_value0 flow_value1]
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
@@ -442,7 +442,7 @@ NLSTimeSeriesReadWrite_Default
 
 NLSTimeSeriesReadWrite_Exact
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [ts ts_out random_flow0 random_flow1 flow_value0-exact flow_value1-exact]
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
@@ -458,7 +458,7 @@ NLSTimeSeriesReadWrite_Exact
 
 NLSTimeSeriesReadWrite_Interp
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp]
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
@@ -474,7 +474,7 @@ NLSTimeSeriesReadWrite_Interp
 
 NLSTimeSeriesGetRangeDouble
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp start-time end-time]
   O> set random_flow0 47
   O> set random_flow1 52
@@ -491,7 +491,7 @@ NLSTimeSeriesGetRangeDouble
 
 NLSTimeSeriesGetRangeString
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp start-time end-time]
   O> set start-time time:create "1999-12-31"
   O> set end-time time:create "2000-01-03"
@@ -508,7 +508,7 @@ NLSTimeSeriesGetRangeString
 
 NLSTimeSeriesGet
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [time-series]
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
@@ -517,23 +517,71 @@ NLSTimeSeriesGet
 
 NLSTimeSeriesGetRange
   extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
   globals [time-series]
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-18 12:00") 3)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-18 12:00") 3)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-18 12:00") 3)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-18 12:00") 3)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-20 12:00") 5)
+  O> set time-series ts-add-row time-series (sentence (time:create "2020-06-20 12:00") 5)
+  (ts-get-range time-series (time:create "2020-06-15 12:00") (time:create "2020-06-16 11:59") "x") => []
+  (ts-get-range time-series (time:create "2020-06-16 12:00") (time:create "2020-06-16 12:00") "x") => [1]
   (ts-get-range time-series (time:create "2020-06-16 12:00") (time:create "2020-06-17 12:00") "x") => [1 2]
   (ts-get-range time-series (time:create "2020-06-17 12:00") (time:create "2020-06-17 12:00") "x") => [2]
-  (ts-get-range time-series (time:create "2020-06-18 12:00") (time:create "2020-06-19 12:00") "x") => []
+  (ts-get-range time-series (time:create "2020-06-18 12:00") (time:create "2020-06-18 12:00") "x") => [3 3 3 3]
+  (ts-get-range time-series (time:create "2020-06-19 12:00") (time:create "2020-06-19 12:00") "x") => []
+  (ts-get-range time-series (time:create "2020-06-20 12:00") (time:create "2020-06-20 12:00") "x") => [5 5]
 
 NLSTimeSeriesGetInterp
  extensions [time csv]
- __includes ["/Users/jzkelter/Repos/Time-Extension/examples/time-series.nls"]
+ __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
  globals [time-series]
  O> set time-series ts-create ["flow"]
  O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
  O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
  ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow" => 5
+
+NLSTimeSeriesHasRepeatTimes
+ extensions [time csv]
+ __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
+ globals [ts1 ts2]
+ O> set ts1 ts-create ["flow"]
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
+ O> set ts2 ts-create ["flow"]
+ O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 00:00:00") 0)
+ O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 01:00:00") 10)
+ O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 02:00:00") 10)
+ O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 03:00:00") 10)
+ ts-has-repeat-times ts1 => true
+ ts-has-repeat-times ts2 => false
+
+NLSTimeSeriesHasRepeatOfTime
+ extensions [time csv]
+ __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
+ globals [ts1]
+ O> set ts1 ts-create ["flow"]
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 04:00:00") 10)
+ O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 05:00:00") 10)
+ ts-has-repeat-of-time ts1 (time:create "2000-01-01 00:00:00") => false
+ ts-has-repeat-of-time ts1 (time:create "2000-01-01 01:00:00") => true
+ ts-has-repeat-of-time ts1 (time:create "2000-01-01 02:00:00") => true
+ ts-has-repeat-of-time ts1 (time:create "2000-01-01 03:00:00") => false
+ ts-has-repeat-of-time ts1 (time:create "2000-01-01 05:00:00") => false
+
 
 NLSTimeSeriesTestsFromFile
  OPEN> extensions/time/examples/nls-time-series-tests.nlogo

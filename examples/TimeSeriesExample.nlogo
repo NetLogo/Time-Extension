@@ -1,4 +1,5 @@
-extensions [time]
+extensions [time csv]
+__includes ["../time-series.nls"]
 globals[
   time-series
   ts
@@ -11,25 +12,25 @@ to setup
   print "============================"
   print ""
 
-  set time-series time:ts-load "time-series-data.csv"
+  set time-series ts-load "time-series-data.csv"
 
-  print time:ts-get time-series time:create "2000-01-01 01:30:00" "flow"
-  print time:ts-get time-series time:create "2000-01-01 10:20:00" "flow"
-  print time:ts-get time-series time:create "2000-01-01 10:30:00" "flow"
-  print time:ts-get time-series time:create "2005-01-02 10:50:01" "flow"
-  print time:ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
+  print ts-get time-series time:create "2000-01-01 01:30:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:20:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:30:00" "flow"
+  print ts-get time-series time:create "2005-01-02 10:50:01" "flow"
+  print ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
 
-  print time:ts-get-interp time-series time:create "2000-01-01 10:30:00" "flow"
-  print time:ts-get-interp time-series time:create "2000-01-03 00:30:00" "all"
+  print ts-get-interp time-series time:create "2000-01-01 10:30:00" "flow"
+  print ts-get-interp time-series time:create "2000-01-03 00:30:00" "all"
 
-  print time:ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
+  print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
-  set ts time:ts-create ["flow" "temp"]
-  time:ts-add-row ts ["2000-01-08" 5 4]
-  time:ts-add-row ts ["2000-01-01" 6 7]
-  time:ts-write ts "new-ts-file.csv"
+  set ts ts-create ["flow" "temp"]
+  set ts ts-add-row ts ["2000-01-08" 5 4]
+  set ts ts-add-row ts ["2000-01-01" 6 7]
+  ts-write ts "new-ts-file.csv"
 
-  set time-series time:ts-load-with-format "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss.SSS"
+  set time-series ts-load-with-format "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss.SSS"
   print time-series
 end
 
@@ -444,7 +445,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
