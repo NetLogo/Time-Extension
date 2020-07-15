@@ -76,7 +76,7 @@ Create a global to store a LogoTimeSeries object.  In your setup procedure, load
 
     globals[time-series]
 
-	set time-series time:ts-load "time-series-data.csv"
+	set time-series ts-load "time-series-data.csv"
 
 
 
@@ -84,7 +84,7 @@ Create a LogoTime and use it to extract the value from the "flow" column that is
 
     let current-time time:create "2000-01-01 01:20:00"
 
-    let current-flow time:ts-get time-series current-time "flow"
+    let current-flow ts-get time-series current-time "flow"
 
     ;; By default, the nearest record in the time series is retrieved (in this case 1010),
 	;; you can alternatively require an exact match or do linear interpolation.
@@ -119,7 +119,7 @@ This extension is powered by the Java Time Library, which has very sophisticated
 
 **Time Series Utilities**
 
-Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this rep with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this repo with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
 
 Users can also create and record a time series of events within their model, access that series during simulations, and export it to a file for analysis. For example, a market model could create a time series object into which is recorded the date and time, trader, price, and size of each trade. The time series utilities let model code get (for example) the mean price over the previous day or week, and save all the trades to a file at the end of a run.
 
@@ -139,9 +139,9 @@ A second common use of discrete event scheduling is when it is important to keep
 
 ## Installation
 
-First, [download the latest version of the extension](https://github.com/colinsheppard/Time-Extension/releases). Note that the latest version of this extension was compiled against NetLogo 5.0.4; if you are using a different version of NetLogo you might consider building your own jar file ([see building section below](#building)).
+The Time extension is now available through the extensions manager. Simply including `extensions [time]` at the top of the model should prompt NetLogo to download the extension (you must be using NetLogo 6.1 or later).
 
-Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
+Alternatively, [download the latest version of the extension](https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/time-2.0beta.zip) (Note that this extension is compiled for NetLogo 6.1 and may not work for earlier versions of NetLogo) Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
 
 For more information on NetLogo extensions:
 [http://ccl.northwestern.edu/netlogo/docs/extensions.html](http://ccl.northwestern.edu/netlogo/docs/extensions.html)
@@ -664,7 +664,7 @@ Reports the value from the *column-name* column of the *logotimeseries* in the r
 
 *ts-get-interp logotimeseries logotime column-name*
 
-Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
+Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
 
     print ts-get-interp ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -672,9 +672,9 @@ Behaves almost identical to time:ts-get, but if there is not an exact match with
 
 **ts-get-exact**
 
-*time:ts-get-exact logotimeseries logotime column-name*
+*ts-get-exact logotimeseries logotime column-name*
 
-Behaves almost identical to time:ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
+Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
 
     print ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -686,7 +686,7 @@ Behaves almost identical to time:ts-get, but if there is not an exact match with
 
 Reports a list of all of the values from the *column-name* column of the *logotimeseries* in the rows between *logotime1* and *logotime2* (inclusively).  If "ALL" or "all" is specified as the column name, then a list of lists is reported, with one sub-list for each column in *logotimeseries*, including the date/time column.  If "LOGOTIME" or "logotime" is specified as the column name, then the date/time column is returned.
 
-If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally.
+If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally, i.e. it will return the same thing as with logotime1 and logotime2 reversed. 
 
     print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
