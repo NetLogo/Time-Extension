@@ -63,7 +63,7 @@ Compare your date/time to some other date/time:
     ; meta data at the top of the file
 	; is skipped when preceded by
 	; a semi-colon
-	timestamp,flow,temp
+	timestamp,flow,temperature 
 	2000-01-01 00:00:00,1000,10
 	2000-01-01 01:00:00,1010,11
 	2000-01-01 03:00:00,1030,13
@@ -119,7 +119,7 @@ This extension is powered by the Java Time Library, which has very sophisticated
 
 **Time Series Utilities**
 
-Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides timie series functionality, but the same functionality is included the time-series.nls file in this repo with convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides time series functionality, but the same functionality is included the time-series.nls file in this reposoitory. This NetLogo file includes convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
 
 Users can also create and record a time series of events within their model, access that series during simulations, and export it to a file for analysis. For example, a market model could create a time series object into which is recorded the date and time, trader, price, and size of each trade. The time series utilities let model code get (for example) the mean price over the previous day or week, and save all the trades to a file at the end of a run.
 
@@ -150,7 +150,7 @@ For more information on NetLogo extensions:
 
 ## Examples
 
-See the example models in the extension subfolder "examples" for thorough demonstrations of usage.
+See the example models in the time extension's subfolder "examples" for thorough demonstrations of usage.
 
 ## Data Types
 
@@ -158,11 +158,11 @@ The **time extension** introduces some new data types (more detail about these i
 
 * **LogoTime** - A LogoTime object stores a time stamp; it can track a full date and time, or just a date (with no associated time).
 
-* **LogoEvent** - A LogoEvent encapsulates a who, a what, and a when.  It allows you to define, for example, that you want turtle 7 to execute the go-forward procedure at tick 10.  When scheduling an event using the **time extension** you pass the who, what, and when as arguments (e.g. "time:schedule-event (turtle 1) td 5").
+* **LogoEvent** - A LogoEvent encapsulates a who, a what, and a when.  It allows you to define, for example, that you want turtle 7 to execute the go-forward procedure at tick 10.  When scheduling an event using the **time extension** you pass the who, what, and when as arguments (e.g. "time:schedule-event (turtle 1) fd 5").
 
 * **Discrete Event Schedule** - A discrete event schedule is a sorted list of LogoEvents that is maintained by this extension and manages the dispatch (execution) of those events.  Users do not need to manipulate or manage this schedule directly, but it is useful to understand that it stores and executes LogoEvents when the "time:go" or "time:go-until" commands are issued.  As the schedule is executed, the **time extension** automatically updates the NetLogo ticks to match the current event in the schedule.
 
-The time-series.nls file in this repo contains the same functionality that was in the original version of the time series.
+The time-series.nls file in this repo provides one more datatype. 
 * **LogoTimeSeries** - A LogoTimeSeries object stores a table of data indexed by LogoTime.  The time series can be read in from a file or recorded by the code during a simulation. It is currently implemented in NetLogo code using a list of lists. 
 
 [back to top](#netlogo-time-extension)
@@ -172,15 +172,15 @@ The time-series.nls file in this repo contains the same functionality that was i
 The **time extension** has the following notable behavior:
 
 * **LogoTimes can store DATETIMEs, DATEs, or DAYs** - A LogoTime is a flexible data structure that will represent your time data as one of three varieties depending on how you create the LogoTime object.  A LogoTime can be a DATETIME, a DATE, or a DAY:
-  * A DATEIME is a fully specified instant in time, with precision down to a millisecond (e.g. January 2, 2000 at 3:04am and 5.678 seconds).
+  * A DATETIME is a fully specified instant in time, with precision down to a millisecond (e.g. January 2, 2000 at 3:04am and 5.678 seconds).
   * A DATE is a fully specified day in time but lacks any information about the time of day (e.g. January 2, 2000).
   * A DAY is a generic date that does not specify a year (e.g. January 2).<br/>
 
   The behavior of the **time extension** primitives depend on which variety of LogoTime you are storing.  For example, the difference between two DATETIMES will have millisecond resolution, while the difference between two DATES or two DAYS will only have resolution to the nearest whole day.
 
-  As another example, a DAY representing 01/01 is always considered to be before 12/31.  Because there's no wrapping around for DAYs, they are only useful if your entire model occurs within one year and doesn't pass from December to January.  If you need to wrap, use a DATE and pick a year for your model, even if there's no basis in reality for that year.
+  As another example, a DAY representing 01/01 is always considered to be before 12/31.  Because there's no wrapping around for DAYs, they are only useful if your entire model occurs within one year and doesn't pass from December to January.  If you need to wrap, use a DATE and pick a year for your model, even if there's no basis in reality for that year. (DAY LogoTime variables are useful, however, as parameters defining the date when something happens every simulated year. You can, for example, use time extension commands to say that a species’ breeding season starts on one DAY—15 May—and ends on another—25 June—each year.)
 
-* **You create LogoTime objects by passing a string** - The time:create primitive was designed to both follow the standard used by joda-time, and to make date time parsing more convenient by allowing a wider range of delimiters and formats.  For example, the following are all valid DATETIME strings:
+* **You create LogoTime objects by passing a string** - The time:create primitive was designed to both follow the standard used by the Java time library, and to make date time parsing more convenient by allowing a wider range of delimiters and formats.  For example, the following are all valid DATETIME strings:
   * "2000-01-02T03:04:05.678"
   * "2000-01-02T3:04:05.678"
   * "2000-01-02 03:04:05"
@@ -223,19 +223,19 @@ The **time extension** has the following notable behavior:
   | SECOND      | "second"				|
   | MILLI	      | "milli"					|
 
-* **Time extension has millisecond resolution** - This is a fundamental feature of the Java Time library and cannot be changed. LogoTime (Day/Date) instances can be converted to use milliseconds, but will be initialized to zero. As for representing milliseconds, milliseconds are represented by floats and can have formatting issues for some values. All operations truncate milliseconds to the third decimal place to prevent parsing issues with the Java Time library. In one case, if time:plus is used to add a value that is less than one whole millisecond, it does nothing.
+* **Time extension has millisecond resolution** - This is a fundamental feature of the Java Time library and cannot be changed. Milliseconds are represented as fractions of a second, truncated to the third decimal place to prevent parsing issues with the Java Time library. This truncation can create artifacts; for example if time:plus is used to add a value that is less than one whole millisecond, it does nothing.
 
 * **Daylight savings time is ignored** - All times are treated as local, or "zoneless", and daylight savings time (DST) is ignored.  It is assumed that most NetLogo users don't need to convert times between time zones or be able to follow the rules of DST for any particular locale.  Instead, users are much more likely to need the ability to load a time series and perform date and time operations without worrying about when DST starts and whether an hour of their time series will get skipped in the spring or repeated in the fall.  It should be noted that the Time library definitely can handle DST for most locales on Earth, but that capability is not extended to NetLogo here and won't be unless by popular demand.
 
-* **Leap days are included** - While we simplify things by excluding time zones and DST, leap days are kept to allow users to reliably use real world time series in their NetLogo model. Day time formatting falls on a leap year, allowing all days to be provided without specifying a year.
+* **Leap days are included** - While we simplify things by excluding time zones and DST, leap days are kept to allow users to reliably use real-world time series in their NetLogo model. LogoTime variable type DAY assumes a leap year, so DAY variables can include 2/29. (If you add one day to a DAY with value of 28 February, the result is 29 February, not 1 March.)
 
-* **LogoTimes are mutable when anchored** - If you anchor a LogoTime (using the *time:anchor-to-ticks* primitive) you end up with a variable whose value changes as the value of Netlogo ticks changes.  Say you have an anchored variable called "anchored-time" and you assign it to another variable "set new-time anchored-time", your new variable will *also be mutable* and change with ticks.  If what you want is a snapshot of the anchored-time that doesn't change, then use the time:copy primitive: "set new-time time:copy anchored-time".
+* **LogoTimes are mutable when anchored** - If you anchor a LogoTime (using the *time:anchor-to-ticks* primitive) you end up with a variable whose value changes as the value of Netlogo ticks changes.  If you have an anchored variable called "anchored-time" and you assign it to another variable "set new-time anchored-time", your new variable will *also be mutable* and change with ticks.  If what you want is a snapshot of the anchored-time that doesn't change, then use the time:copy primitive: "set new-time time:copy anchored-time".
 
 * **Decimal versus whole number time periods** - In this extension, decimal values can be used by the *plus* and *anchor-to-ticks* primitives for seconds, minutes, hours, days, and weeks (milliseconds can't be fractional because they are the base unit of time).  These units are treated as *durations* because they can unambiguously be converted from a decimal number to a whole number of milliseconds.  But there is ambiguity in how many milliseconds there are in 1 month or 1 year, so month and year increments are treated as *periods* which are by definition whole number valued. So if you use the *time:plus* primitive to add 1 month to the date "2012-02-02", you will get "2012-03-02"; and if you add another month you get "2012-04-02" even though February and March have different numbers of days.  If you try to use a fractional number of months or years, it will be rounded to the nearest integer and then added. If you want to increment a time variable by one and a half 365-day years, then just increment by 1.5 * 365 days instead of 1.5 years.
 
 * **LogoEvents are dispatched in order, and ties go to the first created** - If multiple LogoEvents are scheduled for the exact same time, they are dispatched (executed) in the order in which they were added to the discrete event schedule.
 
-* **LogoEvents can be created for an agentset** - When an agentset is scheduled to perform an anonymous command (before NetLogo 6.0 these were called tasks), the individual agents execute the procedure in a non-random order, which is different from *ask* which shuffles the agents.  Of note is that this is the only way I'm aware of to accomplish an unsorted *ask*, in NetLogo while still allowing for the death and creation of agents during execution.  Some simple benchmarking indicates that not shuffling can reduce execution time by ~15%.  To shuffle the order, use the *add-shuffled* primitive, which will execute the actions in random order with low overhead.
+* **LogoEvents can be created for an agentset** - When an agentset is scheduled to perform an anonymous command (before NetLogo 6.0 these were called tasks) at the same time, the individual agents execute the procedure in a non-random order, which is different from *ask* which shuffles the agents.  Not shuffling the agents may save some execution time. To shuffle the order, use the *add-shuffled* primitive, which will execute the actions in random order with low overhead.
 
 * **LogoEvents won't break if an agent dies** - If an agent is scheduled to perform an anonymous command in the future but dies before the event is dispatched, the event will be silently skipped.
 
@@ -246,59 +246,63 @@ The **time extension** has the following notable behavior:
 
 ## Format
 
-The time extension utilizes rules and standards, provided by the Java 8 time library, to parse and accept valid dates. The extension provides default formats for quickly creating time objects, but includes an option for specifying a custom format. In addition, the extension adheres to the ISO 8601 standard, following the Java 8 STRICT format and 24 hour clock format.
+The time extension utilizes rules and standards, provided by the Java 8 time library, to parse and accept valid dates. The extension provides default formats for quickly creating time objects, but includes an option for specifying a custom format. In addition, the extension adheres to the ISO 8601 standard, following the Java 8 STRICT format and 24 hour clock format. The same formats are used for both input and output. 
+
+
 
 ### Date Format
 
-Date formats are encoded strings with unique characters that represent various units of time and their position (date and time). Each character is meant to be placed in a contiguous group to indicate its expected location and type. If a user-provides a date string that does not follow the parsing format or bounds, then an exception will be thrown. With create primitives, the selected default format can create a date-time, date, and day object depending on the string provided. The set of default formats are as follow:
+Date formats are encoded strings with unique characters that represent various units of time and their position (date and time). Each character is meant to be placed in a contiguous group to indicate its expected location and type. If a user provides a date string that does not follow the parsing format or bounds, then an exception will be thrown. With create primitives, the selected default format can create a date-time, date, and day object depending on the string provided. The set of default formats are below. The default delimiter between months, days and years is '/', between hours, minutes and seconds is ":" and between seconds and milliseconds is ".". Using any other delimiter requires using a custom formatter (see [User Defined Formatting](#user-defined-formatting)). 
 
-* **DateTime Formatter**
+* **DateTime Default Formatter**
 
 ```
-MM/dd/YYYY HH:mm:ss.SSS
+MM/dd/yyyy HH:mm:ss.SSS
 ```
 
-For date-time formatters, the format specifies all 7 units (month,day,year,etc) will be available for parsing and generating a date-time object. If invalid strings are provided, time:create and other operations will throw an exception.
+For date-time formatters, the format specifies all 7 units (month,day,year,etc) will be available for parsing and generating a date-time object. 
 
-* **Date Formatter**
+* **Date Default Formatter**
 ```
-MM/dd/YYYY
+MM/dd/yyyy
 ```
-For date formatters, the month, day, and year need to be specified to obtain a date object. If invalid strings are provided, time:create and other operations will throw an exception.
+For date formatters, the month, day, and year need to be specified to obtain a date object.
 
-* **Day Formatter**
+* **Day Default Formatter**
 ```
 MM/dd
 ```
-For day formatters, the month and day need to be specified to obtain a day object. One thing to keep in mind with the day formatter is that the dates are based on the year 2000, which contains a leap day, which could lead to miscalculations if only months are applied. In the case where invalid strings are provided, time:create and other operations will throw an exception.
+For day formatters, the month and day need to be specified to obtain a day object. Day objects are based on the year 2000, which contains a leap day, which could lead to miscalculations if only 28 days are expected in February. 
 
 ### Supported Format Characters
 
-For supported format characters ('H','m',etc), there are three main modes for parsing: short hand, sized, and full. Each mode controls the number of acceptable charcters for parsing digits.
+For supported format characters ('H','m',etc), there are three main modes for parsing: shorthand, sized, and full. Each mode controls the number of acceptable charcters for parsing digits.
 
-* **Short Hand**
-For all units, except the millisecond and year fields, "short hand" formats use a single unique character meant to accept 1 or 2 digits for the corresponding unit. The short-hand case is a lentient option for values that can fluctuate values between 1 or 2 digits.
+* **Shorthand**
+For all units, except the millisecond and year fields, "shorthand" formats use a single unique character meant to accept 1 or 2 digits for the corresponding unit. The short-hand case is a lenient option for values that can fluctuate values between 1 or 2 digits. An example:
 ```
-M/d
+M/d 
 ```
 
 * **Sized**
-For year and millisecond, the number of characters for a specific unit of time determines the number of acceptable numbers. One example is providing a year "200" on a format of "YYYY", which would throw an exception, but "2000" would not.
+For year and millisecond, the number of characters for a specific unit of time determines the number of acceptable numbers. For example, a format of "MM/dd/yyyy HH:mm:ss.S" assumes that that the input/output has tenths of seconds while "MM/dd/yyyy HH:mm:ss.SSS" assumes that the input/output has miliseconds. 
 
 ```
-MM/dd/YY HH:mm:ss.SS
-MM/dd/YYY HH:mm:ss.S
+MM/dd/yyyy HH:mm:ss.SSS
+MM/dd/yyyy HH:mm:ss.S
 ```
 
 * **Full**
-For all units of time, the maximum number of representable formatting characters can be used to provide a verbose and accurrate representation of the time objects. If the string does not follow the format, an exception will be thrown.
+For all units of time, the maximum number of representable formatting characters can be used to provide a verbose and accurrate representation of the time objects. If the string does not follow the format, an exception will be thrown. Example:
 ```
-MM/dd/YYYY HH:mm:ss.SSS
+MM/dd/yyyy HH:mm:ss.SSS
 ```
 
 | Month | Day | Year | Hour | Minute | Second | Millisecond |
 |-------|-----|------|------|--------|--------|-------------|
-|`MM` or `M`| `dd` or `d` | `YYYY` or `YYY` or `YY` or `Y` | `HH` or `H` | `mm` or `m` | `ss` or `s` | `SSS` or `SS` or `S` |
+|`MM` or `M`| `dd` or `d` | `yyyy` or `yy` | `HH` or `H` | `mm` or `m` | `ss` or `s` | `SSS` or `SS` or `S` |
+
+*NOTE*: generally 'yyyy' (or 'uuuu') should be used for years and not 'YYYY' which is a "week based year." This means that a date at the very end of one year, e.g. 12/31/2000 might be given the year 2001 if 'YYYY' is used, because it is counted as part of the first  week of 2001.
 
 ### Date-time Bounds
 Since not all dates are representable within the time extension, a strict formatting is enforced to minimize the effects of invalid input. Dates are bounded by the Gregorian calendar while the time is bounded with their respective unit of time.
@@ -309,11 +313,11 @@ Since not all dates are representable within the time extension, a strict format
 
 ### User Defined Formatting
 
-Along with supporting three date formats, the time extension supports user-defined formatters for brevity and control. The format allows for reordering unique format characters, along with controlling how a unit is parsed.
+The time extension supports user-defined formatters for brevity and control. User defined formatters allow for reordering  format characters for units of time and using alternative delimiters from the defaults.
 
 ```
-M:YYYY:d
-MM/d/YYY HH:mm
+M:yyyy:d
+MM/d/yyyy HH:mm
 ```
 [back to top](#netlogo-time-extension)
 
@@ -325,7 +329,8 @@ MM/d/YYY HH:mm
 
 *time:create time-string*
 
-Reports a LogoTime created by parsing the *time-string* argument.  A LogoTime is a custom data type included with this extension, used to store time in the form of a DATETIME, a DATE, or a DAY.  All other primitives associated with this extension take one or more LogoTimes as as an argument.  See the "Behavior" section above for more information on the behavior of LogoTime objects.
+Reports a LogoTime created by parsing the *time-string* argument.  A LogoTime is a custom data type included with this extension, used to store time in the form of a DATETIME, a DATE, or a DAY.  All other primitives associated with this extension take one or more LogoTimes as as an argument.  See the "Behavior" section above for more information on the behavior of LogoTime objects. The `time:create` primitive raises an error if time-string does not represent a real date or time, e.g., if the day exceeds the number of days in the month or the month is not between 1 and 12. Hours must have values 0-23, and minutes and seconds must be 0-59. Seconds with milliseconds must be between 0.000 and 59.999.
+
 
     ;; Create a datetime, a date, and a day
     let t-datetime time:create "2000-01-02 03:04:05.678"
@@ -338,7 +343,7 @@ Reports a LogoTime created by parsing the *time-string* argument.  A LogoTime is
 
 *time:create-with-format time-string format-string*
 
-Like time:create, but reports a LogoTime created by parsing the *time-string* argument using the *format-string* argument as the format specifier.
+Like `time:create`, but parses the *time-string* argument using the *format-string* argument as the format specifier.
 
     ;; Create a datetime, a date, and a day using American convention for dates: Month/Day/Year
     let t-datetime time:create-with-format "01-02-2000 03:04:05.678" "MM-dd-yyyy HH:mm:ss.SSS"
@@ -347,7 +352,7 @@ Like time:create, but reports a LogoTime created by parsing the *time-string* ar
 
 See the following link for a full description of the available format options:
 
-[http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html](http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html)
+[https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)
 
 ---------------------------------------
 
@@ -370,7 +375,7 @@ See the following link for a full description of the available format options:
 [https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)
 
 *Note*
-In the case for Day and Date time formats, time:get returns default values for unsupported values. Day has a default year of 2000 to calculate for leap years.
+In the case for DATE and DAY variables, time:get returns default values for unsupported values. Day has a default year of 2000 to calculate for leap years.
 
     let t-date (time:create "2000-01-01")
     let t-day (time:create "01-01")
@@ -400,24 +405,30 @@ In the case for Day and Date time formats, time:get returns default values for u
 
 *time:get period-type-string logotime*
 
-Retrieves the numeric value from the *logotime* argument corresponding to the *period-type-string* argument.  For DATETIME variables, all period types are valid; for DATEs, only period types of a day or higher are valid; for DAYs, the only valid period types are "day" and "month". For accessing seconds, seconds are not rounded to the nearest integer, but are provided as is. When time:get is used with a sub-day period type ("hour", "minute") and a logotime that is a date day instead of a datetime, it returns zero. This, also, applies, for year for day, in which the default would be 2000.
+Retrieves the numeric value from the *logotime* argument corresponding to the *period-type-string* argument.  For DATETIME variables, all period types are valid; for DATEs, only period types of a day or higher are valid; for DAYs, the only valid period types are "day" and "month". For accessing seconds, seconds are not rounded to the nearest integer, but truncated. When time:get is used with a sub-day period type ("hour", "minute") and a logotime that is a DATE or DAY instead of a DATETIME, it returns zero. Getting the year of a DAY variable returns the default of 2000.
 
-    let t-datetime (time:create "2000-01-02 03:04:05.678")
+    let t-datetime (time:create "2000-02-02 03:04:05.678")
 
     print time:get "year" t-datetime
     ;;prints "2000"
 
     print time:get "month" t-datetime
     ;;prints "1"
-
-    print time:get "dayofyear" t-datetime
+	
+    print time:get "day" t-datetime
     ;;prints "2"
+    
+    print time:get "dayofyear" t-datetime
+    ;;prints "33"
 
     print time:get "hour" t-datetime
     ;;prints "3"
 
     print time:get "second" t-datetime
     ;;prints "5"
+    
+    print time:get "milli" t-datetime
+    ;;prints "678"
 
 *Note*
 In the case for Day and Date time formats, time:get returns default values for unsupported values. Day has a default year of 2000 to calculate for leap years.
@@ -450,11 +461,15 @@ In the case for Day and Date time formats, time:get returns default values for u
 
 *time:plus logotime number period-type-string*
 
-Reports a LogoTime resulting from the addition of some time period to the *logotime* argument.  The time period to be added is specified by the *number* and *period-type-string* arguments.  Valid period types are YEAR, MONTH, WEEK, DAY, DAYOFYEAR, HOUR, MINUTE, SECOND, and MILLI. When applying additions to LogoTimes, addition is applied through converting the format to datetime, adding the values, and reconverting LogoTime to its respective format. This can lead to incorrectly applying time updates and lost information.
-
+Reports a LogoTime resulting from the addition of some time period to the *logotime* argument.  The time period to be added is specified by the *number* and *period-type-string* arguments.  Valid period types are YEAR, MONTH, WEEK, DAY, DAYOFYEAR, HOUR, MINUTE, SECOND, and MILLI. To subtract time, use a negative value of number. When applying additions to LogoTimes, addition is applied through converting the format to datetime, adding the values, and reconverting LogoTime to its respective format. This can lead to incorrectly applying time updates and lost information.
+    
+    
     let t-datetime (time:create "2000-01-02 03:04:05.678")
 
     ;; Add some period to the datetime
+    print time:plus t-datetime 10 "milli"
+    ;; prints "{{time:logotime 2000-01-02 03:04:06.688}}"
+    
     print time:plus t-datetime 1.0 "seconds"
     ;; prints "{{time:logotime 2000-01-02 03:04:06.678}}"
 
@@ -479,31 +494,33 @@ Reports a LogoTime resulting from the addition of some time period to the *logot
 
 *Addition with Decimals*
 
-- Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond all support decimal addition allowing for adding half a day, a quarter of a second, or another subvalue, except for milliseconds. This is due to the above units converting to milliseconds as a long integer, which causes truncation for the millisecond case. Though all datetypes support decimal additon, Date and Day truncate values to fit their appropriate date. In the case of unsupported units for Date and Day, the time is converted to DateTime, supporting all units. Once the operation is applied, the time's format returns to its initial type, removing units that were not initially supported in the type. This causes some information to be lost in this case.
+- Week, Day, DayOfYear, Hour, Minute, and Second all support decimal addition so you can add half a day, a quarter of a second, or another subvalue. You cannot add fractions of milliseconds because LogoTime variables do not have sub-millisecond resolution. You can add fractions of days (or hours, minutes, etc.) to LogoTime variables of type DATE and DAY, but the result will be truncated to an integer day. This causes some information to be lost. For example:
 
-    print time:plus (time:create "2000-01-01 00:00:00.000") 2.3 "day" => "2000-01-03 07:11:59.999"
-    print time:plus (time:create "2000-01-01 00:00:00.000") 2.3 "day" => "2000-01-03"
+```
+print time:plus (time:create "2000-01-01 00:00:00.000") 2.3 "day" => "2000-01-03 07:11:59.999"
+print time:plus (time:create "2000-01-01") 2.3 "day" => "2000-01-03"
 
-    print time:plus (time:create "2000-01-04 00:00:00.000") -2.3 "day" => "2000-01-01 2000-01-01 16:48:00.001"
-    print time:plus (time:create "2000-01-04") -2.3 "day" => "2000-01-01"
+print time:plus (time:create "2000-01-04 00:00:00.000") -2.3 "day" => "2000-01-01 2000-01-01 16:48:00.001"
+print time:plus (time:create "2000-01-04") -2.3 "day" => "2000-01-01"
+```
 
 - Year and Month both round the provided number to the nearest integer. There is no decimial addition support for year and month.
 
 *Addition with Negative Decimal Numbers*
 
-- Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond all support subtraction through the use of negative numbers. Subtracting with whole numbers works as expected, but when subtracting with decimals the results may produce unexpected behavior. When subtracting with DateTime, DateTime objects maintain accurate times without truncation or rounding. With Date and Day objects, when decimal are subtracted two conversions are applied. First the Date/Day is converted to a DateTime starting at midnight (00:00:00) and second the DateTime is converted back to it's respective type. In this case, Date and Day reflect the updates of DateTime, but don't preserve the same level of accuracy, thanks to remove unsupported units. One example is with subtracting an hour from a Date. If given 01/02/2000, then subtracting 1 hour would generate a date of 01/01/2000 because of the default (00:00:00) conversion and the truncation after applying the addition.
+- Year, Month, Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond all support subtraction through the use of negative numbers. Subtracting with whole numbers works as expected, but when subtracting with decimals the results may produce unexpected behavior. When subtracting with DateTime, DateTime objects maintain accurate times without truncation or rounding. With DATE and DAY variables, when decimals are subtracted two conversions are applied. First the DATE/DAY is converted to a DATETIME starting at midnight (00:00:00), tthen the subraction iis made, and the resulting DATETIME is converted back the original DATE or DAY type by setting the hours, minutes, etc. to zero. One example is with subtracting an hour from a DATE. Subtracting one hour from a DATE variable equal to 01/02/2000 would generate a date of 01/01/2000 because of the default (00:00:00) conversion and the truncation after applying the addition.
 
     "2000-01-02" (convert) => "2000-01-02 00:00:00.000" (subtract hour) => "2000-01-01 23:00:00.000" (application) => "2000-01-01" (restore type)
 
-*Rounding and Truncating Rules, and Converting*
+*How Rounding, Truncating and Converting works*
 
 - Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond: convert user provided time/unit to milliseconds as a long integer => apply addition => convert to initial format (DateTime, Date, or Day) => Remove unsupported units (Date, Day)
 - Year and Month: round user provided time/value to the nearest integer => apply addition => convert to initial foramt => Remove Unsupported units (Day)
 
-*Carry Over*
+*Carryover*
 
-- Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond: All time types allow carrying over values from their subunits. This means that if 24 hours is applied to a Date or Day, then the day progresses. If 23 hours are applied to Date or Day, the value will have no effect thanks to truncation. Also, DateTime can have carry over with decimal addition since DateTime can represent decimal values.
-- Year and Month round to the nearest value before applying addition
+- Week, Day, DayOfYear, Hour, Minute, Second, and Millisecond: All time types allow carrying over values from their subunits. This means that if 24 hours (or 100,000 seconds) are added to a DATE or DAY, result is the next day. If 23 hours are added to a DATE or DAY, its value will not change thanks to truncation. DATETIME variables can have carryover with decimal addition since a DATETIME can represent decimal values.
+- Year and Month numbers are rounded to the nearest integer before being added.
 
 ---------------------------------------
 
@@ -549,11 +566,9 @@ This primitive is useful for recording the elapsed time between model events bec
 
 ** Note **
 
-For period type of "MONTH", difference-between calculates the number of months between dates as the number of months there are between two logotime instances, which have the same day value. For example, if logotime1 is 2000-01-02 then difference-between reports 0 months for logotime2 = 2000-02-01 and 1 month for 2000-02-02. However, the value reported is never greater than 11 or less than -11; it reverts to zero when logotime2 reaches one year from logotime1 and then is 1 when logotime2 is 13 months after logotime1, etc.
+For period type of "MONTH", difference-between reports the difference in the month number (1-12) of logotime1 and logotime2, not the total number of months between the two dates, even if the two times are DATETIME or DATE values. This difference is calculated as the number of times the day number (1-31) of logotime1 occurs between the two dates. For example, if *logotime1* is 2000-01-02 then difference-between reports 0 months for *logotime2* = 2000-02-01, 1 month for 2000-02-02, and -1 month for logotime2 = 1999-12-01. However, the value reported is never greater than 11 or less than -11; it reverts to zero when logotime2 reaches one year from logotime1 and then is 1 when logotime2 is 13 months after logotime1, etc.
 
-For "YEAR", difference-between reports the number [integers] of years there are between two logotime instances. The difference is calculated through matching the day and month while truncating values around that date. This should apply for leap years, as well. For example, if logotime1 is 2000-01-02 then difference-between reports 0 years for logotime2 = 2001-01-01, 1 year for 2000-01-02, and 5 years for 2005-01-02. The total number of months between two dates can therefore be calculated as 12 times the value of of difference-between in years plus the value of difference-between in months.
-
-In LogoTime, both "day" and "dayofyear" are calculated in the same manner, only calculating the difference between two dates. This would yield results that are greater than 365 or less than 365, if Julian dates are expected.
+For "YEAR", difference-between reports the number [integer] of years there are between two logotime instances. The difference is calculated through matching the day and month while truncating values around that date. This should apply for leap years, as well. For example, if logotime1 is 2000-01-02 then `time:difference-between` reports 0 years for *logotime2* = 2001-01-01, 1 year for 2000-01-02, and 5 years for 2005-01-02. The total number of months between two dates can therefore be calculated as 12 times the value of `time:difference-between` in years plus the value of `time:difference-between` in months.
 
 	print time:difference-between (time:create "2000-01-02 00:00") (time:create "2000-02-02 00:00") "days"
 	;;prints "31"
@@ -575,7 +590,7 @@ In LogoTime, both "day" and "dayofyear" are calculated in the same manner, only 
 
 Reports a new LogoTime object which is "anchored" to the native time tracking mechanism in NetLogo (i.e the value of *ticks*).  Once anchored, this LogoTime object will always hold the value of the current time as tracked by *ticks*.  Any of the three varieties of LogoTime can be achored to the tick.  The time value of the *logotime* argument is assumed to be the time at tick zero.  The *number* and *period-type* arguments describe the time represented by one tick (e.g. a tick can be worth 1 day or 2 hours or 90 seconds, etc.)
 
-Note: *time:anchor-to-ticks* is a one-way coupling.  Changes to the value of *ticks* (e.g. when using the *tick* or *tick-advance* commands) will be reflected in the anchored LogoTime, but do not expect changes to the value of *ticks* after making changes to the anchored LogoTime.  Instead, use the discrete event scheduling capability and the *time:anchor-schedule* command to influence the value of *ticks* through the use of LogoTimes.
+Note: *time:anchor-to-ticks* is a one-way coupling.  Changes to the value of *ticks* (e.g. when using the *tick* or *tick-advance* commands) will automatically update the anchored LogoTime, but changing the value of the LogoTime variable will not update the value of *ticks*; in fact it is a bad idea for anything other than ticks to change an anchored variable. However, see the discrete event scheduling capability and the *time:anchor-schedule* command to influence the value of *ticks* through the use of LogoTimes.
 
     set tick-datetime time:anchor-to-ticks (time:create "2000-01-02 03:04:05.678") 1 "hour"
     set tick-date time:anchor-to-ticks (time:create "2000-01-02") 2 "days"
@@ -629,7 +644,7 @@ Returns a new LogoTime object that holds the same date/time as the *logotime* ar
 
 *ts-create column-name-list*
 
-Reports a new, empty LogoTimeSeries. The number of data columns and their names are defined by the number and values of *column-name-list* parameter, which must be a list of strings. The first column, which contains dates or times, is created automatically.
+Reports a new, empty LogoTimeSeries. The number of data columns and their names are defined by the number and values of *column-name-list* parameter, which must be a list of strings. The first column, which contains dates or times, is created automatically. The words “ALL” and “LOGOTIME” (in any combination of lower- or upper-case) cannot be used as column names because they have special meanings in the ts-get and ts-get-range primitives.
 
     let turtle-move-times (ts-create ["turtle-show" "new-xcor" "new-ycor"])
 
@@ -640,7 +655,7 @@ Reports a new, empty LogoTimeSeries. The number of data columns and their names 
 
 *ts-add-row logotimeseries row-list*
 
-Returns a new LogoTimeSeries  with row-list added to the inputed logotimeseries. The *row-list* should be a list containing a LogoTime as the first element and the rest of the data corresponding to the number of columns in the LogoTimeSeries object.  Columns are either numeric or string valued.
+Returns a new LogoTimeSeries with row-list added to *logotimeseries*. This primitive is how data are added to a LogoTimeSeries. The *row-list* should be a list containing a LogoTime as the first element and the rest of the data corresponding to the number of columns in the LogoTimeSeries object.  Columns are either numeric or string valued.
 
     ;; A turtle records the time and destination each time it moves
     ;; model-time is a DATETIME variable anchored to ticks.
@@ -653,7 +668,7 @@ Returns a new LogoTimeSeries  with row-list added to the inputed logotimeseries.
 
 *ts-get logotimeseries logotime column-name*
 
-Reports the value from the *column-name* column of the *logotimeseries* in the row matching *logotime*.  If there is not an exact match with *logotime*, the row with the nearest date/time will be used. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. If "ALL" or "all" is specified as the column name, then the entire row, including the logotime, is returned as a list.
+Reports the value from the *column-name* column of the *logotimeseries* in the row matching *logotime*.  If there is not an exact match with *logotime*, the row with the nearest date/time will be used. If there are multiple rows with the same logotime, only one will be returned. For LogoTimeSeries containing multiple rows with the same logotime value, using ts-get-range to return a list of all times within a range is recommended instead of *ts-get*. If "ALL" or "all" is specified as the column name, then the entire row, including the logotime, is returned as a list.
 
     print ts-get ts (time:create "2000-01-01 10:00:00") "flow"
     ;; prints the value from the flow column in the row containing a time stamp of 2000-01-01 10:00:00
@@ -664,7 +679,7 @@ Reports the value from the *column-name* column of the *logotimeseries* in the r
 
 *ts-get-interp logotimeseries logotime column-name*
 
-Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then the value is linearly interpolated between the two nearest values.  This command will throw an exception if the values in the column are strings instead of numeric.
+Behaves like ts-get, except that if there is not an exact match with the *logotime*, then the value returned is a linear interpolation between the two values  with date/times nearest (just before and just after) *logotime*.  This command will throw an exception if the values in the column are strings instead of numeric.
 
     print ts-get-interp ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -674,7 +689,7 @@ Behaves almost identical to ts-get, but if there is not an exact match with the 
 
 *ts-get-exact logotimeseries logotime column-name*
 
-Behaves almost identical to ts-get, but if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, it is recommended to use ts-get-range to return a list of all times within a range instead. 
+Behaves like ts-get, except that if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, usinig `ts-get-range` to return a list of all times within a range is recommended instead. 
 
     print ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -686,7 +701,7 @@ Behaves almost identical to ts-get, but if there is not an exact match with the 
 
 Reports a list of all of the values from the *column-name* column of the *logotimeseries* in the rows between *logotime1* and *logotime2* (inclusively).  If "ALL" or "all" is specified as the column name, then a list of lists is reported, with one sub-list for each column in *logotimeseries*, including the date/time column.  If "LOGOTIME" or "logotime" is specified as the column name, then the date/time column is returned.
 
-If in the event logotime1 is after logotime2, the primitive will determine the smallest value and compare it normally, i.e. it will return the same thing as with logotime1 and logotime2 reversed. 
+If in the event *logotime1* is after *logotime2*, `ts-get-range` will reverse their values, so it does not matter which of these inputs is smaller.
 
     print ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 
@@ -702,7 +717,7 @@ Reports whether there are any repeated times in the logotimeseries (i.e. two row
 **ts-has-repeat-of-time?**
 *ts-has-repeat-of-time? logotimeries logotime*
 
-Reports whether logotime appears more than once in logotimeseries.  
+Reports whether *logotime* appears more than once in *logotimeseries*.  
 
 ---------------------------------------
 
@@ -714,11 +729,11 @@ Loads time series data from a text input file (comma or tab separated) and repor
 
     let ts ts-load "time-series-data.csv"
 
-Each input file and LogoTimeSeries object can contain one or more variables, which are accessed by the column names provided on the first line of the file.  The first line of the file must therefore start with the the word “time” or “date” (this word is actually unimportant as it is ignored), followed by the names of the variables (columns) in the file.  Do not use "all" or "ALL" for a column name as this keyword is reserved (see ts-get).
+Each input file and LogoTimeSeries object can contain one or more variables, which are accessed by the column names provided on the first line of the file.  The first line of the file must therefore start with the date/time column name, followed by the names of the variables (other columns) in the file.  Do not use "all" or "ALL," or “logotime” or "LOGOTIME” for a column name as thse are reserved keywords (see `ts-get` and `ts-get-range`).
 
 The first column of the file must be timestamps that can be parsed by this extension (see the [behavior section](#behavior) for acceptable string formats).  Finally, if the timestamps do not appear in chronological order in the text file, they will be automatically sorted into order when loaded.
 
-The first line(s) of an input file can include comments delineated by semicolons, just as NetLogo code can.
+Comment lines can appear at the start of input file, but nowhere else in it. Comment lines must start with a semicolon.
 
 The following is an example of hourly river flow and water temperature data that is formatted correctly:
 
@@ -738,11 +753,10 @@ The following is an example of hourly river flow and water temperature data that
 
 Identical to ts-load except that the first column is parsed based on the *format-string* specifier.
 
-    let ts ts-load "time-series-data-custom-date-format.csv" "dd-MM-YYYY HH:mm:ss"
+    let ts ts-load "time-series-data-custom-date-format.csv" "dd-MM-yyyy HH:mm:ss"
 
-See the following link for a full description of the available format options:
+See [Behavior](#Behavior) and [Format](#Format) above concerning format-string options. 
 
-[http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html](http://joda-time.sourceforge.net/api-release/org/joda/time/format/DateTimeFormat.html)
 
 ---------------------------------------
 
@@ -771,7 +785,7 @@ The column names will be written as the header line, for example:
 
 *time:anchor-schedule logotime number period-type*
 
-Anchors the discrete event schedule to the native time tracking mechanism in NetLogo (i.e the value of *ticks*).  Once anchored, LogoTimes can be used for discrete event scheduling (e.g. schedule agent 3 to perform some anonymous command on June 10, 2013).  The value of the *logotime* argument is assumed to be the time at tick zero.  The *number* and *period-type* arguments describe the worth of one tick (e.g. a tick can be worth 1 day, 2 hours, 90 seconds, etc.)
+Anchors the discrete event schedule to the native time tracking mechanism in NetLogo (i.e the value of *ticks*).  Once anchored, LogoTimes can be used for discrete event scheduling (e.g. schedule agent 3 to perform some anonymous command on June 10, 2013).  The value of the *logotime* argument is assumed to be the time at tick zero.  The *number* and *period-type* arguments describe the length of one tick (e.g. a tick can represent 1 day, 2 hours, 90 seconds, etc.)
 
     time:anchor-schedule time:create "2013-05-30" 1 "hour"
 
@@ -810,12 +824,12 @@ Add an event to the discrete event schedule and shuffle the agentset during exec
 
 *time:schedule-repeating-event agent anonymous-command tick-or-time interval-number*  <br/>
 *time:schedule-repeating-event agentset anonymous-command tick-or-time-number interval-number*<br/>
-*time:schedule-repeating-event agent "observer" tick-or-time interval-number*  <br/>
+*time:schedule-repeating-event "observer" anonymous-command tick-or-time interval-number*  <br/>
 *time:schedule-repeating-event-with-period agent anonymous-command tick-or-time period-duration period-type-string*  <br/>
 *time:schedule-repeating-event-with-period agentset anonymous-command tick-or-time-number period-duration period-type-string*<br/>
 *time:schedule-repeating-event-with-period "observer" anonymous-command tick-or-time period-duration period-type-string*
 
-Add a repeating event to the discrete event schedule.  This primitive behaves almost identically to *time:schedule-event* except that after the event is dispatched it is immediately rescheduled *interval-number* ticks into the future using the same *agent* (or *agentset*) and *anonymous-command *. If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
+Add a repeating event to the discrete event schedule.  This primitive behaves almost identically to *time:schedule-event* except that after the event is dispatched it is immediately rescheduled *interval-number* ticks into the future using the same *agent* (or *agentset*) and *anonymous-command*. If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
 
     time:schedule-repeating-event turtles [ [] -> go-forward ] 2.5 1.0
 	time:schedule-repeating-event-with-period turtles [ [] -> go-forward ] 2.5 1.0 "hours"
@@ -849,7 +863,7 @@ Clear all events from the discrete event schedule.
 
 *time:go*
 
-Dispatch all of the events in the discrete event schedule.  When each event is executed, NetLogo’s tick counter (and any LogoTime variables anchored to ticks) is updated to that event’s time.  It's important to note that this command will continue to dispatch events until the discrete event schedule is empty.  If repeating events are in the discrete event schedule or if procedures in the schedule end up scheduling new events, it's possible for this to become an infinite loop.
+Dispatch (execute) all of the events in the discrete event schedule.  When each event is executed, NetLogo’s tick counter (and any LogoTime variables anchored to ticks) is updated to that event’s time.  Note that this command will continue to dispatch events until the discrete event schedule is empty.  If repeating events are in the discrete event schedule or if procedures in the schedule end up scheduling new events, it's possible for this to become an infinite loop.
 
     time:go
 
@@ -874,7 +888,7 @@ Dispatch all of the events in the discrete event schedule that are scheduled for
 
 *time:show-schedule*
 
-Reports as a string all of the events in the schedule in tab-separated format with three columns: tick,semi-colon-separated-list-of-agents,anonymous-command.
+Reports all of the events in the schedule as a single string in tab-separated format with three columns: tick,semi-colon-separated-list-of-agents,anonymous-command.
 
     print time:show-schedule
 
@@ -904,7 +918,7 @@ If compilation succeeds, `time.jar` will be created. See [Installation](#install
 
 ## Authors
 
-Colin Sheppard and Steve Railsback
+Colin Sheppard, Steve Railsback and Jacob Kelter
 
 ## Feedback? Bugs? Feature Requests?
 
@@ -912,7 +926,7 @@ Please visit the [github issue tracker](https://github.com/colinsheppard/Time-Ex
 
 ## Credits
 
-This extension is in part powered by [Joda Time](http://joda-time.sourceforge.net/)/ Java Time library and inspired by the [Ecoswarm Time Manager Library](http://www.humboldt.edu/ecomodel/software.htm).  Allison Campbell helped benchmark discrete event scheduling versus static scheduling.
+This extension is inspired by the Ecoswarm Time Manager Library.  Allison Campbell helped benchmark discrete event scheduling versus static scheduling. The extension was funded in part by the Swarm Development Group.
 
 ## Terms of Use
 
