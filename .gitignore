@@ -13,4 +13,5 @@ Steves-tests/*
 target/
 TroutCode_2020-06-21/
 *.tmp.nlogo
-
+*.csv
+examples/*.txt

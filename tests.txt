@@ -559,8 +559,8 @@ NLSTimeSeriesHasRepeatTimes
  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 01:00:00") 10)
  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 02:00:00") 10)
  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 03:00:00") 10)
- ts-has-repeat-times ts1 => true
- ts-has-repeat-times ts2 => false
+ ts-has-repeat-times? ts1 => true
+ ts-has-repeat-times? ts2 => false
 
 NLSTimeSeriesHasRepeatOfTime
  extensions [time csv]
@@ -576,11 +576,11 @@ NLSTimeSeriesHasRepeatOfTime
  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 04:00:00") 10)
  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 05:00:00") 10)
- ts-has-repeat-of-time ts1 (time:create "2000-01-01 00:00:00") => false
- ts-has-repeat-of-time ts1 (time:create "2000-01-01 01:00:00") => true
- ts-has-repeat-of-time ts1 (time:create "2000-01-01 02:00:00") => true
- ts-has-repeat-of-time ts1 (time:create "2000-01-01 03:00:00") => false
- ts-has-repeat-of-time ts1 (time:create "2000-01-01 05:00:00") => false
+ ts-has-repeat-of-time? ts1 (time:create "2000-01-01 00:00:00") => false
+ ts-has-repeat-of-time? ts1 (time:create "2000-01-01 01:00:00") => true
+ ts-has-repeat-of-time? ts1 (time:create "2000-01-01 02:00:00") => true
+ ts-has-repeat-of-time? ts1 (time:create "2000-01-01 03:00:00") => false
+ ts-has-repeat-of-time? ts1 (time:create "2000-01-01 05:00:00") => false
 
 
 NLSTimeSeriesTestsFromFile
