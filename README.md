@@ -54,7 +54,7 @@ Compare your date/time to some other date/time:
 
 **Time Series Tool**
 
-*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive.
+*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code in the [time-series.nls file in this repo](https://github.com/NetLogo/Time-Extension/blob/master/time-series.nls) which you can download by clicking that link and then right clicking the "raw" button on the upper right of the file and selecting "download linked file". You might have to remove a '.txt' file extension so that the file ends with the '.nls' extension. You can then include that file with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive.
 
 [Download this example time series file](https://github.com/colinsheppard/Time-Extension/raw/master/examples/time-series-data.csv) and place in the same directory as your NetLogo model.  Here are the first 10 lines of the file:
 
@@ -117,7 +117,9 @@ This extension is powered by the Java Time Library, which has very sophisticated
 
 **Time Series Utilities**
 
-Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides time series functionality, but the same functionality is included the time-series.nls file in this reposoitory. This NetLogo file includes convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+Modelers commonly need to use time series data in NetLogo.  The **time extension** no longer provides time series functionality (plus some), but the same functionality is included the [time-series.nls file in this repo](https://github.com/NetLogo/Time-Extension/blob/master/time-series.nls) which you can download by clicking that link and then right clicking the "raw" button on the upper right of the file and selecting "download linked file" (you might have to remove a '.txt' file extension so that the file ends with the '.nls' extension). You can then include that file with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. The time-series.nls file includes convenient procedures for handling time series data.  With a single command, you can load an entire time series data set from a text file.  The first column in that text file holds dates or datetimes.  The remaining columns can be numeric or string values.  You then access the data by time and by column heading, akin to saying "get the flow from May 8, 2008".
+
+ 
 
 Users can also create and record a time series of events within their model, access that series during simulations, and export it to a file for analysis. For example, a market model could create a time series object into which is recorded the date and time, trader, price, and size of each trade. The time series utilities let model code get (for example) the mean price over the previous day or week, and save all the trades to a file at the end of a run.
 
