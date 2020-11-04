@@ -50,7 +50,7 @@ Add 3 days to your date/time and print the date/time object to the screen:
 
 Compare your date/time to some other date/time:
 
-	ifelse time:is-after dt (time:create "2000-01-01 12:00") [print "yes"][print "no"]
+	ifelse time:is-after? dt (time:create "2000-01-01 12:00") [print "yes"][print "no"]
 
 **Time Series Tool**
 
@@ -522,34 +522,36 @@ print time:plus (time:create "2000-01-04") -2.3 "day" => "2000-01-01"
 
 ---------------------------------------
 
-**time:is-before**<br/>
-**time:is-after**<br/>
-**time:is-equal**<br/>
-**time:is-between**
+**time:is-before?**<br/>
+**time:is-after?**<br/>
+**time:is-equal?**<br/>
+**time:is-between?**
 
-*time:is-before logotime1 logotime2*<br/>
-*time:is-after  logotime1 logotime2*<br/>
-*time:is-equal  logotime1 logotime2*<br/>
-*time:is-between  logotime1 logotime2 logotime3*
+*time:is-before? logotime1 logotime2*<br/>
+*time:is-after?  logotime1 logotime2*<br/>
+*time:is-equal?  logotime1 logotime2*<br/>
+*time:is-between?  logotime1 logotime2 logotime3*
 
-Reports a boolean for the test of whether *logotime1* is before/after/equal-to *logotime2*.  The is-between primitive returns true if *logotime1* is between *logotime2* and *logotime3*.  All LogoTime arguments must be of the same variety (DATETIME, DATE, or DAY).
+**Note**: Prior versions of the time extension included these primitives without the "?" at the end. If you have used an older version of the time extension, you will need to update your code accordingly. 
 
-	print time:is-before (time:create "2000-01-02") (time:create "2000-01-03")
+Reports a boolean for the test of whether *logotime1* is before/after/equal-to *logotime2*.  The is-between? primitive returns true if *logotime1* is between *logotime2* and *logotime3*.  All LogoTime arguments must be of the same variety (DATETIME, DATE, or DAY).
+
+	print time:is-before? (time:create "2000-01-02") (time:create "2000-01-03")
 	;;prints "true"
 
-  	print time:is-before (time:create "2000-01-03") (time:create "2000-01-02")
+  	print time:is-before? (time:create "2000-01-03") (time:create "2000-01-02")
 	;;prints "false"
 
-  	print time:is-after  (time:create "2000-01-03") (time:create "2000-01-02")
+  	print time:is-after?  (time:create "2000-01-03") (time:create "2000-01-02")
 	;;prints "true"
 
-  	print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-02")
+  	print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-02")
 	;;prints "true"
 
-  	print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-03")
+  	print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-03")
 	;;prints "false"
 
- 	print time:is-between (time:create "2000-03-08")  (time:create "1999-12-02") (time:create "2000-05-03")
+ 	print time:is-between? (time:create "2000-03-08")  (time:create "1999-12-02") (time:create "2000-05-03")
 	;;prints "true"
 
 ---------------------------------------
@@ -797,7 +799,7 @@ Anchors the discrete event schedule to the native time tracking mechanism in Net
 
 Add an event to the discrete event schedule.  The order in which events are added to the schedule is not important; they will be dispatched in order of the times specified as the last argument of this command. An *agent*, an *agentset*, or the string "observer" can be passed as the first argument along with an *anonymous command* as the second. The anonymous command is executed by the agent(s) or the observer at *tick-or-time* (either a number indicating the tick or a LogoTime), which is a time greater than or equal to the present moment (*>= ticks*).*.
 
-If *tick-or-time* is a LogoTime, then the discrete event schedule must be anchored (see time:anchor-schedule).  If <em>tick-or-time</em> is in the past (less than the current tick/time), a run-time error is raised. (The *is-after* primitive can be used to defend against this error: add an event to the schedule only if its scheduled time is after the current time.)
+If *tick-or-time* is a LogoTime, then the discrete event schedule must be anchored (see time:anchor-schedule).  If <em>tick-or-time</em> is in the past (less than the current tick/time), a run-time error is raised. (The *is-after?* primitive can be used to defend against this error: add an event to the schedule only if its scheduled time is after the current time.)
 
 Once an event has been added to the discrete event schedule, there is no way to remove or cancel it.
 
