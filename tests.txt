@@ -425,9 +425,7 @@ TimePlusExamples
 
 
 NLSTimeSeriesReadWrite_Default
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [ts ts_out random_flow0 random_flow1 flow_value0 flow_value1]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -441,9 +439,7 @@ NLSTimeSeriesReadWrite_Default
   O> if (flow_value1 != random_flow1) [ error "Read and Write or ts-get  Error" ]
 
 NLSTimeSeriesReadWrite_Exact
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [ts ts_out random_flow0 random_flow1 flow_value0-exact flow_value1-exact]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -457,9 +453,7 @@ NLSTimeSeriesReadWrite_Exact
   O> if (flow_value1-exact != random_flow1) [ error "Read and Write ts-get-exact Error" ]
 
 NLSTimeSeriesReadWrite_Interp
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -473,9 +467,7 @@ NLSTimeSeriesReadWrite_Interp
   O> if (flow_value1-interp != random_flow1) [ error "Read and Write or ts-get-interp Error" ]
 
 NLSTimeSeriesGetRangeDouble
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp start-time end-time]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set random_flow0 47
   O> set random_flow1 52
   O> set start-time time:create "1999-12-31"
@@ -490,9 +482,7 @@ NLSTimeSeriesGetRangeDouble
   (ts-get-range ts_out start-time end-time "flow") => [47 52]
 
 NLSTimeSeriesGetRangeString
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [ts ts_out random_flow0 random_flow1 flow_value0-interp flow_value1-interp start-time end-time]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set start-time time:create "1999-12-31"
   O> set end-time time:create "2000-01-03"
   O> set ts ts-create ["flow" "temp"]
@@ -507,18 +497,14 @@ NLSTimeSeriesGetRangeString
   (ts-get-range ts_out start-time end-time "temp") => [2 5]
 
 NLSTimeSeriesGet
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [time-series]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
   (ts-get time-series (time:create "2020-06-16 23:00") "x") => 1
 
 NLSTimeSeriesGetRange
-  extensions [time csv]
-  __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
-  globals [time-series]
+  OPEN> extensions/time/tests/time-series.nlogo
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
@@ -537,52 +523,45 @@ NLSTimeSeriesGetRange
   (ts-get-range time-series (time:create "2020-06-20 12:00") (time:create "2020-06-20 12:00") "x") => [5 5]
 
 NLSTimeSeriesGetInterp
- extensions [time csv]
- __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
- globals [time-series]
- O> set time-series ts-create ["flow"]
- O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
- O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
- ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow" => 5
+  OPEN> extensions/time/tests/time-series.nlogo
+  O> set time-series ts-create ["flow"]
+  O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
+  O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
+  ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow" => 5
 
 NLSTimeSeriesHasRepeatTimes
- extensions [time csv]
- __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
- globals [ts1 ts2]
- O> set ts1 ts-create ["flow"]
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
- O> set ts2 ts-create ["flow"]
- O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 00:00:00") 0)
- O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 01:00:00") 10)
- O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 02:00:00") 10)
- O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 03:00:00") 10)
- ts-has-repeat-times? ts1 => true
- ts-has-repeat-times? ts2 => false
+  OPEN> extensions/time/tests/time-series.nlogo
+  O> set ts1 ts-create ["flow"]
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
+  O> set ts2 ts-create ["flow"]
+  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 00:00:00") 0)
+  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 01:00:00") 10)
+  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 02:00:00") 10)
+  O> set ts2 ts-add-row ts2 (sentence (time:create "2000-01-01 03:00:00") 10)
+  ts-has-repeat-times? ts1 => true
+  ts-has-repeat-times? ts2 => false
 
 NLSTimeSeriesHasRepeatOfTime
- extensions [time csv]
- __includes ["/Users/jzkelter/Repos/Time-Extension/time-series.nls"]
- globals [ts1]
- O> set ts1 ts-create ["flow"]
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 04:00:00") 10)
- O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 05:00:00") 10)
- ts-has-repeat-of-time? ts1 (time:create "2000-01-01 00:00:00") => false
- ts-has-repeat-of-time? ts1 (time:create "2000-01-01 01:00:00") => true
- ts-has-repeat-of-time? ts1 (time:create "2000-01-01 02:00:00") => true
- ts-has-repeat-of-time? ts1 (time:create "2000-01-01 03:00:00") => false
- ts-has-repeat-of-time? ts1 (time:create "2000-01-01 05:00:00") => false
-
+  OPEN> extensions/time/tests/time-series.nlogo
+  O> set ts1 ts-create ["flow"]
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 02:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 03:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 04:00:00") 10)
+  O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 05:00:00") 10)
+  ts-has-repeat-of-time? ts1 (time:create "2000-01-01 00:00:00") => false
+  ts-has-repeat-of-time? ts1 (time:create "2000-01-01 01:00:00") => true
+  ts-has-repeat-of-time? ts1 (time:create "2000-01-01 02:00:00") => true
+  ts-has-repeat-of-time? ts1 (time:create "2000-01-01 03:00:00") => false
+  ts-has-repeat-of-time? ts1 (time:create "2000-01-01 05:00:00") => false
 
 NLSTimeSeriesTestsFromFile
- OPEN> extensions/time/examples/nls-time-series-tests.nlogo
- O> run-tests
+  OPEN> extensions/time/examples/nls-time-series-tests.nlogo
+  O> run-tests

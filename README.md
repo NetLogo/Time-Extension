@@ -1,4 +1,4 @@
-# NetLogo Time Extension
+The Time extension provides NetLogo with three kinds of capabilities for models that use discrete-event simulation or represent time explicitly. The package provides tools for common date and time operations, discrete event scheduling, and using time-series input data.
 
 * [Quickstart](#quickstart)
 * [What is it?](#what-is-it)
@@ -17,8 +17,6 @@
 * [Terms of use](#terms-of-use)
 
 ## Quickstart
-
-[Install the time extension](#installation)
 
 Include the extension in your NetLogo model (at the top):
 
@@ -63,7 +61,7 @@ Compare your date/time to some other date/time:
     ; meta data at the top of the file
 	; is skipped when preceded by
 	; a semi-colon
-	timestamp,flow,temperature 
+	timestamp,flow,temperature
 	2000-01-01 00:00:00,1000,10
 	2000-01-01 01:00:00,1010,11
 	2000-01-01 03:00:00,1030,13
@@ -139,7 +137,7 @@ A second common use of discrete event scheduling is when it is important to keep
 
 ## Installation
 
-The Time extension is now available through the extensions manager. Simply including `extensions [time]` at the top of the model should prompt NetLogo to download the extension (you must be using NetLogo 6.1 or later).
+The Time extension comes bundled with NetLogo. Simply include `extensions [time]` at the top of the model and it will be loaded. New versions of the extension are available through the Netlogo extensions manager as they are released.
 
 Alternatively, [download the latest version of the extension](https://raw.githubusercontent.com/NetLogo/NetLogo-Libraries/6.1/extensions/time-2.0beta.zip) (Note that this extension is compiled for NetLogo 6.1 and may not work for earlier versions of NetLogo) Unzip the archive and rename the directory to "time".  Move the renamed directory to the "extensions" directory inside your NetLogo application folder (i.e. [NETLOGO]/extensions/).  Or you can place the time directory under the same directory holding the NetLogo model in which you want to use this extension.
 
@@ -162,8 +160,8 @@ The **time extension** introduces some new data types (more detail about these i
 
 * **Discrete Event Schedule** - A discrete event schedule is a sorted list of LogoEvents that is maintained by this extension and manages the dispatch (execution) of those events.  Users do not need to manipulate or manage this schedule directly, but it is useful to understand that it stores and executes LogoEvents when the "time:go" or "time:go-until" commands are issued.  As the schedule is executed, the **time extension** automatically updates the NetLogo ticks to match the current event in the schedule.
 
-The time-series.nls file in this repo provides one more datatype. 
-* **LogoTimeSeries** - A LogoTimeSeries object stores a table of data indexed by LogoTime.  The time series can be read in from a file or recorded by the code during a simulation. It is currently implemented in NetLogo code using a list of lists. 
+The time-series.nls file in this repo provides one more datatype.
+* **LogoTimeSeries** - A LogoTimeSeries object stores a table of data indexed by LogoTime.  The time series can be read in from a file or recorded by the code during a simulation. It is currently implemented in NetLogo code using a list of lists.
 
 [back to top](#netlogo-time-extension)
 
@@ -246,13 +244,13 @@ The **time extension** has the following notable behavior:
 
 ## Format
 
-The time extension utilizes rules and standards, provided by the Java 8 time library, to parse and accept valid dates. The extension provides default formats for quickly creating time objects, but includes an option for specifying a custom format. In addition, the extension adheres to the ISO 8601 standard, following the Java 8 STRICT format and 24 hour clock format. The same formats are used for both input and output. 
+The time extension utilizes rules and standards, provided by the Java 8 time library, to parse and accept valid dates. The extension provides default formats for quickly creating time objects, but includes an option for specifying a custom format. In addition, the extension adheres to the ISO 8601 standard, following the Java 8 STRICT format and 24 hour clock format. The same formats are used for both input and output.
 
 
 
 ### Date Format
 
-Date formats are encoded strings with unique characters that represent various units of time and their position (date and time). Each character is meant to be placed in a contiguous group to indicate its expected location and type. If a user provides a date string that does not follow the parsing format or bounds, then an exception will be thrown. With create primitives, the selected default format can create a date-time, date, and day object depending on the string provided. The set of default formats are below. The default delimiter between months, days and years is '/', between hours, minutes and seconds is ":" and between seconds and milliseconds is ".". Using any other delimiter requires using a custom formatter (see [User Defined Formatting](#user-defined-formatting)). 
+Date formats are encoded strings with unique characters that represent various units of time and their position (date and time). Each character is meant to be placed in a contiguous group to indicate its expected location and type. If a user provides a date string that does not follow the parsing format or bounds, then an exception will be thrown. With create primitives, the selected default format can create a date-time, date, and day object depending on the string provided. The set of default formats are below. The default delimiter between months, days and years is '/', between hours, minutes and seconds is ":" and between seconds and milliseconds is ".". Using any other delimiter requires using a custom formatter (see [User Defined Formatting](#user-defined-formatting)).
 
 * **DateTime Default Formatter**
 
@@ -260,7 +258,7 @@ Date formats are encoded strings with unique characters that represent various u
 MM/dd/yyyy HH:mm:ss.SSS
 ```
 
-For date-time formatters, the format specifies all 7 units (month,day,year,etc) will be available for parsing and generating a date-time object. 
+For date-time formatters, the format specifies all 7 units (month,day,year,etc) will be available for parsing and generating a date-time object.
 
 * **Date Default Formatter**
 ```
@@ -272,7 +270,7 @@ For date formatters, the month, day, and year need to be specified to obtain a d
 ```
 MM/dd
 ```
-For day formatters, the month and day need to be specified to obtain a day object. Day objects are based on the year 2000, which contains a leap day, which could lead to miscalculations if only 28 days are expected in February. 
+For day formatters, the month and day need to be specified to obtain a day object. Day objects are based on the year 2000, which contains a leap day, which could lead to miscalculations if only 28 days are expected in February.
 
 ### Supported Format Characters
 
@@ -281,11 +279,11 @@ For supported format characters ('H','m',etc), there are three main modes for pa
 * **Shorthand**
 For all units, except the millisecond and year fields, "shorthand" formats use a single unique character meant to accept 1 or 2 digits for the corresponding unit. The short-hand case is a lenient option for values that can fluctuate values between 1 or 2 digits. An example:
 ```
-M/d 
+M/d
 ```
 
 * **Sized**
-For year and millisecond, the number of characters for a specific unit of time determines the number of acceptable numbers. For example, a format of "MM/dd/yyyy HH:mm:ss.S" assumes that that the input/output has tenths of seconds while "MM/dd/yyyy HH:mm:ss.SSS" assumes that the input/output has miliseconds. 
+For year and millisecond, the number of characters for a specific unit of time determines the number of acceptable numbers. For example, a format of "MM/dd/yyyy HH:mm:ss.S" assumes that that the input/output has tenths of seconds while "MM/dd/yyyy HH:mm:ss.SSS" assumes that the input/output has miliseconds.
 
 ```
 MM/dd/yyyy HH:mm:ss.SSS
@@ -414,10 +412,10 @@ Retrieves the numeric value from the *logotime* argument corresponding to the *p
 
     print time:get "month" t-datetime
     ;;prints "1"
-	
+
     print time:get "day" t-datetime
     ;;prints "2"
-    
+
     print time:get "dayofyear" t-datetime
     ;;prints "33"
 
@@ -426,7 +424,7 @@ Retrieves the numeric value from the *logotime* argument corresponding to the *p
 
     print time:get "second" t-datetime
     ;;prints "5"
-    
+
     print time:get "milli" t-datetime
     ;;prints "678"
 
@@ -462,14 +460,14 @@ In the case for Day and Date time formats, time:get returns default values for u
 *time:plus logotime number period-type-string*
 
 Reports a LogoTime resulting from the addition of some time period to the *logotime* argument.  The time period to be added is specified by the *number* and *period-type-string* arguments.  Valid period types are YEAR, MONTH, WEEK, DAY, DAYOFYEAR, HOUR, MINUTE, SECOND, and MILLI. To subtract time, use a negative value of number. When applying additions to LogoTimes, addition is applied through converting the format to datetime, adding the values, and reconverting LogoTime to its respective format. This can lead to incorrectly applying time updates and lost information.
-    
-    
+
+
     let t-datetime (time:create "2000-01-02 03:04:05.678")
 
     ;; Add some period to the datetime
     print time:plus t-datetime 10 "milli"
     ;; prints "{{time:logotime 2000-01-02 03:04:06.688}}"
-    
+
     print time:plus t-datetime 1.0 "seconds"
     ;; prints "{{time:logotime 2000-01-02 03:04:06.678}}"
 
@@ -598,17 +596,17 @@ Note: *time:anchor-to-ticks* is a one-way coupling.  Changes to the value of *ti
 
     reset-ticks
     tick
-    print (word "tick " ticks)  ;; prints "tick 1" 
+    print (word "tick " ticks)  ;; prints "tick 1"
     print (word "tick-datetime " tick-datetime)  ;; prints "tick-dateime {{time:logotime 2000-01-02 04:04:05.678}}"
     print (word "tick-date " tick-date)  ;; prints "tick-date {{time:logotime 2000-01-04}}"
     print (word "tick-day " tick-day)  ;; prints "tick-day {{time:logotime 04-02}}"
 
 
     tick
-    print (word "tick " ticks)  ;; prints "tick 2" 
+    print (word "tick " ticks)  ;; prints "tick 2"
     print (word "tick-datetime " tick-datetime)  ;; prints "tick-dateime {{time:logotime 2000-01-02 05:04:05.678}}"
     print (word "tick-date " tick-date)  ;; prints "tick-date {{time:logotime 2000-01-06}}""
-    print (word "tick-day " tick-day)  ;; prints "tick-day {{time:logotime 07-02}}"" 
+    print (word "tick-day " tick-day)  ;; prints "tick-day {{time:logotime 07-02}}""
 
 [back to top](#netlogo-time-extension)
 
@@ -623,13 +621,13 @@ Returns a new LogoTime object that holds the same date/time as the *logotime* ar
     set tick-date time:anchor-to-ticks (time:create "2000-01-02") 2 "days"
     reset-ticks
     tick
-    print (word "tick " ticks)  ;; prints "tick 1" 
+    print (word "tick " ticks)  ;; prints "tick 1"
     print (word "tick-date " tick-date)  ;; prints "tick-date {{time:logotime 2000-01-04}}"
 
     set store-date time:copy tick-date
 
     tick
-    print (word "tick " ticks)  ;; prints "tick 1" 
+    print (word "tick " ticks)  ;; prints "tick 1"
     print (word "tick-date " tick-date)  ;; prints "tick-date {{time:logotime 2000-01-06}}"
     print (word "store-date " store-date)  ;; prints "store-date {{time:logotime 2000-01-04}}"
 
@@ -637,7 +635,7 @@ Returns a new LogoTime object that holds the same date/time as the *logotime* ar
 ---------------------------------------
 
 ### Time Series Tool
-*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. Since it is not part of the extension, these "primitives" don't have the "time:" prefix. Also, the NetLogo file must have the csv extension for the time-series.nls functionality to work. 
+*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. Since it is not part of the extension, these "primitives" don't have the "time:" prefix. Also, the NetLogo file must have the csv extension for the time-series.nls functionality to work.
 
 
 **ts-create**
@@ -651,7 +649,7 @@ Reports a new, empty LogoTimeSeries. The number of data columns and their names 
 ---------------------------------------
 
 **ts-add-row**
-*NOTE*: This is the only time-series functionality in time-series.nls that is not backwards compatible with the old time extension. Since time-series.nls implements time series with native NetLogo lists, they are immutable. So, ts-add-row returns a new timeseries, it does not mutate the old one. This means that variables holding the time series must be re-assigned. 
+*NOTE*: This is the only time-series functionality in time-series.nls that is not backwards compatible with the old time extension. Since time-series.nls implements time series with native NetLogo lists, they are immutable. So, ts-add-row returns a new timeseries, it does not mutate the old one. This means that variables holding the time series must be re-assigned.
 
 *ts-add-row logotimeseries row-list*
 
@@ -689,7 +687,7 @@ Behaves like ts-get, except that if there is not an exact match with the *logoti
 
 *ts-get-exact logotimeseries logotime column-name*
 
-Behaves like ts-get, except that if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, usinig `ts-get-range` to return a list of all times within a range is recommended instead. 
+Behaves like ts-get, except that if there is not an exact match with the date/time stamp, then an exception is thrown. If there are multiple rows with the same logotime, only one will be returned. In such a case, usinig `ts-get-range` to return a list of all times within a range is recommended instead.
 
     print ts-get-exact ts (time:create "2000-01-01 10:30:00") "flow"
 
@@ -711,7 +709,7 @@ If in the event *logotime1* is after *logotime2*, `ts-get-range` will reverse th
 **ts-has-repeat-times?**
 *ts-has-repeat-times? logotimeseries*
 
-Reports whether there are any repeated times in the logotimeseries (i.e. two rows with the same time). This can be helpful for determining if it is appropriate to use ts-get or ts-get-range. 
+Reports whether there are any repeated times in the logotimeseries (i.e. two rows with the same time). This can be helpful for determining if it is appropriate to use ts-get or ts-get-range.
 
 ---------------------------------------
 **ts-has-repeat-of-time?**
@@ -755,12 +753,12 @@ Identical to ts-load except that the first column is parsed based on the *format
 
     let ts ts-load "time-series-data-custom-date-format.csv" "dd-MM-yyyy HH:mm:ss"
 
-See [Behavior](#Behavior) and [Format](#Format) above concerning format-string options. 
+See [Behavior](#Behavior) and [Format](#Format) above concerning format-string options.
 
 
 ---------------------------------------
 
-**ts-write** 
+**ts-write**
 
 *ts-write logotimeseries filepath*
 
@@ -791,7 +789,7 @@ Anchors the discrete event schedule to the native time tracking mechanism in Net
 
 ---------------------------------------
 
-**time:schedule-event** 
+**time:schedule-event**
 
 *time:schedule-event agent anonymous-command tick-or-time*  <br/>
 *time:schedule-event agentset anonymous-command tick-or-time*<br/>
@@ -809,7 +807,7 @@ Once an event has been added to the discrete event schedule, there is no way to 
 
 ---------------------------------------
 
-**time:schedule-event-shuffled** 
+**time:schedule-event-shuffled**
 
 *time:schedule-event-shuffled agentset anonymous-command tick-or-time*
 
@@ -820,7 +818,7 @@ Add an event to the discrete event schedule and shuffle the agentset during exec
 ---------------------------------------
 
 **time:schedule-repeating-event** <br/>
-**time:schedule-repeating-event-with-period** 
+**time:schedule-repeating-event-with-period**
 
 *time:schedule-repeating-event agent anonymous-command tick-or-time interval-number*  <br/>
 *time:schedule-repeating-event agentset anonymous-command tick-or-time-number interval-number*<br/>
@@ -935,4 +933,3 @@ This extension is inspired by the Ecoswarm Time Manager Library.  Allison Campbe
 The NetLogo dynamic scheduler extension is in the public domain.  To the extent possible under law, Colin Sheppard and Steve Railsback have waived all copyright and related or neighboring rights.
 
 [back to top](#netlogo-time-extension)
-
