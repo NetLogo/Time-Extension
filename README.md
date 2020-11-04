@@ -639,7 +639,8 @@ Returns a new LogoTime object that holds the same date/time as the *logotime* ar
 ---------------------------------------
 
 ### Time Series Tool
-*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the time-series.nls file in this repo. You can include that functionality with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. Since it is not part of the extension, these "primitives" don't have the "time:" prefix. Also, the NetLogo file must have the csv extension for the time-series.nls functionality to work.
+*NOTE*: The time series tool is not currently included in the extension. However, all of the functionality (plus some) has been reproduced in NetLogo code. It is in the [time-series.nls file in this repo](https://github.com/NetLogo/Time-Extension/blob/master/time-series.nls) which you can download by clicking that link and then right clicking the "raw" button on the upper right of the file and selecting "download linked file" (you might have to remove a '.txt' file extension so that the file ends with the '.nls' extension). You can then include that file with the [____includes__](http://ccl.northwestern.edu/netlogo/docs/dict/includes.html) primitive. Since it is not part of the extension, these "primitives" don't have the "time:" prefix. Also, the NetLogo file must have the csv extension for the time-series.nls functionality to work.
+
 
 
 **ts-create**
