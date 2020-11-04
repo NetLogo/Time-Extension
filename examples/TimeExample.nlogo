@@ -111,16 +111,16 @@ to setup
 
   ;; make comparisons between LogoTimes
   print "before, before, after, equal, equal"
-  print time:is-before (time:create "2000-01-02") (time:create "2000-01-03")
-  print time:is-before (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-after  (time:create "2000-01-03") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-02")
-  print time:is-equal  (time:create "2000-01-02") (time:create "2000-01-03")
+  print time:is-before? (time:create "2000-01-02") (time:create "2000-01-03")
+  print time:is-before? (time:create "2000-01-03") (time:create "2000-01-02")
+  print time:is-after?  (time:create "2000-01-03") (time:create "2000-01-02")
+  print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-02")
+  print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-03")
   print "before days"
-  print time:is-before (time:create "01-02") (time:create "01-03")
+  print time:is-before? (time:create "01-02") (time:create "01-03")
   print "is between"
-  print time:is-between (time:create "2000-03-08") (time:create "1999-12-02") (time:create "2000-05-03")
-  print time:is-between (time:create "2000-03-08") (time:create "2000-05-03") (time:create "1999-12-02")
+  print time:is-between? (time:create "2000-03-08") (time:create "1999-12-02") (time:create "2000-05-03")
+  print time:is-between? (time:create "2000-03-08") (time:create "2000-05-03") (time:create "1999-12-02")
   print ""
   print "============================"
   print ""
@@ -165,7 +165,6 @@ to setup-and-go
   ]
   tick
 end
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW

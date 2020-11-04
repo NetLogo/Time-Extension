@@ -33,11 +33,11 @@ to copy-anchor-date
     let store-date time:copy tick-date
     let store-same-date time:copy store-date
     tick
-    if not time:is-before store-date tick-date
+    if not time:is-before? store-date tick-date
       [ error (word store-date " is not before" tick-date) ]
-    if not time:is-after tick-date store-date
+    if not time:is-after? tick-date store-date
       [ error (word store-date " is not after " tick-date) ]
-    if not time:is-equal store-date store-same-date
+    if not time:is-equal? store-date store-same-date
         [ error (word store-date " is not equal to " store-same-date) ]
   ]
   print "Finishing Tests......"
@@ -98,11 +98,11 @@ to copy-anchor-datetime
     let store-date time:copy tick-date ; copy the current ticked value
     let store-same-date time:copy store-date ; create a second copy for comparison
     tick
-    if not time:is-before store-date tick-date
+    if not time:is-before? store-date tick-date
       [ error (word store-date " is not before" tick-date) ]
-    if not time:is-after tick-date store-date
+    if not time:is-after? tick-date store-date
       [ error (word store-date " is not after " tick-date) ]
-    if not time:is-equal store-date store-same-date
+    if not time:is-equal? store-date store-same-date
         [ error (word store-date " is not equal to " store-same-date) ]
   ]
   print "Finishing Tests......"
@@ -466,7 +466,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

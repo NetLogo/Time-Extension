@@ -24,10 +24,10 @@ class TimeExtension extends DefaultClassManager {
     /**
      Time and formatting Primitives
      */
-    primManager.addPrimitive("is-before", new TimePrimitives.IsBefore())
-    primManager.addPrimitive("is-after", new TimePrimitives.IsAfter())
-    primManager.addPrimitive("is-equal", new TimePrimitives.IsEqual())
-    primManager.addPrimitive("is-between", new TimePrimitives.IsBetween())
+    primManager.addPrimitive("is-before?", new TimePrimitives.IsBefore())
+    primManager.addPrimitive("is-after?", new TimePrimitives.IsAfter())
+    primManager.addPrimitive("is-equal?", new TimePrimitives.IsEqual())
+    primManager.addPrimitive("is-between?", new TimePrimitives.IsBetween())
     primManager.addPrimitive("show", new TimePrimitives.Show())
     primManager.addPrimitive("get", new TimePrimitives.Get())
     primManager.addPrimitive("anchor-to-ticks", new TimePrimitives.Anchor())

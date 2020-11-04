@@ -61,22 +61,22 @@ end
 
 to test-ts-get
   let ts ts-load  "time-series-data.csv"
-  if not time:is-equal (ts-get ts (time:create "2000-01-03 01:00:01") "LOGOTIME") (time:create "2000-01-03 01:00:00") [error "failure to get the last time as the closest to a time bigger than the last"]
-  if not time:is-equal (ts-get ts (time:create "1999-12-31 00:00:00") "LOGOTIME") (time:create "2000-01-01 00:00:00") [error "failure to get the first time as the closest to a time bigger than the last"]
-  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:00:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get the exact match 2000-01-01 01:00:00"]
-  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:29:59") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:59"]
-  if not time:is-equal (ts-get ts (time:create "2000-01-01 01:30:01") "LOGOTIME") (time:create "2000-01-01 02:00:00") [error "failure to get 2000-01-01 02:00:00 for 2000-01-01 01:30:01"]
+  if not time:is-equal? (ts-get ts (time:create "2000-01-03 01:00:01") "LOGOTIME") (time:create "2000-01-03 01:00:00") [error "failure to get the last time as the closest to a time bigger than the last"]
+  if not time:is-equal? (ts-get ts (time:create "1999-12-31 00:00:00") "LOGOTIME") (time:create "2000-01-01 00:00:00") [error "failure to get the first time as the closest to a time bigger than the last"]
+  if not time:is-equal? (ts-get ts (time:create "2000-01-01 01:00:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get the exact match 2000-01-01 01:00:00"]
+  if not time:is-equal? (ts-get ts (time:create "2000-01-01 01:29:59") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:59"]
+  if not time:is-equal? (ts-get ts (time:create "2000-01-01 01:30:01") "LOGOTIME") (time:create "2000-01-01 02:00:00") [error "failure to get 2000-01-01 02:00:00 for 2000-01-01 01:30:01"]
 
   ; what should this do? higher or lower
-  ;if not time:is-equal (ts-get ts (time:create "2000-01-01 01:30:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:00"]
+  ;if not time:is-equal? (ts-get ts (time:create "2000-01-01 01:30:00") "LOGOTIME") (time:create "2000-01-01 01:00:00") [error "failure to get 2000-01-01 01:00:00 for 2000-01-01 01:29:00"]
   print "All ts-get tests passed"
 end
 
 to test-ts-add-row
   let ts ts-load  "time-series-data.csv"
-  if not time:is-equal time:create "2000-01-03 01:00:01" (item 0 item 51 ts-add-row ts (list time:create "2000-01-03 01:00:01" 10 20)) [error "failure to add row with latest time to end"]
-  if not time:is-equal time:create "1999-12-31 00:00:00" (item 0 item 1 ts-add-row ts (list time:create "1999-12-31 00:00:00" 10 20)) [error "failure to add row with earliest time to beginning"]
-  if not time:is-equal time:create "2000-01-01 02:00:01" (item 0 item 4 ts-add-row ts (list time:create "2000-01-01 02:00:01" 10 20)) [error "failure to add row to the proper place"]
+  if not time:is-equal? time:create "2000-01-03 01:00:01" (item 0 item 51 ts-add-row ts (list time:create "2000-01-03 01:00:01" 10 20)) [error "failure to add row with latest time to end"]
+  if not time:is-equal? time:create "1999-12-31 00:00:00" (item 0 item 1 ts-add-row ts (list time:create "1999-12-31 00:00:00" 10 20)) [error "failure to add row with earliest time to beginning"]
+  if not time:is-equal? time:create "2000-01-01 02:00:01" (item 0 item 4 ts-add-row ts (list time:create "2000-01-01 02:00:01" 10 20)) [error "failure to add row to the proper place"]
   print "All ts-add-row tests passed"
 end
 
@@ -106,7 +106,6 @@ to test-ts-get-interp
 
   print "All ts-interp tests passed"
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 221

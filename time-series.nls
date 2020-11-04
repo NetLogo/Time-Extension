@@ -9,10 +9,10 @@ end
 to-report ts-add-row [ltime-series row]
 
   (ifelse
-    length ltime-series = 1 or time:is-after (__time-of row) (__time-of last ltime-series) [
+    length ltime-series = 1 or time:is-after? (__time-of row) (__time-of last ltime-series) [
       report lput (__row-copy row) ltime-series
     ]
-    time:is-before (__time-of row) (__time-of item 1 ltime-series) [
+    time:is-before? (__time-of row) (__time-of item 1 ltime-series) [
       report insert-item 1 ltime-series (__row-copy row)
     ]
     [ ;else
@@ -66,7 +66,7 @@ end
 
 to-report ts-get-exact [ltime-series logotime col-name]
   let closest-row ts-get ltime-series logotime "all"
-  ifelse time:is-equal (item 0 closest-row) logotime [
+  ifelse time:is-equal? (item 0 closest-row) logotime [
     report __col-of-row (item 0 ltime-series) closest-row col-name
   ] [
     error word "There is no row in this timeseries with exactly the time " logotime
@@ -79,7 +79,7 @@ to-report ts-get-range [ltime-series logotime1 logotime2 col-name]
   ; reports a subset of the time-series between the two logotimes.
 
 ; reverse the times if logotime2 is before logotime1
-  if time:is-before logotime2 logotime1 [
+  if time:is-before? logotime2 logotime1 [
     let temp1 logotime1
     set logotime1 logotime2
     set logotime2 temp1
@@ -92,7 +92,7 @@ to-report ts-get-range [ltime-series logotime1 logotime2 col-name]
   let start-index nobody
   ifelse first b&a-t1 = last b&a-t1 [ ; if b&a are the same, there was an exact match. So, need to get the index of the first row with that time
     set start-index first b&a-t1
-    while [start-index > 1 and time:is-equal logotime1 (__time-of item (start-index - 1) ltime-series)] [set start-index start-index - 1]
+    while [start-index > 1 and time:is-equal? logotime1 (__time-of item (start-index - 1) ltime-series)] [set start-index start-index - 1]
   ] [ ; if there isn't an exact match, then the after index will be the start of the returned range.
     set start-index __after-index (last b&a-t1) max-index
   ]
@@ -102,7 +102,7 @@ to-report ts-get-range [ltime-series logotime1 logotime2 col-name]
   let end-index nobody
   ifelse (first b&a-t2 = last b&a-t2) [ ; if b&a are the same, there was an exact match. So need to get the index of the first row after that time.
     set end-index last b&a-t2
-    while [end-index < max-index and time:is-equal logotime2 (__time-of item end-index ltime-series)] [set end-index end-index + 1]
+    while [end-index < max-index and time:is-equal? logotime2 (__time-of item end-index ltime-series)] [set end-index end-index + 1]
   ] [ ; if there isn't an exact match, then the after index will be the end of the returned range
     set end-index __after-index (last b&a-t2) max-index
   ]
@@ -132,7 +132,7 @@ end
 
 to-report ts-has-repeat-times? [ltime-series]
   foreach (range 1 (length ltime-series - 1)) [i ->
-    if time:is-equal (__time-of item i ltime-series) (__time-of item (i + 1) ltime-series) [report true]]
+    if time:is-equal? (__time-of item i ltime-series) (__time-of item (i + 1) ltime-series) [report true]]
   report false
 end
 
@@ -144,10 +144,10 @@ to-report ts-has-repeat-of-time? [ltime-series logotime]
   ; if the indices are the same, that just means there was an exact match -> still need to check above and below
   ifelse i1 = i2 [
     (ifelse
-      i1 > 1 and time:is-equal (__time-of item (i1 - 1) ltime-series) (__time-of item i1 ltime-series) [
+      i1 > 1 and time:is-equal? (__time-of item (i1 - 1) ltime-series) (__time-of item i1 ltime-series) [
         report true
       ]
-      i2 < (length ltime-series - 1) and time:is-equal (__time-of item i2 ltime-series) (__time-of item (i2 + 1) ltime-series) [
+      i2 < (length ltime-series - 1) and time:is-equal? (__time-of item i2 ltime-series) (__time-of item (i2 + 1) ltime-series) [
         report true
       ]
       [report false]
@@ -212,11 +212,11 @@ to-report __indices-before-and-after [timeseries logotime]
   let min-i 1
   while [true] [
     (ifelse
-      time:is-equal logotime (__time-of item i timeseries) [report list i i]
-      (time:is-before logotime (__time-of item i timeseries)) and i = 1 [report list nobody i]
-      (time:is-after logotime (__time-of item i timeseries)) and i = (length timeseries - 1) [report list i nobody]
-      (time:is-after logotime (__time-of item i timeseries)) and (time:is-before logotime (__time-of item (i + 1) timeseries)) [report list i (i + 1)]
-      time:is-before logotime (__time-of item i timeseries) [
+      time:is-equal? logotime (__time-of item i timeseries) [report list i i]
+      (time:is-before? logotime (__time-of item i timeseries)) and i = 1 [report list nobody i]
+      (time:is-after? logotime (__time-of item i timeseries)) and i = (length timeseries - 1) [report list i nobody]
+      (time:is-after? logotime (__time-of item i timeseries)) and (time:is-before? logotime (__time-of item (i + 1) timeseries)) [report list i (i + 1)]
+      time:is-before? logotime (__time-of item i timeseries) [
         set max-i i
         set i floor ((i + min-i) / 2)
       ]
@@ -233,7 +233,7 @@ to-report __time-of [row]
 end
 
 to-report __sort-by-date [timeseries]
-  report sort-by [[row1 row2] -> time:is-before (item 0 row1) (item 0 row2)] timeseries
+  report sort-by [[row1 row2] -> time:is-before? (item 0 row1) (item 0 row2)] timeseries
 end
 
 to-report __remove-comment-lines [data]
@@ -266,24 +266,24 @@ to-report __col-of-row [columns row col-name]
 end
 
 to-report __is-before-or-equal? [logotime1 logotime2]
-  report time:is-before logotime1 logotime2 or time:is-equal logotime1 logotime2
+  report time:is-before? logotime1 logotime2 or time:is-equal? logotime1 logotime2
 end
 
 to-report __is-after-or-equal? [logotime1 logotime2]
-  report time:is-after logotime1 logotime2 or time:is-equal logotime1 logotime2
+  report time:is-after? logotime1 logotime2 or time:is-equal? logotime1 logotime2
 end
 
 to-report __logotime-variety [logotime]
   let variety nobody
   carefully [
-    let temp time:is-equal logotime time:create "2000-12-01 1"
+    let temp time:is-equal? logotime time:create "2000-12-01 1"
     set variety "DATETIME"
   ] [
     carefully [
-      let temp time:is-equal logotime time:create "2000-12-01"
+      let temp time:is-equal? logotime time:create "2000-12-01"
       set variety "DATE"
     ] [
-      let temp time:is-equal logotime time:create "12-01"
+      let temp time:is-equal? logotime time:create "12-01"
       set variety "DAY"
     ]
   ]

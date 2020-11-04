@@ -37,7 +37,7 @@ to setup
   set end-time-code time:create end-time
 
   ; Some defensive programming
-  if time:is-after time end-time-code [ error "Really, the simulation must end after it starts" ]
+  if time:is-after? time end-time-code [ error "Really, the simulation must end after it starts" ]
   output-print time:show time "MMMM d, yyyy HH:mm"
 
   ; Read all the input file's data into a LogoTimeSeries variable

@@ -193,9 +193,9 @@ to test-plus-is-before
             the-delta-value
             the-units
             (time:show the-new-logotime "yyyy-MM-dd HH:mm:ss.SSS")
-            (time:is-before the-logotime the-new-logotime)
-            (time:is-after the-logotime the-new-logotime)
-            (time:is-equal the-logotime the-new-logotime)
+            (time:is-before? the-logotime the-new-logotime)
+            (time:is-after? the-logotime the-new-logotime)
+            (time:is-equal? the-logotime the-new-logotime)
             (time:difference-between the-logotime the-new-logotime a-unit)
             a-unit
           )
@@ -609,7 +609,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

@@ -63,7 +63,7 @@ to add-datetime
     let dt time:create-with-format the-time-string "yyyy/M/d H:m:s.SSS" ; this has a relaxed pattern for single digit values
     let newdt time:plus dt random 24 "hour"
     let newdt2 time:plus dt (24 + random 24) "hour"
-    if not time:is-between newdt dt newdt2
+    if not time:is-between? newdt dt newdt2
      [ print time:show dt "yyyy/MM/dd HH:mm:ss.SSS"
        print time:show newdt "yyyy/MM/dd HH:mm:ss.SSS"
        print time:show newdt2 "yyyy/MM/dd HH:mm:ss.SSS"
@@ -461,7 +461,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.1.0-RC2
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@

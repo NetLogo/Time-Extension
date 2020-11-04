@@ -121,56 +121,56 @@ TimePlusOperatorMillisecond
 
 TimeIsBefore
   extensions [time]
-  time:is-before (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => true
-  time:is-before (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => false
-  time:is-before (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-before (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => false
-  time:is-before (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-before (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => true
-  time:is-before (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-before (time:create "2000/01/01 10:01")  (time:create "2000/01/01 10:00") => false
-  time:is-before (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:01") => true
+  time:is-before? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => true
+  time:is-before? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => false
+  time:is-before? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-before? (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => false
+  time:is-before? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-before? (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => true
+  time:is-before? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-before? (time:create "2000/01/01 10:01")  (time:create "2000/01/01 10:00") => false
+  time:is-before? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:01") => true
 
 TimeIsAfter
   extensions [time]
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => false
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:01")  (time:create "2000/01/01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:01") => false
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => false
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:01")  (time:create "2000/01/01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:01") => false
 
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000-01-01 11:00") => false
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000-01-01 09:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000-01-01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2001-01-01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2000-01-01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2001-01-01 10:00") => false
-  time:is-after (time:create "2001/01/01 10:00")  (time:create "2000-01-01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:01")  (time:create "2000-01-01 10:00") => true
-  time:is-after (time:create "2000/01/01 10:00")  (time:create "2000-01-01 10:01") => false
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000-01-01 11:00") => false
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000-01-01 09:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000-01-01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2001-01-01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2000-01-01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2001-01-01 10:00") => false
+  time:is-after? (time:create "2001/01/01 10:00")  (time:create "2000-01-01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:01")  (time:create "2000-01-01 10:00") => true
+  time:is-after? (time:create "2000/01/01 10:00")  (time:create "2000-01-01 10:01") => false
 
 
 TimeIsEqual
   extensions [time]
-  time:is-equal (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => false
-  time:is-equal (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => false
-  time:is-equal (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => true
-  time:is-equal (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => true
-  time:is-equal (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-equal (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => false
-  time:is-equal (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
-  time:is-equal (time:plus (time:create "2001/01/01 10:00") 3 "day") (time:create "2001/01/04 10:00") => true
-  time:is-equal (time:plus (time:create "2001/01/04 10:00") -3 "day") (time:create "2001/01/01 10:00") => true
-  time:is-equal (time:plus (time:create "2001/01/04") -3 "day") (time:create "2001/01/01") => true
-  time:is-equal (time:plus (time:create "2001/01/04") -2 "day") (time:create "2001/01/01") => false
-  time:is-equal (time:plus (time:create "2001/01/04") -3 "day") (time:plus (time:create "2001/01/01") 0 "day") => true
-  time:is-equal (time:plus (time:create "2001/01/04") 0 "day") (time:plus (time:create "2001/01/04") 0 "day") => true
-  time:is-equal (time:plus (time:create "2001/01/04") 1 "day") (time:plus (time:create "2001/01/04") 1 "day") => true
-   time:is-equal (time:plus (time:create "2001/01/04") 1 "day") (time:plus (time:create "2001/01/05") 0 "day") => true
+  time:is-equal? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 11:00") => false
+  time:is-equal? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 09:00") => false
+  time:is-equal? (time:create "2000/01/01 10:00")  (time:create "2000/01/01 10:00") => true
+  time:is-equal? (time:create "2001/01/01 10:00")  (time:create "2001/01/01 10:00") => true
+  time:is-equal? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-equal? (time:create "2000/01/01 10:00")  (time:create "2001/01/01 10:00") => false
+  time:is-equal? (time:create "2001/01/01 10:00")  (time:create "2000/01/01 10:00") => false
+  time:is-equal? (time:plus (time:create "2001/01/01 10:00") 3 "day") (time:create "2001/01/04 10:00") => true
+  time:is-equal? (time:plus (time:create "2001/01/04 10:00") -3 "day") (time:create "2001/01/01 10:00") => true
+  time:is-equal? (time:plus (time:create "2001/01/04") -3 "day") (time:create "2001/01/01") => true
+  time:is-equal? (time:plus (time:create "2001/01/04") -2 "day") (time:create "2001/01/01") => false
+  time:is-equal? (time:plus (time:create "2001/01/04") -3 "day") (time:plus (time:create "2001/01/01") 0 "day") => true
+  time:is-equal? (time:plus (time:create "2001/01/04") 0 "day") (time:plus (time:create "2001/01/04") 0 "day") => true
+  time:is-equal? (time:plus (time:create "2001/01/04") 1 "day") (time:plus (time:create "2001/01/04") 1 "day") => true
+   time:is-equal? (time:plus (time:create "2001/01/04") 1 "day") (time:plus (time:create "2001/01/05") 0 "day") => true
 
 TimeShow
   extensions [time]
@@ -211,10 +211,10 @@ LimitedTimeConversions
 
 TimeIsBetween
   extensions [time]
-  time:is-between (time:create "2000/01/01 10:00:01") (time:create "2000/01/01 10:00:01") (time:create "2000/01/01 10:00:01") => true
-  time:is-between (time:create "2000/01/01") (time:create "2000/01/01") (time:create "2000/01/01") => true
-  time:is-between (time:create "2000/01/02") (time:create "2000/01/05") (time:create "2000/01/01") => true
-  time:is-between (time:create "2000/01/01") (time:create "2000/01/02") (time:create "2000/01/03") => false
+  time:is-between? (time:create "2000/01/01 10:00:01") (time:create "2000/01/01 10:00:01") (time:create "2000/01/01 10:00:01") => true
+  time:is-between? (time:create "2000/01/01") (time:create "2000/01/01") (time:create "2000/01/01") => true
+  time:is-between? (time:create "2000/01/02") (time:create "2000/01/05") (time:create "2000/01/01") => true
+  time:is-between? (time:create "2000/01/01") (time:create "2000/01/02") (time:create "2000/01/03") => false
 
 TimeGet
   extensions [time]
