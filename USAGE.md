@@ -1,4 +1,3 @@
-
 The Time extension provides NetLogo with three kinds of capabilities for models that use discrete-event simulation or represent time explicitly. The package provides tools for common date and time operations, discrete event scheduling, and using time-series input data.
 
 * [Quickstart](#quickstart)
@@ -324,7 +323,7 @@ MM/d/yyyy HH:mm
 
 ## Primitives
 
-
+{{! escape mustache tags}}{{={| |}=}}
 
 ### Date/Time Utilities
 

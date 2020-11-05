@@ -1,7 +1,7 @@
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
-netLogoVersion := "6.1.0-RC2"
+netLogoVersion := "6.1.1"
 netLogoClassManager := "org.nlogo.extensions.time.TimeExtension"
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.12"
 netLogoExtName := "time"
 netLogoZipSources := false
 
