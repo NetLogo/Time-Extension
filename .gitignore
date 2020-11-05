@@ -7,11 +7,12 @@ examples/new-ts-file.csv
 jar-command.sh
 .DS_Store
 debugging
-.bundledFiles 
-.java-version 
+.bundledFiles
+.java-version
 Steves-tests/*
 target/
 TroutCode_2020-06-21/
 *.tmp.nlogo
 *.csv
 examples/*.txt
+*.jar
