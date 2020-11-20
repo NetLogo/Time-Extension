@@ -6,6 +6,9 @@ netLogoExtName := "time"
 netLogoZipSources := false
 
 netLogoTarget := org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
+
+version := "2.0.0"
+
 publishMavenStyle in ThisBuild := false
 lazy val src = (project in file("."))
   .settings(
