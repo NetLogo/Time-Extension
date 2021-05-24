@@ -16,3 +16,4 @@ lazy val src = (project in file("."))
     scalaSource in Compile := baseDirectory.value / "src",
     scalacOptions ++= "-deprecation -unchecked -Xfatal-warnings".split(" ").toSeq
   )
+isSnapshot := true
