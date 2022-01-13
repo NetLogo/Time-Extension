@@ -107,7 +107,7 @@ object TimeUtils {
     Math.round(d).longValue().intValue()
 
   def intToDouble(i: Int): java.lang.Double =
-    (new java.lang.Integer(i)).doubleValue()
+    java.lang.Double.valueOf(i)
 
   def printToLogfile(msg: String): Unit = {
     val logger: Logger = Logger.getLogger("MyLog")
