@@ -5,6 +5,7 @@ The Time extension provides NetLogo with three kinds of capabilities for models 
 * [What is it?](#what-is-it)
 * [Installation](#installation)
 * [Examples](#examples)
+* [Data Types](#data-types)
 * [Behavior](#behavior)
 * [Format](#format)
 * [Primitives](#primitives)
@@ -807,7 +808,7 @@ Add an event to the discrete event schedule.  The order in which events are adde
 
 If *tick-or-time* is a LogoTime, then the discrete event schedule must be anchored (see time:anchor-schedule).  If <em>tick-or-time</em> is in the past (less than the current tick/time), a run-time error is raised. (The *is-after?* primitive can be used to defend against this error: add an event to the schedule only if its scheduled time is after the current time.)
 
-Once an event has been added to the discrete event schedule, there is no way to remove or cancel it.
+Once an event has been added to the discrete event schedule, there is no way to remove or cancel it except by clearing the entire schedule with time:clear-schedule.
 
     time:schedule-event turtles [ [] -> go-forward ] 1.0
     time:schedule-event turtles [ [] -> fd 1 ] 1.0
