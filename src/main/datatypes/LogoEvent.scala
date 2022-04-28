@@ -56,8 +56,8 @@ class LogoEvent(var agents: org.nlogo.agent.AgentSet,
 
   override def equals(obj: Any): Boolean = this == obj
 
-  def getExtensionName(): String = "time"
-  def getNLTypeName(): String = "event"
+  def getExtensionName: String = "time"
+  def getNLTypeName: String = "event"
   def recursivelyEqual(arg0: AnyRef): Boolean = equals(arg0)
   def dump(arg0: Boolean, arg1: Boolean, arg2: Boolean): String = {
     var result: String = tick.toString + ": "

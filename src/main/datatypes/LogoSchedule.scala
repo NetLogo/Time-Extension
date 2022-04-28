@@ -253,8 +253,8 @@ class LogoSchedule extends ExtensionObject {
     buf.toString
   }
 
-  def getExtensionName(): String = "time"
-  def getNLTypeName(): String = "schedule"
+  def getExtensionName: String = "time"
+  def getNLTypeName: String = "schedule"
   def recursivelyEqual(arg0: AnyRef): Boolean = equals(arg0)
   def clear(): Unit = scheduleTree.clear()
 }

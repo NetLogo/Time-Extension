@@ -55,8 +55,7 @@ object TimeUtils {
       case double: java.lang.Double => double
       case obj =>
        throw new ExtensionException(
-        s"time: was expecting a number as argument " + (argIndex + 1) +
-          ", found this instead: $obj")
+        s"time: was expecting a number as argument ${argIndex + 1}, found this instead: $obj")
     }
 
   def getListFromArgument(args: Array[Argument], argIndex: java.lang.Integer): LogoList =
@@ -85,8 +84,7 @@ object TimeUtils {
       case integer: java.lang.Integer => integer.longValue()
       case obj =>
         throw new ExtensionException(
-          s"time: was expecting a number as argument " + (argIndex + 1) +
-            ", found this instead: $obj")
+          s"time: was expecting a number as argument ${argIndex + 1}, found this instead: $obj")
     }
 
   def getStringFromArgument(args: Array[Argument], argIndex: java.lang.Integer): String =
@@ -94,8 +92,7 @@ object TimeUtils {
       case string: String => string
       case obj =>
         throw new ExtensionException(
-          s"time: was expecting a string as argument " + (argIndex + 1) +
-            ", found this instead: $obj")
+          s"time: was expecting a string as argument ${argIndex + 1}, found this instead: $obj")
     }
 
   def getTimeSeriesFromArgument(args: Array[Argument], argIndex: java.lang.Integer): LogoTimeSeries =
@@ -103,9 +100,7 @@ object TimeUtils {
       case lts: LogoTimeSeries => lts
       case obj =>
         throw new ExtensionException(
-          s"time: was expecting a LogoTimeSeries object as argument " +
-            (argIndex + 1) +
-            ", found this instead: $obj")
+          s"time: was expecting a LogoTimeSeries object as argument ${argIndex + 1}, found this instead: $obj")
     }
 
   def roundDouble(d: java.lang.Double): java.lang.Integer =
@@ -136,8 +131,7 @@ object TimeUtils {
       case lschedule: LogoSchedule => lschedule
       case obj =>
         throw new ExtensionException(
-          s"Was expecting a LogoSchedule as argument " + (index + 1) +
-            " found this instead: $obj")
+          s"Was expecting a LogoSchedule as argument ${index + 1} found this instead: $obj")
     }
 
   def printToConsole(context: Context, msg: String): Unit = {

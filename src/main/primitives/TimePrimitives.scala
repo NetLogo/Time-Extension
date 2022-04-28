@@ -14,7 +14,7 @@ import org.nlogo.extensions.time.datatypes._
 object TimePrimitives {
 
   class NewLogoTime extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.StringType), Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       TimeExtension.context = context
@@ -23,7 +23,7 @@ object TimePrimitives {
   }
 
   class Anchor extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(
         Array(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
         Syntax.WildcardType)
@@ -48,7 +48,7 @@ object TimePrimitives {
   }
 
   class Show extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.WildcardType, Syntax.StringType),
                              Syntax.StringType)
     def report(args: Array[Argument], context: Context): AnyRef = {
@@ -64,7 +64,7 @@ object TimePrimitives {
   }
 
   class Copy extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.WildcardType),
                              Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
@@ -74,7 +74,7 @@ object TimePrimitives {
   }
 
   class CreateWithFormat extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.StringType, Syntax.StringType),
                              Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
@@ -88,7 +88,7 @@ object TimePrimitives {
   }
 
   class DifferenceBetween extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
                                    Syntax.WildcardType,
                                    Syntax.StringType),
@@ -103,7 +103,7 @@ object TimePrimitives {
   }
 
   class Get extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.StringType, Syntax.WildcardType), Syntax.NumberType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val periodType: PeriodType =
@@ -114,7 +114,7 @@ object TimePrimitives {
   }
 
   class IsAfter extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(
         Array(Syntax.WildcardType, Syntax.WildcardType),
         Syntax.BooleanType)
@@ -126,7 +126,7 @@ object TimePrimitives {
   }
 
   class IsBefore extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(
         Array(Syntax.WildcardType, Syntax.WildcardType),
         Syntax.BooleanType)
@@ -138,7 +138,7 @@ object TimePrimitives {
   }
 
   class IsBetween extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
                                    Syntax.WildcardType,
                                    Syntax.WildcardType),
@@ -152,7 +152,7 @@ object TimePrimitives {
   }
 
   class IsEqual extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(
         Array(Syntax.WildcardType, Syntax.WildcardType),
         Syntax.BooleanType)
@@ -164,7 +164,7 @@ object TimePrimitives {
   }
 
   class Plus extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(
         Array(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
         Syntax.WildcardType)

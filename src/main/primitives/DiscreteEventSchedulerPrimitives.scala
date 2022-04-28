@@ -12,7 +12,7 @@ import org.nlogo.extensions.time.datatypes._
 object DiscreteEventSchedulerPrimitives {
 
   class AddEvent extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -23,7 +23,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class AddEventShuffled extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -34,7 +34,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class AnchorSchedule extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType))
     def perform(args: Array[Argument], context: Context): Unit = {
@@ -46,14 +46,14 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class ClearSchedule extends Command {
-    def getSyntax(): Syntax = SyntaxJ.commandSyntax(Array(): Array[Int])
+    def getSyntax: Syntax = SyntaxJ.commandSyntax(Array(): Array[Int])
     def perform(args: Array[Argument], context: Context): Unit = {
       TimeExtension.schedule.clear()
     }
   }
 
   class GetSize extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(): Array[Int], Syntax.NumberType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       if (TimeExtension.debug)
@@ -63,14 +63,14 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class Go extends Command {
-    def getSyntax(): Syntax = SyntaxJ.commandSyntax(Array(): Array[Int])
+    def getSyntax: Syntax = SyntaxJ.commandSyntax(Array(): Array[Int])
     def perform(args: Array[Argument], context: Context): Unit = {
       TimeExtension.schedule.performScheduledTasks(args, context)
     }
   }
 
   class GoUntil extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(Array(Syntax.WildcardType))
     def perform(args: Array[Argument], context: Context): Unit = {
       var untilTime: LogoTime = null
@@ -89,7 +89,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class RepeatEvent extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -102,7 +102,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class RepeatEventShuffled extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -115,7 +115,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class RepeatEventShuffledWithPeriod extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -129,7 +129,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class RepeatEventWithPeriod extends Command {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.commandSyntax(
         Array(Syntax.WildcardType,
               Syntax.WildcardType,
@@ -142,7 +142,7 @@ object DiscreteEventSchedulerPrimitives {
   }
 
   class ShowSchedule extends Reporter {
-    def getSyntax(): Syntax =
+    def getSyntax: Syntax =
       SyntaxJ.reporterSyntax(Array(): Array[Int], Syntax.StringType)
     def report(args: Array[Argument], context: Context): AnyRef =
       TimeExtension.schedule.dump(false, false, false)

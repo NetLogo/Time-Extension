@@ -1,6 +1,6 @@
 package org.nlogo.extensions.time.datatypes
 
-import java.io.{BufferedWriter, File, FileWriter, IOException, FileNotFoundException}
+import java.io.{BufferedWriter, File, FileWriter}
 import java.util.{ArrayList, Arrays}
 import scala.collection.immutable.TreeMap
 import scala.collection.mutable.LinkedHashMap
@@ -208,8 +208,8 @@ class LogoTimeSeries extends ExtensionObject {
       timeHigh = timeTemp
     }
 
-    var columnList: ArrayList[String] = new ArrayList[String](scacolumns.size)
-    var resultList: ArrayList[LogoList] = new ArrayList[LogoList](scacolumns.size)
+    val columnList: ArrayList[String] = new ArrayList[String](scacolumns.size)
+    val resultList: ArrayList[LogoList] = new ArrayList[LogoList](scacolumns.size)
     columnName match {
         case "ALL_-_COLUMNS" => columnList.addAll(scacolumns.keySet.asJava)
         case "LOGOTIME" =>
@@ -226,7 +226,7 @@ class LogoTimeSeries extends ExtensionObject {
         lowerKey = timelist.min
       else throw new ExtensionException("List is empty (Low)")
     }
-    if(times.get(higherKey) == None) {  // NOTE: I think we don't need this. It's fine if the list is empty, just return an empty list. 
+    if(times.get(higherKey) == None) {  // NOTE: I think we don't need this. It's fine if the list is empty, just return an empty list.
       val timelist = times.keySet.filter(stime => stime.isBefore(timeHigh) || stime.isEqual(timeHigh))
       if(!timelist.isEmpty) higherKey = timelist.max
       else throw new ExtensionException("List is empty (High)")
@@ -301,7 +301,7 @@ class LogoTimeSeries extends ExtensionObject {
       }
     }
   }
-  def getExtensionName(): String = "time"
-  def getNLTypeName(): String = "LogoTimeSeries"
+  def getExtensionName: String = "time"
+  def getNLTypeName: String = "LogoTimeSeries"
   def recursivelyEqual(arg0: AnyRef): Boolean = false
 }

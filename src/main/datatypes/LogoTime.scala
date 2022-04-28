@@ -8,7 +8,6 @@ import java.time.format.ResolverStyle.STRICT
 import java.time.format.DateTimeParseException
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.WeekFields
-import java.util.Comparator
 import org.nlogo.agent.World
 import org.nlogo.api.ExtensionException
 import org.nlogo.core.ExtensionObject
@@ -304,8 +303,8 @@ class LogoTime extends ExtensionObject {
 /*  time:anchor-schedule time:create "2000-01-01" 0.5 "day"
   set current-time time:anchor-to-ticks time:create "2000-01-01" 0.5 "day"
  */
-  def getExtensionName(): String = "time"
-  def getNLTypeName(): String = "logotime"
+  def getExtensionName: String = "time"
+  def getNLTypeName: String = "logotime"
   def recursivelyEqual(arg0: AnyRef): Boolean = equals(arg0)
 
   def show(fmt: DateTimeFormatter): String =

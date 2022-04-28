@@ -3,7 +3,7 @@ package org.nlogo.extensions.time
 import org.nlogo.extensions.time.datatypes.LogoSchedule
 import org.nlogo.extensions.time.primitives.DiscreteEventSchedulerPrimitives
 import org.nlogo.extensions.time.primitives.TimePrimitives
-import org.nlogo.extensions.time.primitives.TimeSeriesPrimitives
+//import org.nlogo.extensions.time.primitives.TimeSeriesPrimitives
 import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.Context
 
@@ -15,7 +15,7 @@ object TimeExtension {
 }
 
 class TimeExtension extends DefaultClassManager {
-  override def additionalJars(): java.util.List[String] = {
+  override def additionalJars: java.util.List[String] = {
     val list: java.util.List[String] = new java.util.ArrayList[String]()
     list
   }
