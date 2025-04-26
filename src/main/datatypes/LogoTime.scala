@@ -419,7 +419,7 @@ class LogoTime extends ExtensionObject {
         per = Some (Period.of(TimeUtils.roundDouble(durVal), 0, 0))
       case _ =>
         throw new ExtensionException(
-          pType + " type is not supported by the time:plus primitive")
+          s"$pType type is not supported by the time:plus primitive")
     }
     this.dateType match {
       case DateTime =>

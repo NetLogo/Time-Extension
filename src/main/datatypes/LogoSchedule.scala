@@ -7,8 +7,8 @@ import org.nlogo.api.{Argument, Context, ExtensionException}
 import org.nlogo.core.{AgentKindJ, ExtensionObject}
 import org.nlogo.nvm.ExtensionContext
 import org.nlogo.extensions.time._
-import scala.collection.JavaConverters._
-import util.control.Breaks._
+
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 class LogoSchedule extends ExtensionObject {
   // This is the data structure that contains all the scheduled events
@@ -89,7 +89,7 @@ class LogoSchedule extends ExtensionObject {
       case clazz if clazz == classOf[java.lang.Double] =>
         args(2).getDoubleValue
       case clazz if clazz == classOf[LogoTime] =>
-        if (!this.isAnchored)
+        if (!this.isAnchored())
             throw new ExtensionException(s"""A LogoEvent can only be scheduled to occur at a LogoTime
             if the discrete event schedule has been anchored to a LogoTime, see time:anchor-schedule""")
         this.timeToTick(TimeUtils.getTimeFromArgument(args, 2))
@@ -111,7 +111,7 @@ class LogoSchedule extends ExtensionObject {
       if (repeatInterval <= 0)
           throw new ExtensionException("time repeat the repeat interval must be a positive number")
       if (args.length == 5) {
-        if (!this.isAnchored)
+        if (!this.isAnchored())
            throw new ExtensionException(
            """A LogoEvent can only be scheduled to repeat using a period type if the discrete
               event schedule has been anchored to a LogoTime, see time:anchor-schedule""")
@@ -170,7 +170,7 @@ class LogoSchedule extends ExtensionObject {
     performScheduledTasks(args, context, java.lang.Double.MAX_VALUE)
   }
   def performScheduledTasks(args: Array[Argument], context: Context, untilTime: LogoTime): Unit = {
-    if (!this.isAnchored) throw new ExtensionException(
+    if (!this.isAnchored()) throw new ExtensionException(
       """time:go-until can only accept a LogoTime as a stopping time if the schedule is anchored
          using time:anchor-schedule""")
     // Calculate the untilTick and pass it to the main function
@@ -207,17 +207,20 @@ class LogoSchedule extends ExtensionObject {
           val copy: ArrayList[Agent] = new ArrayList[Agent]()
 
           while (iter.hasNext) copy.add(iter.next())
-          for (theAgent <- copy.asScala) {
-            breakable {
-              if (theAgent == null || theAgent.id == -1)
-                break
+          copy.asScala.dropWhile { agent =>
+            if (agent == null || agent.id == -1) {
+              false
+            } else {
               val nvmContext: org.nlogo.nvm.Context = new org.nlogo.nvm.Context(
-                extcontext.nvmContext.job,theAgent, extcontext.nvmContext.ip,
+                extcontext.nvmContext.job, agent, extcontext.nvmContext.ip,
                 extcontext.nvmContext.activation,
                 extcontext.workspace)
-              if (extcontext.nvmContext.stopping){return}
-              event.task.perform(nvmContext, emptyArgs.asInstanceOf[Array[AnyRef]])
-              if (nvmContext.stopping){return}
+              if (extcontext.nvmContext.stopping) {
+                false
+              } else {
+                event.task.perform(nvmContext, emptyArgs.asInstanceOf[Array[AnyRef]])
+                !nvmContext.stopping
+              }
             }
           }
       }
@@ -232,8 +235,8 @@ class LogoSchedule extends ExtensionObject {
   }
 
   def getCurrentTime(): LogoTime =
-    if (!this.isAnchored) null
-    else this.timeAnchor.plus(this.tickType, getTickCounter.ticks / this.tickValue)
+    if (!this.isAnchored()) null
+    else this.timeAnchor.plus(this.tickType, getTickCounter().ticks / this.tickValue)
 
   def dump(readable: Boolean, exporting: Boolean, reference: Boolean): String = {
     val buf: StringBuilder = new StringBuilder()

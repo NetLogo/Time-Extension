@@ -35,6 +35,7 @@ object TimeUtils {
       case "week" => Week
       case "month" => Month
       case "year" => Year
+      case _ => throw new Exception(s"Unexpected type: $typ")
     }
   }
 

@@ -11,10 +11,11 @@ import org.nlogo.nvm.ExtensionContext
 import org.nlogo.extensions.time._
 import scala.util.{Try, Success, Failure}
 import util.control.Breaks.{breakable, break}
-import scala.collection.JavaConverters._
+
+import scala.jdk.CollectionConverters.{ ListHasAsScala, SeqHasAsJava, SetHasAsJava }
 
 class LogoTimeSeries extends ExtensionObject {
-  implicit val logoComparator = LogoTimeComparator
+  implicit val logoComparator: org.nlogo.extensions.time.datatypes.LogoTimeComparator.type = LogoTimeComparator
   var times: TreeMap[LogoTime, TimeSeriesRecord] =
     new TreeMap[LogoTime, TimeSeriesRecord]()
   var scacolumns: LinkedHashMap[String, TimeSeriesColumn] =
@@ -98,10 +99,10 @@ class LogoTimeSeries extends ExtensionObject {
       case Success(bufferedSource) =>
         var ind = 0
         var columnNames = Array[String]()
-        for( line <- bufferedSource.getLines)
+        for( line <- bufferedSource.getLines())
           breakable {
             line match {
-              case linedata if linedata.charAt(0) == ";" => break
+              case linedata if linedata.charAt(0) == ';' => break()
               case _ if ind == 0 =>
                 ind = ind + 1
                 columnNames = line.split(',').map(_.trim)

@@ -4,7 +4,8 @@ import org.nlogo.api.Agent
 import org.nlogo.nvm.AnonymousCommand
 import org.nlogo.core.ExtensionObject
 import org.nlogo.extensions.time._
-import scala.collection.JavaConverters._
+
+import scala.jdk.CollectionConverters.IterableHasAsScala
 
 object LogoEventComparator extends Ordering[LogoEvent] {
   def compare(a: LogoEvent, b: LogoEvent): Int =
@@ -48,7 +49,7 @@ class LogoEvent(var agents: org.nlogo.agent.AgentSet,
         TimeExtension.schedule.scheduleTree.add(this)
       }
       case _ => {
-        val currentTime: LogoTime = callingSchedule.getCurrentTime
+        val currentTime: LogoTime = callingSchedule.getCurrentTime()
         this.tick = this.tick + currentTime.getDifferenceBetween(callingSchedule.tickType, currentTime.plus(repeatIntervalPeriodType, repeatInterval)) / callingSchedule.tickValue
         TimeExtension.schedule.scheduleTree.add(this)
       }
