@@ -6,7 +6,6 @@ import org.nlogo.api.Argument
 import org.nlogo.api.Context
 import org.nlogo.api.Reporter
 import org.nlogo.core.Syntax
-import org.nlogo.core.SyntaxJ
 import org.nlogo.nvm.ExtensionContext
 import org.nlogo.extensions.time._
 import org.nlogo.extensions.time.datatypes._
@@ -15,7 +14,7 @@ object TimePrimitives {
 
   class NewLogoTime extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.StringType), Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.StringType), ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       TimeExtension.context = context
       new LogoTime(TimeUtils.getStringFromArgument(args, 0))
@@ -24,9 +23,9 @@ object TimePrimitives {
 
   class Anchor extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(
-        Array(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
-        Syntax.WildcardType)
+      Syntax.reporterSyntax(
+        right = List(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
+        ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       /* The anchor primitives have experienced some changes with the use of the
          Java time library. Originally, the Joda library would create copies of
@@ -49,8 +48,8 @@ object TimePrimitives {
 
   class Show extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType, Syntax.StringType),
-                             Syntax.StringType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType, Syntax.StringType),
+                            ret = Syntax.StringType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val time: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       // There is an implicit LogoTime initialization
@@ -65,8 +64,8 @@ object TimePrimitives {
 
   class Copy extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val time: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       new LogoTime(time)
@@ -75,8 +74,8 @@ object TimePrimitives {
 
   class CreateWithFormat extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.StringType, Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.StringType, Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       TimeExtension.context = context
       val customFormat = TimeUtils.getStringFromArgument(args, 1) match {
@@ -89,10 +88,10 @@ object TimePrimitives {
 
   class DifferenceBetween extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
-                                   Syntax.WildcardType,
-                                   Syntax.StringType),
-                                   Syntax.NumberType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType,
+                                         Syntax.WildcardType,
+                                         Syntax.StringType),
+                            ret = Syntax.NumberType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val startTime: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       val endTime: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -104,7 +103,7 @@ object TimePrimitives {
 
   class Get extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.StringType, Syntax.WildcardType), Syntax.NumberType)
+      Syntax.reporterSyntax(right = List(Syntax.StringType, Syntax.WildcardType), ret = Syntax.NumberType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val periodType: PeriodType =
         TimeUtils.stringToPeriodType(TimeUtils.getStringFromArgument(args, 0))
@@ -115,9 +114,9 @@ object TimePrimitives {
 
   class IsAfter extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(
-        Array(Syntax.WildcardType, Syntax.WildcardType),
-        Syntax.BooleanType)
+      Syntax.reporterSyntax(
+        right = List(Syntax.WildcardType, Syntax.WildcardType),
+        ret = Syntax.BooleanType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val timeA: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       val timeB: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -127,9 +126,9 @@ object TimePrimitives {
 
   class IsBefore extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(
-        Array(Syntax.WildcardType, Syntax.WildcardType),
-        Syntax.BooleanType)
+      Syntax.reporterSyntax(
+        right = List(Syntax.WildcardType, Syntax.WildcardType),
+        ret = Syntax.BooleanType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val timeA: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       val timeB: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -139,10 +138,10 @@ object TimePrimitives {
 
   class IsBetween extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
-                                   Syntax.WildcardType,
-                                   Syntax.WildcardType),
-                                   Syntax.BooleanType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType,
+                                         Syntax.WildcardType,
+                                         Syntax.WildcardType),
+                            ret = Syntax.BooleanType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val timeA: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       val timeB: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -153,9 +152,9 @@ object TimePrimitives {
 
   class IsEqual extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(
-        Array(Syntax.WildcardType, Syntax.WildcardType),
-        Syntax.BooleanType)
+      Syntax.reporterSyntax(
+        right = List(Syntax.WildcardType, Syntax.WildcardType),
+        ret = Syntax.BooleanType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val timeA: LogoTime = TimeUtils.getTimeFromArgument(args, 0)
       val timeB: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -165,9 +164,9 @@ object TimePrimitives {
 
   class Plus extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(
-        Array(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
-        Syntax.WildcardType)
+      Syntax.reporterSyntax(
+        right = List(Syntax.WildcardType, Syntax.NumberType, Syntax.StringType),
+        ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val time: LogoTime = new LogoTime(TimeUtils.getTimeFromArgument(args, 0))
       time.plus(

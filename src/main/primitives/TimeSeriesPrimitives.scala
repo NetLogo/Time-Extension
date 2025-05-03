@@ -9,7 +9,6 @@ import org.nlogo.api.ExtensionException
 import org.nlogo.api.Reporter
 import org.nlogo.core.LogoList
 import org.nlogo.core.Syntax
-import org.nlogo.core.SyntaxJ
 import org.nlogo.nvm.ExtensionContext
 import org.nlogo.extensions.time._
 import org.nlogo.extensions.time.datatypes._
@@ -17,7 +16,7 @@ import org.nlogo.extensions.time.datatypes._
 object TimeSeriesPrimitives {
   class TimeSeriesAddRow extends Command {
     def getSyntax: Syntax =
-      SyntaxJ.commandSyntax(Array(Syntax.WildcardType, Syntax.WildcardType))
+      Syntax.commandSyntax(right = List(Syntax.WildcardType, Syntax.WildcardType))
     def perform(args: Array[Argument], context: Context): Unit = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val list: LogoList = TimeUtils.getListFromArgument(args, 1)
@@ -45,8 +44,8 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesCreate extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       var columnList: LogoList = null
       try columnList = TimeUtils.getListFromArgument(args, 0)
@@ -64,10 +63,10 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesGet extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
-                                   Syntax.WildcardType,
-                                   Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType,
+                                         Syntax.WildcardType,
+                                         Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val time: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -82,10 +81,10 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesGetExact extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
-                                   Syntax.WildcardType,
-                                   Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType,
+                                         Syntax.WildcardType,
+                                         Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val time: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -101,10 +100,10 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesGetInterp extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType,
-                                   Syntax.WildcardType,
-                                   Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType,
+                                         Syntax.WildcardType,
+                                         Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val time: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -119,9 +118,9 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesGetRange extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.WildcardType, Syntax.WildcardType,
-                                   Syntax.WildcardType, Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.WildcardType, Syntax.WildcardType,
+                                         Syntax.WildcardType, Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val timeA: LogoTime = TimeUtils.getTimeFromArgument(args, 1)
@@ -141,7 +140,7 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesLoad extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.StringType), Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.StringType), ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val filename: String = TimeUtils.getStringFromArgument(args, 0)
        new LogoTimeSeries(filename, context.asInstanceOf[ExtensionContext])
@@ -150,8 +149,8 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesLoadWithFormat extends Reporter {
     def getSyntax: Syntax =
-      SyntaxJ.reporterSyntax(Array(Syntax.StringType, Syntax.StringType),
-                             Syntax.WildcardType)
+      Syntax.reporterSyntax(right = List(Syntax.StringType, Syntax.StringType),
+                            ret = Syntax.WildcardType)
     def report(args: Array[Argument], context: Context): AnyRef = {
       val filename: String = TimeUtils.getStringFromArgument(args, 0)
       val format: Option[String] =
@@ -164,7 +163,7 @@ object TimeSeriesPrimitives {
 
   class TimeSeriesWrite extends Command {
     def getSyntax: Syntax =
-      SyntaxJ.commandSyntax(Array(Syntax.WildcardType, Syntax.StringType))
+      Syntax.commandSyntax(right = List(Syntax.WildcardType, Syntax.StringType))
     def perform(args: Array[Argument], context: Context): Unit = {
       val ts: LogoTimeSeries = TimeUtils.getTimeSeriesFromArgument(args, 0)
       val filename: String = TimeUtils.getStringFromArgument(args, 1)
