@@ -21,7 +21,7 @@ class TimeExtension extends DefaultClassManager {
   }
 
   def load(primManager: org.nlogo.api.PrimitiveManager): Unit = {
-    /**
+    /*
      Time and formatting Primitives
      */
     primManager.addPrimitive("is-before?", new TimePrimitives.IsBefore())
@@ -36,7 +36,7 @@ class TimeExtension extends DefaultClassManager {
     primManager.addPrimitive("create", new TimePrimitives.NewLogoTime())
     primManager.addPrimitive("create-with-format", new TimePrimitives.CreateWithFormat())
     primManager.addPrimitive("copy", new TimePrimitives.Copy())
-    /**
+    /*
      TimeSeries Primitives:
      */
     // not included in beta. May re-include later
@@ -49,7 +49,7 @@ class TimeExtension extends DefaultClassManager {
     // primManager.addPrimitive("ts-get-interp", new TimeSeriesPrimitives.TimeSeriesGetInterp())
     // primManager.addPrimitive("ts-get-exact", new TimeSeriesPrimitives.TimeSeriesGetExact())
     // primManager.addPrimitive("ts-get-range", new TimeSeriesPrimitives.TimeSeriesGetRange())
-    /**
+    /*
      DiscreteEventscheduler primitives
      */
     primManager.addPrimitive("schedule-event", new DiscreteEventSchedulerPrimitives.AddEvent())
