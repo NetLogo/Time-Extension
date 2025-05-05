@@ -11,7 +11,7 @@ Test / scalaSource := baseDirectory.value / "src" / "test"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "UTF8", "-release", "11")
 
 netLogoExtName := "time"
-netLogoVersion := "7.0.0-internal1"
+netLogoVersion := "7.0.0-internal1-df97144"
 netLogoClassManager := "org.nlogo.extensions.time.TimeExtension"
 netLogoPackageExtras += (baseDirectory.value / "src" / "time-series.nls" -> None)
 netLogoTestExtras ++= Seq((baseDirectory.value / "examples"), (baseDirectory.value / "tests"))
