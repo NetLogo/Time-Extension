@@ -28,12 +28,12 @@ class LogoTime extends ExtensionObject {
       .parseStrict().appendPattern("uuuu-MM-dd HH:mm:ss.")
       .parseLenient().appendPattern("SSS")).toFormatter
   private var isAnchored: java.lang.Boolean = false
-  private var tickValue: java.lang.Double = _
-  private var tickType: PeriodType = _
-  private var anchorDatetime: LocalDateTime = _
-  private var anchorDate: LocalDate = _
-  private var anchorMonthDay: MonthDay = _
-  private var world: World = _
+  private var tickValue: java.lang.Double = 0.0
+  private var tickType: PeriodType = null
+  private var anchorDatetime: LocalDateTime = null
+  private var anchorDate: LocalDate = null
+  private var anchorMonthDay: MonthDay = null
+  private var world: World = null
 
   @throws[ExtensionException]
   def this(dt: LocalDateTime) = {
@@ -63,11 +63,11 @@ class LogoTime extends ExtensionObject {
               customForm.indexOf('S') >= 0 || customForm.indexOf('s') >= 0 ||
               customForm.indexOf('K') >= 0 || customForm.indexOf('k') >= 0 ||
               customForm.indexOf('m') >= 0)
-          DateTime
-        else if (customForm.indexOf('Y') >= 0 || customForm.indexOf('y') >= 0)
-          Date
-        else
-          DayDate
+            DateTime
+          else if (customForm.indexOf('Y') >= 0 || customForm.indexOf('y') >= 0)
+            Date
+          else
+            DayDate
     }
     this.defaultFmt = this.dateType match {
       case DateTime =>
@@ -148,7 +148,6 @@ class LogoTime extends ExtensionObject {
       case DateTime => this.datetime.compareTo(that.datetime)
       case Date => this.date.compareTo(that.date)
       case DayDate => this.monthDay.compareTo(that.monthDay)
-      case _ => -999
     }
   }
 
@@ -273,7 +272,6 @@ class LogoTime extends ExtensionObject {
       case DayDate =>
         val fmt = if(this.customFmt == null) this.defaultFmt else this.customFmt
         monthDay.format(fmt)
-      case _ => ""
     }
   }
 
@@ -319,7 +317,7 @@ class LogoTime extends ExtensionObject {
      the beginning of the day on year 2000
   */
   def get(periodType: PeriodType): java.lang.Double =
-    periodType match {
+    (periodType match {
      case Milli =>
         this.dateType match {
           case DateTime => (datetime.getNano) / 1000000
@@ -383,8 +381,7 @@ class LogoTime extends ExtensionObject {
           case Date => date.atStartOfDay.getYear()
           case DayDate => monthDay.atYear(2000).getYear()
         }
-      case _ => throw new ExtensionException("Incorrect Time Unit")
-    }
+    }).toDouble
 
   /** time:plus has been the source of plenty of hidden runtime issues
      with time conversions and parsing errors. These two errors are
@@ -400,7 +397,6 @@ class LogoTime extends ExtensionObject {
       case DateTime => this.plus(this.datetime, pType, durVal)
       case Date => this.plus(this.date, pType, durVal)
       case DayDate => this.plus(this.monthDay, pType, durVal)
-      case _ => this
     }
 
   def plus(refTime: AnyRef, pType: PeriodType, durValArg: java.lang.Double): LogoTime = {
@@ -451,7 +447,6 @@ class LogoTime extends ExtensionObject {
           case Some(period) =>
             new LogoTime(MonthDay.from(refTime.asInstanceOf[MonthDay].atYear(2000).atStartOfDay.plus(period)))
         }
-      case failedtype =>  throw new ExtensionException(s"$failedtype type does not match datatypes")
     }
   }
 
@@ -466,7 +461,6 @@ class LogoTime extends ExtensionObject {
       case DateTime => this.datetime.isBefore(timeB.datetime)
       case Date => this.date.isBefore(timeB.date)
       case DayDate => this.monthDay.isBefore(timeB.monthDay)
-      case _ => true
     }
   }
 
@@ -479,7 +473,6 @@ class LogoTime extends ExtensionObject {
       case DateTime => this.datetime.isEqual(timeB.datetime)
       case Date => this.date.isEqual(timeB.date)
       case DayDate => this.monthDay.equals(timeB.monthDay)
-      case _ => true
     }
   }
 
@@ -522,7 +515,6 @@ class LogoTime extends ExtensionObject {
           this.monthDay.equals(timeA.monthDay) ||
           this.monthDay.equals(timeB.monthDay))
         }
-      case _ => true
     }
   }
 
@@ -568,14 +560,13 @@ class LogoTime extends ExtensionObject {
           case _ => throw new ExtensionException(s"$pType testing type is not supported by the time:difference-between primitive")
         }
         this.dateType match {
-            case DateTime =>
-              (Duration.between(this.datetime, endTime.datetime)).toMillis /durVal
-            case Date =>
-             (Duration.between(this.date.atStartOfDay(), endTime.date.atStartOfDay())).toMillis / durVal
-            case DayDate =>
-              (Duration.between(this.monthDay.atYear(2000).atStartOfDay(), endTime.monthDay.atYear(2000).atStartOfDay())).toMillis /durVal
-            case _ => throw new ExtensionException(s"$pType ptype is not supported by the time:difference-between primitive")
-          }
+          case DateTime =>
+            (Duration.between(this.datetime, endTime.datetime)).toMillis /durVal
+          case Date =>
+            (Duration.between(this.date.atStartOfDay(), endTime.date.atStartOfDay())).toMillis / durVal
+          case DayDate =>
+            (Duration.between(this.monthDay.atYear(2000).atStartOfDay(), endTime.monthDay.atYear(2000).atStartOfDay())).toMillis /durVal
+        }
       }
       case _ => throw new ExtensionException(s"$pType coding type is not supported by the time:difference-between primitive")
     }

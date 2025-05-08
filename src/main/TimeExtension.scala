@@ -9,7 +9,7 @@ import org.nlogo.api.Context
 
 object TimeExtension {
   val schedule: LogoSchedule = new LogoSchedule()
-  var context: Context = _
+  var context: Context = null
   var nextEvent: Long = 0
   var debug: Boolean = false
 }

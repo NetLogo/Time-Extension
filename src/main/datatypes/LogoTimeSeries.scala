@@ -49,7 +49,7 @@ class LogoTimeSeries extends ExtensionObject {
     try times = times + (time -> record)
     catch {
       case e: NullPointerException =>
-        if (time.dateType != times.keySet.toArray(scala.reflect.classTag[LogoTime])(0).dateType) {
+        if (time.dateType != times.keySet.toArray(using scala.reflect.classTag[LogoTime])(0).dateType) {
           throw new ExtensionException(s"date type mismatch ${time.dateType}")
         } else {
           throw e
@@ -185,8 +185,7 @@ class LogoTimeSeries extends ExtensionObject {
                 .data.map(_.toDouble).apply(times.getOrElse(lowerKey, throw new ExtensionException("lowerKey doesn't exist in data")).dataIndex)
             val keyDiv =
               lowerKey.getDifferenceBetween(Milli, time) / lowerKey.getDifferenceBetween(Milli, higherKey)
-           resultList.add((lowerKeyCol + (higherKeyCol - lowerKeyCol2) * keyDiv)
-           .toString)
+            resultList.add((lowerKeyCol + (higherKeyCol - lowerKeyCol2) * keyDiv).toString)
           }
         case _ =>
           resultList.add(scacolumns.getOrElse(colName, throw new ExtensionException("colName doesn't exist in columns"))

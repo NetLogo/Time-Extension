@@ -39,31 +39,30 @@ class LogoSchedule extends ExtensionObject {
   @throws[ExtensionException]
   def addEvent(args: Array[Argument], context: Context, addType: AddType): Unit = {
     /* It should be mentioned that this match statement
-       is for recording the type of primitive that is
-       calling this function. It only serves for debugging
-       and not much else in the function */
-      val primName = addType match { // initial check
-        case Default =>
-          if (args.length < 3)
-            throw new ExtensionException(
-              "time:add must have 3 arguments: schedule agent task tick/time")
-          "add"
-        case Shuffle =>
-          if (args.length < 3)
-            throw new ExtensionException(
-              "time:add-shuffled must have 3 arguments: schedule agent task tick/time")
-          "add-shuffled"
-        case Repeat =>
-          if (args.length < 4)
-            throw new ExtensionException("""time:repeat must have 4 or 5 arguments:
-              schedule agent task tick/time number (period-type)""")
-          "repeat"
-        case RepeatShuffled =>
-          if (args.length < 4)
-            throw new ExtensionException("time:repeat-shuffled must have 4 or 5 arguments: schedule agent task tick/time number (period-type)")
-          "repeat-shuffled"
-        case _ => throw new ExtensionException("Incorrect primitive option in LogoSchedule")
-      }
+      is for recording the type of primitive that is
+      calling this function. It only serves for debugging
+      and not much else in the function */
+    val primName = addType match { // initial check
+      case Default =>
+        if (args.length < 3)
+          throw new ExtensionException(
+            "time:add must have 3 arguments: schedule agent task tick/time")
+        "add"
+      case Shuffle =>
+        if (args.length < 3)
+          throw new ExtensionException(
+            "time:add-shuffled must have 3 arguments: schedule agent task tick/time")
+        "add-shuffled"
+      case Repeat =>
+        if (args.length < 4)
+          throw new ExtensionException("""time:repeat must have 4 or 5 arguments:
+            schedule agent task tick/time number (period-type)""")
+        "repeat"
+      case RepeatShuffled =>
+        if (args.length < 4)
+          throw new ExtensionException("time:repeat-shuffled must have 4 or 5 arguments: schedule agent task tick/time number (period-type)")
+        "repeat-shuffled"
+    }
 
     // Throw exception on conditions for agent, agentsets and observer
     val isInvalidEventArgument = !(args(0).get.isInstanceOf[Agent]) &&
