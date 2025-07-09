@@ -1,66 +1,66 @@
 TimeModelDiscreteScheduling
-  OPEN> extensions/time/examples/DiscreteEventScheduling.nlogo
+  OPEN> extensions/time/examples/DiscreteEventScheduling.nlogox
   O> setup
   O> go-until
 
 
 TimeModelTimeSeriesNLSReadWrite
-  OPEN> extensions/time/examples/nlsTimeSeriesTest-CSVReadWrite.nlogo
+  OPEN> extensions/time/examples/nlsTimeSeriesTest-CSVReadWrite.nlogox
   O> run-test
 
 TimeModelSchedulingBenchmark
-  OPEN> extensions/time/examples/SchedulingBenchmark.nlogo
+  OPEN> extensions/time/examples/SchedulingBenchmark.nlogox
   O> go-discrete-event
   O> go-static
 
 TimeModelMouseDiscreteEvent
-  OPEN> extensions/time/examples/MouseDiscreteEvent.nlogo
+  OPEN> extensions/time/examples/MouseDiscreteEvent.nlogox
   O> setup
   O> start
 
 TimeModelTimeExample
-  OPEN> extensions/time/examples/TimeExample.nlogo
+  OPEN> extensions/time/examples/TimeExample.nlogox
   O> setup
   O> go
 
 TimeModelTimeSeriesNLSExample
-  OPEN> extensions/time/examples/nls-TimeSeriesExample.nlogo
+  OPEN> extensions/time/examples/nls-TimeSeriesExample.nlogox
   O> setup
   O> go
 
 TimeModelTimeTestAnchored
-  OPEN> extensions/time/examples/TimeTest-AnchoredCopy.nlogo
+  OPEN> extensions/time/examples/TimeTest-AnchoredCopy.nlogox
   O> run-tests
 
 TimeModelTimeTestsFormatter
-  OPEN> extensions/time/examples/TimeTest-Formatter.nlogo
+  OPEN> extensions/time/examples/TimeTest-Formatter.nlogox
   O> run-tests
 
 TimeModelTimeTestRepeatingEvents_2019_02_11
-  OPEN> extensions/time/examples/TimeTest-RepeatingEvent.nlogo
+  OPEN> extensions/time/examples/TimeTest-RepeatingEvent.nlogox
   O> run-tests
 
 TimeModelTimeTestsScheduleLength_2019_02_15
-  OPEN> extensions/time/examples/TimeTest-ScheduleLength.nlogo
+  OPEN> extensions/time/examples/TimeTest-ScheduleLength.nlogox
   O> run-tests
 
 TimeModelTimeTests_SFR_2019_01_29
-  OPEN> extensions/time/examples/TimeTests_SFR_2019-01-29.nlogo
+  OPEN> extensions/time/examples/TimeTests_SFR_2019-01-29.nlogox
   O> test-date-times
 
 TimeModelTimeTests_SFR_2019_02_01
-  OPEN> extensions/time/examples/TimeTests_SFR_2019-02-01.nlogo
+  OPEN> extensions/time/examples/TimeTests_SFR_2019-02-01.nlogox
   O> write-test-file
   O> write-test-file-dates
 
 TimeModelTimeTests_SFR_2019_02_05
-  OPEN> extensions/time/examples/TimeTests_SFR_2019-02-05.nlogo
+  OPEN> extensions/time/examples/TimeTests_SFR_2019-02-05.nlogox
   O> test-create
   O> test-create-with-format
   O> test-plus-is-before
 
 TimeModelTimeTests_VariableTimeStepDemo
-  OPEN> extensions/time/examples/VariableTimeStepDemo.nlogo
+  OPEN> extensions/time/examples/VariableTimeStepDemo.nlogox
   O> setup
   O> go
 
@@ -425,7 +425,7 @@ TimePlusExamples
 
 
 NLSTimeSeriesReadWrite_Default
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -439,7 +439,7 @@ NLSTimeSeriesReadWrite_Default
   O> if (flow_value1 != random_flow1) [ error "Read and Write or ts-get  Error" ]
 
 NLSTimeSeriesReadWrite_Exact
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -453,7 +453,7 @@ NLSTimeSeriesReadWrite_Exact
   O> if (flow_value1-exact != random_flow1) [ error "Read and Write ts-get-exact Error" ]
 
 NLSTimeSeriesReadWrite_Interp
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set random_flow0 (random 100)
   O> set random_flow1 (random 100)
   O> set ts ts-create ["flow" "temp"]
@@ -467,7 +467,7 @@ NLSTimeSeriesReadWrite_Interp
   O> if (flow_value1-interp != random_flow1) [ error "Read and Write or ts-get-interp Error" ]
 
 NLSTimeSeriesGetRangeDouble
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set random_flow0 47
   O> set random_flow1 52
   O> set start-time time:create "1999-12-31"
@@ -482,7 +482,7 @@ NLSTimeSeriesGetRangeDouble
   (ts-get-range ts_out start-time end-time "flow") => [47 52]
 
 NLSTimeSeriesGetRangeString
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set start-time time:create "1999-12-31"
   O> set end-time time:create "2000-01-03"
   O> set ts ts-create ["flow" "temp"]
@@ -497,14 +497,14 @@ NLSTimeSeriesGetRangeString
   (ts-get-range ts_out start-time end-time "temp") => [2 5]
 
 NLSTimeSeriesGet
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
   (ts-get time-series (time:create "2020-06-16 23:00") "x") => 1
 
 NLSTimeSeriesGetRange
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set time-series ts-create ["x"]
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
   O> set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
@@ -523,14 +523,14 @@ NLSTimeSeriesGetRange
   (ts-get-range time-series (time:create "2020-06-20 12:00") (time:create "2020-06-20 12:00") "x") => [5 5]
 
 NLSTimeSeriesGetInterp
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set time-series ts-create ["flow"]
   O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
   O> set time-series ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
   ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow" => 5
 
 NLSTimeSeriesHasRepeatTimes
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set ts1 ts-create ["flow"]
   O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
   O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
@@ -545,7 +545,7 @@ NLSTimeSeriesHasRepeatTimes
   ts-has-repeat-times? ts2 => false
 
 NLSTimeSeriesHasRepeatOfTime
-  OPEN> extensions/time/tests/time-series.nlogo
+  OPEN> extensions/time/tests/time-series.nlogox
   O> set ts1 ts-create ["flow"]
   O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 00:00:00") 0)
   O> set ts1 ts-add-row ts1 (sentence (time:create "2000-01-01 01:00:00") 10)
@@ -563,5 +563,5 @@ NLSTimeSeriesHasRepeatOfTime
   ts-has-repeat-of-time? ts1 (time:create "2000-01-01 05:00:00") => false
 
 NLSTimeSeriesTestsFromFile
-  OPEN> extensions/time/examples/nls-time-series-tests.nlogo
+  OPEN> extensions/time/examples/nls-time-series-tests.nlogox
   O> run-tests

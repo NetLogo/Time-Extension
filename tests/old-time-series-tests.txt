@@ -1,9 +1,9 @@
 TimeModelTimeSeriesReadWrite
-  OPEN> extensions/time/examples/TimeSeriesTest-CSVReadWrite.nlogo
+  OPEN> extensions/time/examples/TimeSeriesTest-CSVReadWrite.nlogox
   O> run-test
 
 TimeModelTimeSeriesExample
-  OPEN> extensions/time/examples/TimeSeriesExample.nlogo
+  OPEN> extensions/time/examples/TimeSeriesExample.nlogox
   O> setup
   O> go
 
