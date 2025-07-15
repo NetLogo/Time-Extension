@@ -15,10 +15,6 @@ object TimeExtension {
 }
 
 class TimeExtension extends DefaultClassManager {
-  override def additionalJars: java.util.List[String] = {
-    val list: java.util.List[String] = new java.util.ArrayList[String]()
-    list
-  }
 
   def load(primManager: org.nlogo.api.PrimitiveManager): Unit = {
     /*
