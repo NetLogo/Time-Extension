@@ -15,3 +15,5 @@ netLogoVersion      := "7.0.0-424b50b"
 netLogoClassManager := "org.nlogo.extensions.time.TimeExtension"
 netLogoPackageExtras += (baseDirectory.value / "src" / "time-series.nls" -> None)
 netLogoTestExtras ++= Seq((baseDirectory.value / "examples"), (baseDirectory.value / "tests"))
+
+resolvers += "jitpack" at "https://jitpack.io"
