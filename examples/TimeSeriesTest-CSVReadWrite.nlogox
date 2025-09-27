@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<model version="NetLogo 7.0.0-beta2" snapToGrid="false">
-  <code>extensions [time]
+<model version="NetLogo 7.0.0" snapToGrid="false">
+  <code>extensions [ csv time ]
+
+__includes [ "../time-series.nls" ]
 
 globals [ts ts_out]
 
 to setup
   let random_flow0 (random 100)
   let random_flow1 (random 100)
-  set ts time:ts-create ["flow" "temp"]
-  time:ts-add-row ts (list (time:create "2000-01-01") random_flow0 2)
-  time:ts-add-row ts (list (time:create "2000-01-02") random_flow1 5)
-  time:ts-write ts "new-ts-output.csv"
+  set ts ts-create ["flow" "temp"]
+  set ts ts-add-row ts (list (time:create "2000-01-01") random_flow0 2)
+  set ts ts-add-row ts (list (time:create "2000-01-02") random_flow1 5)
+  ts-write ts "new-ts-output.csv"
 
-  set ts_out time:ts-load "new-ts-output.csv"
-  let flow_value0 time:ts-get ts_out (time:create "2000-01-01") "flow"
-  let flow_value1 time:ts-get ts_out (time:create "2000-01-02") "flow"
+  set ts_out ts-load "new-ts-output.csv"
+  let flow_value0 ts-get ts_out (time:create "2000-01-01") "flow"
+  let flow_value1 ts-get ts_out (time:create "2000-01-02") "flow"
   if(flow_value0 != random_flow0)
   [ error "Read and Write Error" ]
   if (flow_value1 != random_flow1)
   [ error "Read and Write Error" ]
 
-  let flow_value0e time:ts-get-exact ts_out (time:create "2000-01-01") "flow"
-  let flow_value1e time:ts-get-exact ts_out (time:create "2000-01-02") "flow"
+  let flow_value0e ts-get-exact ts_out (time:create "2000-01-01") "flow"
+  let flow_value1e ts-get-exact ts_out (time:create "2000-01-02") "flow"
   if(flow_value0e != random_flow0)
   [ error "Read and Write Error" ]
   if (flow_value1e != random_flow1)
   [ error "Read and Write Error" ]
 
-  let flow_value0i time:ts-get-interp ts_out (time:create "2000-01-01") "flow"
-  let flow_value1i time:ts-get-interp ts_out (time:create "2000-01-02") "flow"
+  let flow_value0i ts-get-interp ts_out (time:create "2000-01-01") "flow"
+  let flow_value1i ts-get-interp ts_out (time:create "2000-01-02") "flow"
   if(flow_value0i != random_flow0)
   [ error "Read and Write Error" ]
   if (flow_value1i != random_flow1)
