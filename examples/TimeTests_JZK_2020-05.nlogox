@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<model version="NetLogo 7.0.0-beta2" snapToGrid="false">
+<model version="NetLogo 7.0.0" snapToGrid="false">
   <code>extensions [ time csv ]
+
+__includes ["../time-series.nls"]
 
 globals [
   time-series
@@ -23,12 +25,12 @@ to test-ts-get
   ; https://github.com/NetLogo/Time-Extension/issues/26
   print "*********testing ts-get************"
 
-  set time-series time:ts-create ["x"]
+  set time-series ts-create ["x"]
   let true-val 1
-  time:ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
-  time:ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
+  set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
+  set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
 
-  let ret-val (time:ts-get time-series (time:create "2020-06-16 23:00") "x") ; should be 1, because 23:00 on 6/16 is closer to 12:00 on 6/16 than 12:00 on 6/17
+  let ret-val (ts-get time-series (time:create "2020-06-16 23:00") "x") ; should be 1, because 23:00 on 6/16 is closer to 12:00 on 6/16 than 12:00 on 6/17
   ifelse true-val = ret-val [
     print "test passed"
   ] [
@@ -40,13 +42,13 @@ end
 to test-ts-get-range
   ; https://github.com/NetLogo/Time-Extension/issues/27
   print "*********testing ts-get-range************"
-  set time-series time:ts-create ["x"]
-  time:ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
-  time:ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
+  set time-series ts-create ["x"]
+  set time-series ts-add-row time-series (sentence (time:create "2020-06-16 12:00") 1)
+  set time-series ts-add-row time-series (sentence (time:create "2020-06-17 12:00") 2)
 
-  let cond1 length (time:ts-get-range time-series (time:create "2020-06-16 12:00") (time:create "2020-06-17 12:00") "x") = 2
+  let cond1 length (ts-get-range time-series (time:create "2020-06-16 12:00") (time:create "2020-06-17 12:00") "x") = 2
 
-  let cond2 length (time:ts-get-range time-series (time:create "2020-06-17 12:00") (time:create "2020-06-17 12:00") "x") = 1
+  let cond2 length (ts-get-range time-series (time:create "2020-06-17 12:00") (time:create "2020-06-17 12:00") "x") = 1
   ; print (time:ts-get-range time-series (time:create "2020-06-18 12:00") (time:create "2020-06-19 12:00") "x")
   ifelse cond1 and cond2 [;  and cond3 [
     print "test passed"
@@ -59,10 +61,10 @@ end
 to test-ts-get-interp
   ; https://github.com/NetLogo/Time-Extension/issues/25
   print "*********testing ts-get-interp************"
-  set time-series time:ts-create ["flow"]
-  time:ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
-  time:ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
-  let ret-val time:ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow"
+  set time-series ts-create ["flow"]
+  set time-series ts-add-row time-series (sentence (time:create "2000-01-01 00:00:00") 0)
+  set time-series ts-add-row time-series (sentence (time:create "2000-01-01 01:00:00") 10)
+  let ret-val ts-get-interp time-series time:create "2000-01-01 00:30:00" "flow"
   print ret-val
   ifelse ret-val = 5 [
     print "test passed"
@@ -85,23 +87,23 @@ to test-ts-load
   print "============================"
 
 
-  set time-series time:ts-load "time-series-data-with-comments.csv"
+  set time-series ts-load "time-series-data-with-comments.csv"
 
-  print time:ts-get time-series time:create "2000-01-01 01:30:00" "flow"
-  print time:ts-get time-series time:create "2000-01-01 10:20:00" "flow"
-  print time:ts-get time-series time:create "2000-01-01 10:30:00" "flow"
-  print time:ts-get time-series time:create "2005-01-02 10:50:01" "flow"
-  print time:ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
+  print ts-get time-series time:create "2000-01-01 01:30:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:20:00" "flow"
+  print ts-get time-series time:create "2000-01-01 10:30:00" "flow"
+  print ts-get time-series time:create "2005-01-02 10:50:01" "flow"
+  print ts-get-exact time-series time:create "2000-01-01 10:00" "flow"
 
-  print time:ts-get-exact time-series time:create "2000-01-01 00:00" "flow"
-  print time:ts-get-exact time-series time:create "2000-01-01 00:00" "temp"  ; This line has a comment and it creates an error
+  print ts-get-exact time-series time:create "2000-01-01 00:00" "flow"
+  print ts-get-exact time-series time:create "2000-01-01 00:00" "temp"  ; This line has a comment and it creates an error
 
 ;  print time:ts-get-interp time-series time:create "2000-01-01 10:30:00" "flow"
 ;  print time:ts-get-interp time-series time:create "2000-01-03 00:30:00" "all"
 ;
 ;  print time:ts-get-range time-series time:create "2000-01-02 12:30:00" time:create "2000-01-03 00:30:00" "all"
 ;
-;  set ts time:ts-create ["flow" "temp"]
+;  set ts ts-create ["flow" "temp"]
 ;  time:ts-add-row ts ["2000-01-08" 5 4]
 ;  time:ts-add-row ts ["2000-01-01" 6 7]
 ;  time:ts-write ts "new-ts-file.csv"
