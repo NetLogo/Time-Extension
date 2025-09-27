@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<model version="NetLogo 7.0.0-beta2" snapToGrid="false">
+<model version="NetLogo 7.0.0" snapToGrid="false">
   <code><![CDATA[extensions [time]
 
 globals[
@@ -53,6 +53,10 @@ to setup
 
   ;; You can always clear the schedule
   ;;time:clear-schedule
+end
+
+to go
+  time:go
 end
 
 ;; Note: in this example model, go-forward occurs inside a turtle context, so self refers to the turtle performing the event
@@ -838,5 +842,5 @@ end]]></code>
       </indicator>
     </shape>
   </linkShapes>
-  <previewCommands>setup repeat 75 [ go ]</previewCommands>
+  <previewCommands>setup go-until</previewCommands>
 </model>
