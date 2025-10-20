@@ -4,6 +4,7 @@ import java.io.{BufferedWriter, File, FileWriter}
 import java.util.{ArrayList, Arrays}
 import scala.collection.immutable.TreeMap
 import scala.collection.mutable.LinkedHashMap
+import scala.io.Source
 
 import org.nlogo.api.ExtensionException
 import org.nlogo.core.{ExtensionObject, LogoList}
@@ -95,7 +96,7 @@ class LogoTimeSeries extends ExtensionObject {
    *  object. There are a couple global variables: columns and times
    */
   def parseTimeSeriesFile(filename: String, customFormat: Option[String], context: ExtensionContext): Unit =
-    Try(io.Source.fromFile(context.attachCurrentDirectory(filename))) match {
+    Try(Source.fromFile(context.attachCurrentDirectory(filename))) match {
       case Success(bufferedSource) =>
         var ind = 0
         var columnNames = Array[String]()
