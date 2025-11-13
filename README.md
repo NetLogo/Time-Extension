@@ -35,24 +35,24 @@ Create a global date/time and initialize in the setup procedure:
 
 From the console, execute setup and then print a formatted version of your date/time to the console:
 
-	setup
+    setup
     print time:show dt "EEEE, MMMM d, yyyy"
     ;; prints "Sunday, January 2, 2000"
 
 Print the hour of the day, the day of the week, and the day of the year:
 
-	print time:get "hour" dt		;; prints 10
-	print time:get "dayofweek" dt 	;; prints 6
-	print time:get "dayofyear" dt	;; prints 1
+    print time:get "hour" dt  ;; prints 10
+    print time:get "dayofweek" dt  ;; prints 6
+    print time:get "dayofyear" dt  ;; prints 1
 
 Add 3 days to your date/time and print the date/time object to the screen:
 
     set dt time:plus dt 3 "days"
-	print dt
+    print dt
 
 Compare your date/time to some other date/time:
 
-	ifelse time:is-after? dt (time:create "2000-01-01 12:00") [print "yes"][print "no"]
+    ifelse time:is-after? dt (time:create "2000-01-01 12:00") [print "yes"][print "no"]
 
 **Time Series Tool**
 
@@ -61,22 +61,22 @@ Compare your date/time to some other date/time:
 [Download this example time series file](https://github.com/colinsheppard/Time-Extension/raw/master/examples/time-series-data.csv) and place in the same directory as your NetLogo model.  Here are the first 10 lines of the file:
 
     ; meta data at the top of the file
-	; is skipped when preceded by
-	; a semi-colon
-	timestamp,flow,temperature
-	2000-01-01 00:00:00,1000,10
-	2000-01-01 01:00:00,1010,11
-	2000-01-01 03:00:00,1030,13
-	2000-01-01 04:00:00,1040,14
-	2000-01-01 05:00:00,1050,15
-	…
-	…
+    ; is skipped when preceded by
+    ; a semi-colon
+    timestamp,flow,temperature
+    2000-01-01 00:00:00,1000,10
+    2000-01-01 01:00:00,1010,11
+    2000-01-01 03:00:00,1030,13
+    2000-01-01 04:00:00,1040,14
+    2000-01-01 05:00:00,1050,15
+    …
+    …
 
 Create a global to store a LogoTimeSeries object.  In your setup procedure, load the data from the CSV file:
 
     globals[time-series]
 
-	set time-series ts-load "time-series-data.csv"
+    set time-series ts-load "time-series-data.csv"
 
 
 
@@ -87,7 +87,7 @@ Create a LogoTime and use it to extract the value from the "flow" column that is
     let current-flow ts-get time-series current-time "flow"
 
     ;; By default, the nearest record in the time series is retrieved (in this case 1010),
-	;; you can alternatively require an exact match or do linear interpolation.
+    ;; you can alternatively require an exact match or do linear interpolation.
 
 **Discrete Event Scheduler**
 
@@ -212,18 +212,18 @@ The **time extension** has the following notable behavior:
 
 * **Time extension recognizes "period types"** - In order to make it easy to specify a time period like "2 days" or "4 weeks", the **time extension** will accept strings to specify a period type.  The following is a table of the period types and strings that **time** recognizes (note: any of these period type strings can be pluralized and are case **in**sensitive):
 
-  | PERIOD TYPE | Valid string specifiers		|
+  | PERIOD TYPE | Valid string specifiers                 |
   | ------------|-----------------------------------------|
-  | YEAR	      | "year"					|
-  | MONTH	      | "month"					|
-  | WEEK	      | "week"					|
-  | DAY	      | "day", "dayofmonth", "dom"		|
+  | YEAR        | "year"                                  |
+  | MONTH       | "month"                                 |
+  | WEEK        | "week"                                  |
+  | DAY         | "day", "dayofmonth", "dom"              |
   | DAYOFYEAR   | "dayofyear", "doy", "julianday", "jday" |
   | DAYOFWEEK   | "dayofweek", "dow", "weekday", "wday"   |
-  | HOUR	      | "hour"					|
-  | MINUTE      | "minute"				|
-  | SECOND      | "second"				|
-  | MILLI	      | "milli"					|
+  | HOUR        | "hour"                                  |
+  | MINUTE      | "minute"                                |
+  | SECOND      | "second"                                |
+  | MILLI       | "milli"                                 |
 
 * **Time extension has millisecond resolution** - This is a fundamental feature of the Java Time library and cannot be changed. Milliseconds are represented as fractions of a second, truncated to the third decimal place to prevent parsing issues with the Java Time library. This truncation can create artifacts; for example if time:plus is used to add a value that is less than one whole millisecond, it does nothing.
 
@@ -542,23 +542,23 @@ print time:plus (time:create "2000-01-04") -2.3 "day" => "2000-01-01"
 
 Reports a boolean for the test of whether *logotime1* is before/after/equal-to *logotime2*.  The is-between? primitive returns true if *logotime1* is between *logotime2* and *logotime3*.  All LogoTime arguments must be of the same variety (DATETIME, DATE, or DAY).
 
-	print time:is-before? (time:create "2000-01-02") (time:create "2000-01-03")
-	;;prints "true"
+    print time:is-before? (time:create "2000-01-02") (time:create "2000-01-03")
+    ;;prints "true"
 
-  	print time:is-before? (time:create "2000-01-03") (time:create "2000-01-02")
-	;;prints "false"
+      print time:is-before? (time:create "2000-01-03") (time:create "2000-01-02")
+    ;;prints "false"
 
-  	print time:is-after?  (time:create "2000-01-03") (time:create "2000-01-02")
-	;;prints "true"
+      print time:is-after?  (time:create "2000-01-03") (time:create "2000-01-02")
+    ;;prints "true"
 
-  	print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-02")
-	;;prints "true"
+      print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-02")
+    ;;prints "true"
 
-  	print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-03")
-	;;prints "false"
+      print time:is-equal?  (time:create "2000-01-02") (time:create "2000-01-03")
+    ;;prints "false"
 
- 	print time:is-between? (time:create "2000-03-08")  (time:create "1999-12-02") (time:create "2000-05-03")
-	;;prints "true"
+     print time:is-between? (time:create "2000-03-08")  (time:create "1999-12-02") (time:create "2000-05-03")
+    ;;prints "true"
 
 ---------------------------------------
 
@@ -576,17 +576,17 @@ For period type of "MONTH", difference-between reports the difference in the mon
 
 For "YEAR", difference-between reports the number [integer] of years there are between two logotime instances. The difference is calculated through matching the day and month while truncating values around that date. This should apply for leap years, as well. For example, if logotime1 is 2000-01-02 then `time:difference-between` reports 0 years for *logotime2* = 2001-01-01, 1 year for 2000-01-02, and 5 years for 2005-01-02. The total number of months between two dates can therefore be calculated as 12 times the value of `time:difference-between` in years plus the value of `time:difference-between` in months.
 
-	print time:difference-between (time:create "2000-01-02 00:00") (time:create "2000-02-02 00:00") "days"
-	;;prints "31"
+    print time:difference-between (time:create "2000-01-02 00:00") (time:create "2000-02-02 00:00") "days"
+    ;;prints "31"
 
-  	print time:difference-between (time:create "2000-01-02") (time:create "2001-02-02") "days"
-	;;prints "397"
+      print time:difference-between (time:create "2000-01-02") (time:create "2001-02-02") "days"
+    ;;prints "397"
 
-  	print time:difference-between (time:create "01-02") (time:create "01-01") "hours"
-	;;prints "-24"
+      print time:difference-between (time:create "01-02") (time:create "01-01") "hours"
+    ;;prints "-24"
 
-	print time:difference-between (time:create "2000-01-02") (time:create "2000-02-15") "months"
-	;;prints "1"
+    print time:difference-between (time:create "2000-01-02") (time:create "2000-02-15") "months"
+    ;;prints "1"
 
 ---------------------------------------
 
@@ -724,7 +724,7 @@ Reports whether there are any repeated times in the logotimeseries (i.e. two row
 **ts-has-repeat-of-time?**
 *ts-has-repeat-of-time? logotimeries logotime*
 
-Reports whether *logotime* appears more than once in *logotimeseries*.  
+Reports whether *logotime* appears more than once in *logotimeseries*.
 
 ---------------------------------------
 
@@ -839,7 +839,7 @@ Add an event to the discrete event schedule and shuffle the agentset during exec
 Add a repeating event to the discrete event schedule.  This primitive behaves almost identically to *time:schedule-event* except that after the event is dispatched it is immediately rescheduled *interval-number* ticks into the future using the same *agent* (or *agentset*) and *anonymous-command*. If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
 
     time:schedule-repeating-event turtles [ [] -> go-forward ] 2.5 1.0
-	time:schedule-repeating-event-with-period turtles [ [] -> go-forward ] 2.5 1.0 "hours"
+    time:schedule-repeating-event-with-period turtles [ [] -> go-forward ] 2.5 1.0 "hours"
 
 ---------------------------------------
 

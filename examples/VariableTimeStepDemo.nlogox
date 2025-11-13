@@ -106,7 +106,7 @@ This model demonstrates use of the Time extension to provide scheduling of model
 
 ## HOW IT WORKS
 
-A time-series input file contains the times at which two environment variables (river flow and temperature) change, and their values at each change. The Time extension's LogoTimeSeries variable type is used to read in the input and extract a NetLogo list of the times at which flow and temperature change (between simulation starting and ending times specified by the user). 
+A time-series input file contains the times at which two environment variables (river flow and temperature) change, and their values at each change. The Time extension's LogoTimeSeries variable type is used to read in the input and extract a NetLogo list of the times at which flow and temperature change (between simulation starting and ending times specified by the user).
 
 Then, in the go procedure, the list of times at which temperature and flow change is used to keep track of the current simulation time and calculate the time (number of days, including fractions) represented by each tick.
 

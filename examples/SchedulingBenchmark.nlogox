@@ -54,26 +54,26 @@ end]]></code>
     <slider x="14" step="100" y="54" max="5000" display="nticks" height="33" min="0" direction="Horizontal" default="5000.0" variable="nticks" width="172" sizeVersion="0"></slider>
     <slider x="13" step="1" y="156" max="100" display="nsteps" height="33" min="0" direction="Horizontal" default="100.0" variable="nsteps" width="172" sizeVersion="0"></slider>
     <slider x="14" step="1" y="106" max="200" display="n-rest-between-action" height="33" min="1" direction="Horizontal" default="50.0" variable="n-rest-between-action" width="195" sizeVersion="0"></slider>
-    <note x="581" y="68" height="1450" backgroundDark="0" fontSize="11" width="643" markdown="false" textColorLight="-16777216" backgroundLight="0">This model was designed to benchmark traditional agent scheduling against discrete event scheduling using the time extension.  
+    <note x="581" y="68" height="1450" backgroundDark="0" fontSize="11" width="643" markdown="false" textColorLight="-16777216" backgroundLight="0">This model was designed to benchmark traditional agent scheduling against discrete event scheduling using the time extension.
 
 Discrete event scheduling is most useful for models where agents spend a lot of time *not* doing anything but yet they know at what future tick they will need to do something.  Sometimes in a netlogo model, you have to test a certain condition or set of conditions for all agents every tick (usually in the form of an "ask") in order to decide whether the agents should act or not.  But for some models, you might know in advance exactly when a particular agent needs to act, but yet you still have to test some set of conditions until the time is ripe.  Discrete event scheduling cuts all of those superfluous test out and the action is performed only when needed, with no testing and very little overhead.
 
 For example, if an agent is a state machine and spends most of the time in the state "at rest" and has a predicatable schedule that knows that the agent should transition to the state "awake" at tick 105, then using a discrete event scheduler allows you to schedule the "wake up" procedure for tick 105 and avoid testing conditions in the meantime.
 
-To simulate the benefit of discrete event scheduling versus "static" scheduling, this model implements the exact same model using both techniques.  
+To simulate the benefit of discrete event scheduling versus "static" scheduling, this model implements the exact same model using both techniques.
 
 Use the sliders to set:
 
--nturtles: the number of turtles, 
+-nturtles: the number of turtles,
 -nticks: the number of total ticks in the simulation,
 -n-rest-between-action: for how many time steps should the turtles "rest" or do nothing between actions (where an "action" is for all turtles to move forward by nsteps),
--nsteps: how many steps does each turtle take when it moves forward. 
+-nsteps: how many steps does each turtle take when it moves forward.
 
 The model behaves as follows:
 
 -Starting at tick 1 and for every n-rest-between-action ticks thereafter, all turtles move forward by nsteps.
--The total simulation runs out to 'nticks'.  
--With the static scheduler, the current time is tested to determine whether agents should move forward.  
+-The total simulation runs out to 'nticks'.
+-With the static scheduler, the current time is tested to determine whether agents should move forward.
 -With the discrete event scheduler, the agents are scheduled during setup to move forward at the appropriate times.
 -At the end of a single run, the amount of time it took to do the whole run is written to the console.
 
