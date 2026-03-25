@@ -3,7 +3,7 @@ import org.nlogo.build.{ NetLogoExtension, ExtensionDocumentationPlugin }
 enablePlugins(NetLogoExtension, ExtensionDocumentationPlugin)
 
 name       := "time"
-version    := "3.1.1"
+version    := "3.1.2"
 isSnapshot := true
 
 scalaVersion := "3.7.0"
