@@ -237,9 +237,9 @@ The **time extension** has the following notable behavior:
 
 * **LogoEvents are dispatched in order, and ties go to the first created** - If multiple LogoEvents are scheduled for the exact same time, they are dispatched (executed) in the order in which they were added to the discrete event schedule.
 
-* **LogoEvents can be created for an agentset** - When an agentset is scheduled to perform an anonymous command (before NetLogo 6.0 these were called tasks) at the same time, the individual agents execute the procedure in a non-random order, which is different from *ask* which shuffles the agents.  Not shuffling the agents may save some execution time. To shuffle the order, use the *add-shuffled* primitive, which will execute the actions in random order with low overhead.
+* **LogoEvents can be created for an agentset** - When an agentset is scheduled to perform an arrow command (before NetLogo 6.0 these were called tasks) at the same time, the individual agents execute the procedure in a non-random order, which is different from *ask* which shuffles the agents.  Not shuffling the agents may save some execution time. To shuffle the order, use the *add-shuffled* primitive, which will execute the actions in random order with low overhead.
 
-* **LogoEvents won't break if an agent dies** - If an agent is scheduled to perform an anonymous command in the future but dies before the event is dispatched, the event will be silently skipped.
+* **LogoEvents won't break if an agent dies** - If an agent is scheduled to perform an arrow command in the future but dies before the event is dispatched, the event will be silently skipped.
 
 * **LogoEvents can be scheduled to occur at a LogoTime** - LogoTimes are acceptable alternatives to specifying tick numbers for when events should occur.  However, for this to work the discrete event schedule must be "anchored" to a reference time so it knows a relationship between ticks and time.  See *time:anchor-schedule** below for an example of anchoring.
 
@@ -792,7 +792,7 @@ The column names will be written as the header line, for example:
 
 *time:anchor-schedule logotime number period-type*
 
-Anchors the discrete event schedule to the native time tracking mechanism in NetLogo (i.e the value of *ticks*).  Once anchored, LogoTimes can be used for discrete event scheduling (e.g. schedule agent 3 to perform some anonymous command on June 10, 2013).  The value of the *logotime* argument is assumed to be the time at tick zero.  The *number* and *period-type* arguments describe the length of one tick (e.g. a tick can represent 1 day, 2 hours, 90 seconds, etc.)
+Anchors the discrete event schedule to the native time tracking mechanism in NetLogo (i.e the value of *ticks*).  Once anchored, LogoTimes can be used for discrete event scheduling (e.g. schedule agent 3 to perform some arrow command on June 10, 2013).  The value of the *logotime* argument is assumed to be the time at tick zero.  The *number* and *period-type* arguments describe the length of one tick (e.g. a tick can represent 1 day, 2 hours, 90 seconds, etc.)
 
     time:anchor-schedule time:create "2013-05-30" 1 "hour"
 
@@ -800,11 +800,11 @@ Anchors the discrete event schedule to the native time tracking mechanism in Net
 
 **time:schedule-event**
 
-*time:schedule-event agent anonymous-command tick-or-time*  <br/>
-*time:schedule-event agentset anonymous-command tick-or-time*<br/>
-*time:schedule-event "observer" anonymous-command tick-or-time*
+*time:schedule-event agent arrow-command tick-or-time*  <br/>
+*time:schedule-event agentset arrow-command tick-or-time*<br/>
+*time:schedule-event "observer" arrow-command tick-or-time*
 
-Add an event to the discrete event schedule.  The order in which events are added to the schedule is not important; they will be dispatched in order of the times specified as the last argument of this command. An *agent*, an *agentset*, or the string "observer" can be passed as the first argument along with an *anonymous command* as the second. The anonymous command is executed by the agent(s) or the observer at *tick-or-time* (either a number indicating the tick or a LogoTime), which is a time greater than or equal to the present moment (*>= ticks*).*.
+Add an event to the discrete event schedule.  The order in which events are added to the schedule is not important; they will be dispatched in order of the times specified as the last argument of this command. An *agent*, an *agentset*, or the string "observer" can be passed as the first argument along with an *arrow command* as the second. The arrow command is executed by the agent(s) or the observer at *tick-or-time* (either a number indicating the tick or a LogoTime), which is a time greater than or equal to the present moment (*>= ticks*).*.
 
 If *tick-or-time* is a LogoTime, then the discrete event schedule must be anchored (see time:anchor-schedule).  If <em>tick-or-time</em> is in the past (less than the current tick/time), a run-time error is raised. (The *is-after?* primitive can be used to defend against this error: add an event to the schedule only if its scheduled time is after the current time.)
 
@@ -818,7 +818,7 @@ Once an event has been added to the discrete event schedule, there is no way to 
 
 **time:schedule-event-shuffled**
 
-*time:schedule-event-shuffled agentset anonymous-command tick-or-time*
+*time:schedule-event-shuffled agentset arrow-command tick-or-time*
 
 Add an event to the discrete event schedule and shuffle the agentset during execution.  This is identical to *time:schedule-event* but the individuals in the agentset execute the action in randomized order.
 
@@ -829,14 +829,14 @@ Add an event to the discrete event schedule and shuffle the agentset during exec
 **time:schedule-repeating-event** <br/>
 **time:schedule-repeating-event-with-period**
 
-*time:schedule-repeating-event agent anonymous-command tick-or-time interval-number*  <br/>
-*time:schedule-repeating-event agentset anonymous-command tick-or-time-number interval-number*<br/>
-*time:schedule-repeating-event "observer" anonymous-command tick-or-time interval-number*  <br/>
-*time:schedule-repeating-event-with-period agent anonymous-command tick-or-time period-duration period-type-string*  <br/>
-*time:schedule-repeating-event-with-period agentset anonymous-command tick-or-time-number period-duration period-type-string*<br/>
-*time:schedule-repeating-event-with-period "observer" anonymous-command tick-or-time period-duration period-type-string*
+*time:schedule-repeating-event agent arrow-command tick-or-time interval-number*  <br/>
+*time:schedule-repeating-event agentset arrow-command tick-or-time-number interval-number*<br/>
+*time:schedule-repeating-event "observer" arrow-command tick-or-time interval-number*  <br/>
+*time:schedule-repeating-event-with-period agent arrow-command tick-or-time period-duration period-type-string*  <br/>
+*time:schedule-repeating-event-with-period agentset arrow-command tick-or-time-number period-duration period-type-string*<br/>
+*time:schedule-repeating-event-with-period "observer" arrow-command tick-or-time period-duration period-type-string*
 
-Add a repeating event to the discrete event schedule.  This primitive behaves almost identically to *time:schedule-event* except that after the event is dispatched it is immediately rescheduled *interval-number* ticks into the future using the same *agent* (or *agentset*) and *anonymous-command*. If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
+Add a repeating event to the discrete event schedule.  This primitive behaves almost identically to *time:schedule-event* except that after the event is dispatched it is immediately rescheduled *interval-number* ticks into the future using the same *agent* (or *agentset*) and *arrow-command*. If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
 
     time:schedule-repeating-event turtles [ [] -> go-forward ] 2.5 1.0
     time:schedule-repeating-event-with-period turtles [ [] -> go-forward ] 2.5 1.0 "hours"
@@ -846,8 +846,8 @@ Add a repeating event to the discrete event schedule.  This primitive behaves al
 **time:schedule-repeating-event-shuffled** <br/>
 **time:schedule-repeating-event-shuffled-with-period**
 
-*time:schedule-repeating-event-shuffled agentset anonymous-command tick-or-time-number interval-number*<br/>
-*time:schedule-repeating-event-shuffled-with-period agentset anonymous-command tick-or-time-number interval-number*
+*time:schedule-repeating-event-shuffled agentset arrow-command tick-or-time-number interval-number*<br/>
+*time:schedule-repeating-event-shuffled-with-period agentset arrow-command tick-or-time-number interval-number*
 
 Add a repeating event to the discrete event schedule and shuffle the agentset during execution.  This is identical to *time:schedule-repeating-event* but the individuals in the agentset execute the action in randomized order.  If the schedule is anchored (see time:anchor-schedule), then *time:schedule-repeating-event-shuffled-with-period* can be used to expressed the repeat interval as a period (e.g. 1 "day" or 2.5 "hours").  Warning: repeating events can cause an infinite loop to occur if you execute the schedule with time:go.  To avoid infinite loops, use time:go-until.
 
@@ -895,7 +895,7 @@ Dispatch all of the events in the discrete event schedule that are scheduled for
 
 *time:show-schedule*
 
-Reports all of the events in the schedule as a single string in tab-separated format with three columns: tick,semi-colon-separated-list-of-agents,anonymous-command.
+Reports all of the events in the schedule as a single string in tab-separated format with three columns: tick,semi-colon-separated-list-of-agents,arrow-command.
 
     print time:show-schedule
 
